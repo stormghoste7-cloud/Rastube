@@ -3,41 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Version Pro</title>
+    <title>RASSTUBE ULTRA | Edition Rapide</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <style>
         :root { --primary: #ff0000; --bg: #0f0f0f; --card-bg: #1e1e1e; --text: #ffffff; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
-        
+        body { background-color: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 0; }
         header { background: #0f0f0f; padding: 10px 5%; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
         .search-bar { width: 100%; background: #121212; border: 1px solid #333; padding: 10px; border-radius: 20px; color: white; outline: none; }
-
         .main-container { max-width: 900px; margin: 10px auto; padding: 0 15px; }
-
-        /* UPLOAD DRAWER */
         .upload-drawer { display: none; background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; }
-        .progress-bar-wrap { width: 100%; background: #000; height: 8px; border-radius: 4px; margin-top: 10px; display: none; overflow: hidden; }
+        .progress-bar-wrap { width: 100%; background: #000; height: 10px; border-radius: 5px; margin-top: 15px; display: none; overflow: hidden; }
         #progressFill { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; }
-
-        /* PLAYER SECTION */
         #mainPlayerContainer { display: none; margin-bottom: 30px; }
-        video { width: 100%; border-radius: 12px; background: #000; transition: 0.3s; }
-        .video-meta { padding: 15px 0; border-bottom: 1px solid #333; }
+        video { width: 100%; border-radius: 12px; background: #000; }
         .video-actions { display: flex; gap: 10px; margin-top: 10px; align-items: center; }
         .btn-action { background: #272727; border: none; color: white; padding: 10px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .btn-action.active { color: #f1c40f; }
-
-        /* GRIDS */
-        .section-title { font-size: 18px; margin: 25px 0 15px 0; border-left: 4px solid var(--primary); padding-left: 10px; font-weight: bold; }
+        .section-title { font-size: 18px; margin: 25px 0 15px 0; border-left: 4px solid var(--primary); padding-left: 10px; }
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
         .video-card { cursor: pointer; background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
         .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; overflow: hidden; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .v-info { padding: 10px; }
-
         input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; margin-bottom: 10px; box-sizing: border-box; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
     </style>
@@ -49,7 +37,7 @@
         <h2 style="color:red">Rasstube Pro</h2>
         <input type="text" id="usernameInput" placeholder="Ton Pseudo">
         <input type="file" id="avatarInput" accept="image/*">
-        <button onclick="login()" style="background:red; color:white; border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">LANCER</button>
+        <button onclick="login()" style="background:red; color:white; border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold;">LANCER</button>
     </div>
 </div>
 
@@ -57,7 +45,7 @@
     <div class="header-top">
         <span style="color:red; font-weight:900; font-size:24px;">RASSTUBE</span>
         <div style="display:flex; align-items:center; gap:12px;">
-            <button onclick="toggleUpload()" style="background:#272727; color:white; border:none; padding:8px 15px; border-radius:20px; font-weight:bold; cursor:pointer;">+ Créer</button>
+            <button onclick="toggleUpload()" style="background:#272727; color:white; border:none; padding:8px 15px; border-radius:20px; font-weight:bold;">+ Créer</button>
             <div id="navUser"></div>
         </div>
     </div>
@@ -66,12 +54,10 @@
 
 <div class="main-container">
     <section class="upload-drawer" id="uploadDrawer">
-        <label style="font-size:12px; color:#aaa;">Fichier Vidéo :</label>
-        <input type="file" id="videoFile" accept="video/*">
-        <label style="font-size:12px; color:#aaa;">Miniature :</label>
-        <input type="file" id="thumbFile" accept="image/*">
-        <input type="text" id="vTitle" placeholder="Titre de la vidéo...">
-        <button id="pubBtn" onclick="publishVideo()" style="background:red; color:white; border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">PUBLIER</button>
+        <label style="font-size:12px; color:#aaa;">Vidéo :</label><input type="file" id="videoFile" accept="video/*">
+        <label style="font-size:12px; color:#aaa;">Miniature :</label><input type="file" id="thumbFile" accept="image/*">
+        <input type="text" id="vTitle" placeholder="Titre...">
+        <button id="pubBtn" onclick="publishVideo()" style="background:red; color:white; border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold;">PUBLIER MAINTENANT</button>
         <div class="progress-bar-wrap" id="progWrap"><div id="progressFill"></div></div>
     </section>
 
@@ -80,13 +66,12 @@
         <div class="video-meta">
             <h2 id="nowPlayingTitle" style="margin:0; font-size:18px;"></h2>
             <div class="video-actions">
-                <button class="btn-action" id="favBtn" onclick="toggleFav()">⭐ Favoris</button>
+                <button class="btn-action" onclick="toggleFav()">⭐ Favoris</button>
                 <select id="quality" onchange="adjQ()" style="background:#272727; color:white; border:none; border-radius:18px; padding:8px 12px; font-size:12px;">
-                    <option value="1">720p</option>
-                    <option value="0.75">540p</option>
-                    <option value="0.5">360p</option>
+                    <option value="1">720p (Max)</option>
+                    <option value="0.5">360p (Éco)</option>
                 </select>
-                <button class="btn-action" id="likeBtn">👍 <span id="likeCount">0</span></button>
+                <button class="btn-action">👍 Like</button>
             </div>
         </div>
     </div>
@@ -99,10 +84,10 @@
 </div>
 
 <script>
-    // CONFIGURATION FIREBASE
+    // --- CONFIGURATION À VÉRIFIER ---
     const firebaseConfig = {
         databaseURL: "https://rastube-default-rtdb.firebaseio.com/",
-        storageBucket: "rastube-default.appspot.com" // Assure-toi que c'est le bon bucket
+        storageBucket: "rastube-default.appspot.com" // Vérifie bien ce nom dans ta console Firebase !
     };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
@@ -110,19 +95,14 @@
     let currentVideo = null;
 
     window.onload = function() {
-        if (!localStorage.getItem('rasstube_name')) {
-            document.getElementById('loginModal').style.display = "flex";
-        } else {
-            showUser();
-            loadVideos();
-            loadFavs();
-        }
+        if (!localStorage.getItem('rasstube_name')) document.getElementById('loginModal').style.display = "flex";
+        else { showUser(); loadVideos(); loadFavs(); }
     };
 
     function login() {
         const name = document.getElementById('usernameInput').value;
         const file = document.getElementById('avatarInput').files[0];
-        if(!name || !file) return alert("Pseudo et image requis");
+        if(!name || !file) return alert("Remplis tout !");
         const reader = new FileReader();
         reader.onload = (e) => {
             localStorage.setItem('rasstube_name', name);
@@ -134,10 +114,9 @@
     }
 
     function showUser() {
-        document.getElementById('navUser').innerHTML = `<img src="${localStorage.getItem('rasstube_avatar')}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid #444">`;
+        document.getElementById('navUser').innerHTML = `<img src="${localStorage.getItem('rasstube_avatar')}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">`;
     }
 
-    // FONCTION PUBLIER AVEC STORAGE (Répare le blocage à 70%)
     async function publishVideo() {
         const vFile = document.getElementById('videoFile').files[0];
         const tFile = document.getElementById('thumbFile').files[0];
@@ -146,9 +125,13 @@
         const fill = document.getElementById('progressFill');
         const wrap = document.getElementById('progWrap');
 
-        if(!vFile || !tFile || !title) return alert("Remplis tout !");
+        if(!vFile || !tFile || !title) return alert("Champs vides !");
         
+        // LIMITE DE SÉCURITÉ : 40 Mo max pour éviter le plantage
+        if(vFile.size > 40 * 1024 * 1024) return alert("Vidéo trop lourde. Prends-en une plus courte !");
+
         btn.disabled = true;
+        btn.innerText = "Démarrage...";
         wrap.style.display = "block";
 
         try {
@@ -156,43 +139,46 @@
             const tRef = storage.ref('thumbs/' + Date.now() + "_" + tFile.name);
             await tRef.put(tFile);
             const tUrl = await tRef.getDownloadURL();
-            fill.style.width = "20%";
+            fill.style.width = "15%";
 
-            // 2. Upload Vidéo avec suivi
+            // 2. Upload Vidéo DIRECT (Firebase Storage est bcp plus robuste)
             const vRef = storage.ref('videos/' + Date.now() + "_" + vFile.name);
             const uploadTask = vRef.put(vFile);
 
-            uploadTask.on('state_changed', (snap) => {
-                const p = (snap.bytesTransferred / snap.totalBytes) * 70 + 20;
-                fill.style.width = p + "%";
-                btn.innerText = "Envoi : " + Math.round(p) + "%";
-            }, null, async () => {
-                const vUrl = await uploadTask.snapshot.ref.getDownloadURL();
-                database.ref('videos').push({
-                    title, thumb: tUrl, video: vUrl, likes: 0,
-                    author: localStorage.getItem('rasstube_name'),
-                    authorPic: localStorage.getItem('rasstube_avatar')
-                });
-                fill.style.width = "100%";
-                alert("Publié !");
-                location.reload();
-            });
+            uploadTask.on('state_changed', 
+                (snap) => {
+                    const p = (snap.bytesTransferred / snap.totalBytes) * 80 + 15;
+                    fill.style.width = p + "%";
+                    btn.innerText = "Envoi : " + Math.round(p) + "%";
+                }, 
+                (err) => { alert("Erreur : " + err.message + ". Vérifie si Storage est activé !"); btn.disabled = false; }, 
+                async () => {
+                    const vUrl = await uploadTask.snapshot.ref.getDownloadURL();
+                    database.ref('videos').push({
+                        title, thumb: tUrl, video: vUrl, likes: 0,
+                        author: localStorage.getItem('rasstube_name'),
+                        authorPic: localStorage.getItem('rasstube_avatar')
+                    });
+                    fill.style.width = "100%";
+                    btn.innerText = "RÉUSSI !";
+                    setTimeout(() => location.reload(), 1000);
+                }
+            );
         } catch (e) {
-            alert("Erreur. Vérifie ta console Firebase Storage.");
+            alert("Erreur critique d'envoi.");
             btn.disabled = false;
         }
     }
 
     function loadVideos() {
-        database.ref('videos').on('value', snap => {
+        database.ref('videos').limitToLast(20).on('value', snap => {
             const grid = document.getElementById('videoGrid');
             grid.innerHTML = "";
             snap.forEach(child => {
                 const v = child.val();
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.setAttribute('data-title', v.title.toLowerCase());
-                card.innerHTML = `<div class="v-thumb"><img src="${v.thumb}"></div><div class="v-info"><b>${v.title}</b><br><small style="color:gray">${v.author}</small></div>`;
+                card.innerHTML = `<div class="v-thumb"><img src="${v.thumb}"></div><div style="padding:10px;"><b>${v.title}</b><br><small style="color:gray">${v.author}</small></div>`;
                 card.onclick = () => playVideo(child.key, v);
                 grid.prepend(card);
             });
@@ -201,16 +187,10 @@
 
     function playVideo(id, v) {
         currentVideo = {id, ...v};
-        document.getElementById('videoPlayer').src = v.video;
+        const p = document.getElementById('videoPlayer');
+        p.src = v.video;
         document.getElementById('nowPlayingTitle').innerText = v.title;
-        document.getElementById('likeCount').innerText = v.likes || 0;
         document.getElementById('mainPlayerContainer').style.display = "block";
-        
-        // Update Like Button
-        document.getElementById('likeBtn').onclick = () => {
-            database.ref('videos/' + id + '/likes').transaction(l => (l || 0) + 1);
-        };
-
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
@@ -221,10 +201,11 @@
 
     function toggleFav() {
         let favs = JSON.parse(localStorage.getItem('rasstube_favs') || "[]");
+        if(!currentVideo) return;
         if(!favs.find(f => f.id === currentVideo.id)) {
             favs.push(currentVideo);
             localStorage.setItem('rasstube_favs', JSON.stringify(favs));
-            document.getElementById('favBtn').classList.add('active');
+            alert("Ajouté aux favoris !");
             loadFavs();
         }
     }
@@ -236,7 +217,7 @@
         favs.forEach(v => {
             const card = document.createElement('div');
             card.className = 'video-card';
-            card.innerHTML = `<div class="v-thumb"><img src="${v.thumb}"></div><div class="v-info"><b>${v.title}</b></div>`;
+            card.innerHTML = `<div class="v-thumb"><img src="${v.thumb}"></div><div style="padding:10px;"><b>${v.title}</b></div>`;
             card.onclick = () => playVideo(v.id, v);
             grid.appendChild(card);
         });
@@ -250,7 +231,7 @@
     function searchVideo() {
         const q = document.getElementById('searchBar').value.toLowerCase();
         document.querySelectorAll('#videoGrid .video-card').forEach(c => {
-            c.style.display = c.getAttribute('data-title').includes(q) ? "block" : "none";
+            c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none";
         });
     }
 </script>
