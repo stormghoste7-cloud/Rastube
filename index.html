@@ -5,122 +5,193 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RASSTUBE .NET</title>
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary: #ff4d4d;
+            --bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text: #ffffff;
         }
 
-        /* Barre de navigation */
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Header Moderne Flou */
         header {
-            background-color: #111;
-            padding: 15px;
+            background: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #ff0000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .logo {
-            color: #ff0000;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
             text-decoration: none;
+            letter-spacing: -1px;
         }
 
         .nav-links a {
-            color: #fff;
+            color: #ddd;
             text-decoration: none;
-            margin-left: 15px;
+            margin-left: 20px;
             font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
         }
 
-        /* Section Poster une vidéo */
-        .upload-section {
-            background: #111;
-            margin: 20px;
+        .nav-links a:hover { color: var(--primary); }
+
+        /* Conteneur Principal */
+        .container {
+            max-width: 1200px;
+            margin: auto;
             padding: 20px;
-            border-radius: 10px;
-            border: 1px dashed #444;
         }
 
-        .upload-section h2 { color: #ff0000; font-size: 18px; }
+        /* Section Poster Stylisée */
+        .upload-section {
+            background: linear-gradient(145deg, #1a1a1a, #111);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
 
-        input, textarea, button {
+        .upload-section h2 { 
+            color: var(--text); 
+            font-size: 20px; 
+            margin-top: 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        input, textarea {
             width: 100%;
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-        }
-
-        button {
-            background-color: #ff0000;
+            background: #222;
+            border: 1px solid #333;
             color: white;
-            font-weight: bold;
-            cursor: pointer;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            box-sizing: border-box;
         }
 
-        /* Grille des vidéos */
+        input:focus { border-color: var(--primary); outline: none; }
+
+        .btn-publish {
+            background: linear-gradient(90deg, #ff4d4d, #b30000);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-publish:active { transform: scale(0.98); }
+
+        /* Grille Vidéo Pro */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            gap: 25px;
         }
 
         .video-card {
-            background: #111;
-            border-radius: 10px;
+            background: var(--card-bg);
+            border-radius: 12px;
             overflow: hidden;
+            transition: 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            border-color: rgba(255, 77, 77, 0.3);
         }
 
         .thumbnail {
             width: 100%;
-            height: 160px;
-            background: #222;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #444;
+            aspect-ratio: 16/9;
+            background: #2a2a2a;
+            position: relative;
         }
 
-        .video-info { padding: 10px; }
-        .video-title { font-weight: bold; margin-bottom: 5px; }
-        .video-author { color: #aaa; font-size: 12px; }
+        .thumbnail::after {
+            content: "▶";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .video-info { padding: 15px; }
+        .video-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; display: block; }
+        .video-meta { color: #888; font-size: 13px; }
+
     </style>
 </head>
 <body>
 
 <header>
-    <a href="#" class="logo">🎬 RASSTUBE .NET</a>
+    <a href="#" class="logo">🎬 RASSTUBE</a>
     <div class="nav-links">
-        <a href="#login">Connexion</a>
         <a href="#upload">Poster</a>
+        <a href="#login" style="border: 1px solid var(--primary); padding: 5px 15px; border-radius: 20px;">Connexion</a>
     </div>
 </header>
 
-<section class="upload-section" id="upload">
-    <h2>Poste ta vidéo</h2>
-    <input type="text" placeholder="Titre de la vidéo...">
-    <textarea placeholder="Description..."></textarea>
-    <label style="display:block; margin-top:10px; font-size:12px;">Ajouter une miniature :</label>
-    <input type="file" accept="image/*">
-    <button>PUBLIER</button>
-</section>
+<div class="container">
+    <section class="upload-section" id="upload">
+        <h2>Créer du contenu</h2>
+        <input type="text" placeholder="Quel est le titre de ta pépite ?">
+        <textarea placeholder="Décris ta vidéo en quelques mots..."></textarea>
+        
+        <div style="margin-top:15px;">
+            <label style="font-size:13px; color:#888;">Miniature (JPG, PNG)</label>
+            <input type="file" accept="image/*" style="font-size:12px;">
+        </div>
 
-<h2 style="margin-left: 20px;">Vidéos recommandées</h2>
-<div class="video-grid">
-    <div class="video-card">
-        <div class="thumbnail">Miniature vidéo</div>
-        <div class="video-info">
-            <div class="video-title">Ma première vidéo sur Rasstube</div>
-            <div class="video-author">Rayan • 0 vues</div>
+        <button class="btn-publish">Mettre en ligne</button>
+    </section>
+
+    <h2 style="font-size: 22px; margin-bottom: 20px;">Tendances</h2>
+    <div class="video-grid">
+        <div class="video-card">
+            <div class="thumbnail"></div>
+            <div class="video-info">
+                <span class="video-title">Bienvenue sur le nouveau Rasstube .NET</span>
+                <div class="video-meta">Rayan • 1.2k vues • Il y a 1h</div>
+            </div>
+        </div>
+        <div class="video-card">
+            <div class="thumbnail"></div>
+            <div class="video-info">
+                <span class="video-title">Tuto : Comment utiliser la plateforme</span>
+                <div class="video-meta">Admin • 450 vues • Il y a 3h</div>
+            </div>
         </div>
     </div>
 </div>
