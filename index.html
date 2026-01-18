@@ -3,27 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Plateforme Officielle</title>
+    <title>RASSTUBE .NET | Premium</title>
     <style>
         :root {
             --primary: #ff0000;
-            --primary-hover: #cc0000;
             --bg: #050505;
             --card-bg: #121212;
             --text: #ffffff;
-            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 0;
         }
 
-        /* --- NAVIGATION --- */
         header {
             background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(15px);
@@ -32,36 +27,14 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #222;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: sticky; top: 0; z-index: 1000;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--primary);
-            text-decoration: none;
-            text-transform: uppercase;
-        }
+        .logo { font-size: 24px; font-weight: 900; color: var(--primary); text-decoration: none; }
 
-        .nav-btn {
-            background: var(--primary);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-            transition: 0.3s;
-        }
+        .main-container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
 
-        .nav-btn:hover { background: var(--primary-hover); }
-
-        /* --- CONTAINER --- */
-        .main-container { max-width: 1300px; margin: 20px auto; padding: 0 20px; }
-
-        /* --- FORMULAIRE DE PUBLICATION --- */
+        /* FORMULAIRE PHOTO */
         .upload-box {
             background: var(--card-bg);
             border: 1px solid #222;
@@ -70,164 +43,121 @@
             margin-bottom: 40px;
         }
 
-        .upload-box h2 { margin-top: 0; font-size: 1.2rem; color: var(--primary); }
-
         input, textarea {
-            width: 100%;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: white;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-sizing: border-box;
+            width: 100%; background: #1a1a1a; border: 1px solid #333;
+            color: white; padding: 12px; margin: 10px 0; border-radius: 8px;
+        }
+
+        .file-input-label {
+            display: block; background: #333; padding: 10px;
+            text-align: center; border-radius: 8px; cursor: pointer;
+            margin: 10px 0; border: 1px dashed var(--primary);
+        }
+
+        #previewImg {
+            width: 100%; max-height: 200px; object-fit: cover;
+            border-radius: 10px; display: none; margin-bottom: 10px;
         }
 
         .publish-btn {
-            background: var(--primary);
-            width: 100%;
-            border: none;
-            padding: 15px;
-            color: white;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            text-transform: uppercase;
+            background: var(--primary); width: 100%; border: none;
+            padding: 15px; color: white; font-weight: bold;
+            border-radius: 8px; cursor: pointer;
         }
 
-        /* --- GRILLE VIDÉO --- */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
+        /* GRILLE ET CARTES */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 
-        .video-card {
-            background: transparent;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; }
 
-        .video-card:hover { transform: translateY(-5px); }
-
-        .v-thumb {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #222;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-
+        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; overflow: hidden; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-        .v-info { padding: 12px 5px; }
-        .v-title { font-weight: bold; font-size: 16px; margin-bottom: 5px; display: block; }
-        .v-meta { color: #aaa; font-size: 13px; }
+        .v-info { padding: 12px; }
+        .v-title { font-weight: bold; display: block; margin-bottom: 5px; }
 
-        /* --- MODAL (FENÊTRE) CONNEXION --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
+        .like-btn {
+            color: #555; font-size: 20px; cursor: pointer; transition: 0.3s;
         }
+        .like-btn.active { color: var(--primary); transform: scale(1.2); }
 
-        .modal-content {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            border: 1px solid var(--primary);
-        }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="#" class="logo">Rasstube</a>
-    <div style="display: flex; gap: 15px;">
-        <a href="#" class="nav-btn" onclick="openModal()">Connexion</a>
-    </div>
+    <a href="#" class="logo">RASSTUBE</a>
+    <button class="publish-btn" style="width:auto; padding: 8px 15px;" onclick="document.getElementById('upload').scrollIntoView()">Poster</button>
 </header>
 
 <div class="main-container">
     
-    <section class="upload-box">
-        <h2>🚀 Partage ta vidéo</h2>
-        <input type="text" id="vTitle" placeholder="Titre de la vidéo...">
-        <textarea id="vDesc" placeholder="Description..."></textarea>
-        <input type="text" id="vThumb" placeholder="Lien d'une image pour la miniature (URL)...">
-        <button class="publish-btn" onclick="publishVideo()">Publier sur Rasstube</button>
+    <section class="upload-box" id="upload">
+        <h2 style="color:var(--primary)">🎬 Nouvelle Publication</h2>
+        
+        <img id="previewImg" src="">
+        
+        <label class="file-input-label">
+            📸 Choisir une miniature depuis mon téléphone
+            <input type="file" id="vFile" accept="image/*" style="display:none" onchange="previewFile()">
+        </label>
+
+        <input type="text" id="vTitle" placeholder="Titre de la vidéo">
+        <textarea id="vDesc" placeholder="Description"></textarea>
+        
+        <button class="publish-btn" onclick="publishVideo()">PUBLIER MAINTENANT</button>
     </section>
 
-    <h2 style="border-left: 4px solid red; padding-left: 15px;">Dernières publications</h2>
+    <h2>Tendances</h2>
     <div class="video-grid" id="videoGrid">
-        <div class="video-card">
-            <div class="v-thumb">
-                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=500" alt="thumb">
-            </div>
-            <div class="v-info">
-                <span class="v-title">Bienvenue sur la version finale !</span>
-                <div class="v-meta">Rayan • 15k vues • Maintenant</div>
-            </div>
         </div>
-    </div>
-</div>
-
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <h2 style="color:red">S'inscrire</h2>
-        <input type="text" placeholder="Nom d'utilisateur">
-        <input type="password" placeholder="Mot de passe">
-        <button class="publish-btn" onclick="closeModal()">Rejoindre la communauté</button>
-        <p style="font-size: 12px; color: gray; margin-top: 15px;" onclick="closeModal()">Fermer</p>
-    </div>
 </div>
 
 <script>
-    // Fonction pour ajouter une vidéo dynamiquement
+    let currentBase64 = "";
+
+    // Fonction pour lire l'image du téléphone
+    function previewFile() {
+        const file = document.querySelector('#vFile').files[0];
+        const preview = document.querySelector('#previewImg');
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.style.display = "block";
+            currentBase64 = reader.result; // On stocke l'image
+        }
+
+        if (file) { reader.readAsDataURL(file); }
+    }
+
     function publishVideo() {
         const title = document.getElementById('vTitle').value;
-        const thumb = document.getElementById('vThumb').value || 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500';
-        
-        if(title === "") { alert("Donne un titre à ta vidéo !"); return; }
+        if(!title || !currentBase64) { alert("Ajoute un titre et une image !"); return; }
 
         const grid = document.getElementById('videoGrid');
-        const newVideo = `
-            <div class="video-card" style="animation: fadeIn 0.5s ease;">
-                <div class="v-thumb"><img src="${thumb}"></div>
-                <div class="v-info">
-                    <span class="v-title">${title}</span>
-                    <div class="v-meta">Toi • 0 vue • À l'instant</div>
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+            <div class="v-thumb"><img src="${currentBase64}"></div>
+            <div class="v-info">
+                <span class="v-title">${title}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <small style="color:#888">Par Toi • 0 vue</small>
+                    <span class="like-btn" onclick="this.classList.toggle('active')">❤</span>
                 </div>
             </div>
         `;
         
-        grid.innerHTML = newVideo + grid.innerHTML;
+        grid.prepend(card);
         
-        // Vider le formulaire
+        // Reset
         document.getElementById('vTitle').value = "";
-        document.getElementById('vThumb').value = "";
-        alert("Vidéo publiée avec succès !");
+        document.getElementById('previewImg').style.display = "none";
+        currentBase64 = "";
+        alert("Vidéo postée !");
     }
-
-    // Fonctions pour la fenêtre de connexion
-    function openModal() { document.getElementById('loginModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
 </script>
-
-<style>
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-</style>
 
 </body>
 </html>
