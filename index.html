@@ -39,7 +39,7 @@
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- CARTES CONTENU --- */
+        /* --- CARTES CONTENU & RSHOT --- */
         .v-card { background: var(--card); border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
         .v-card video, .v-card img { width: 100%; display: block; }
         .v-body { padding: 12px; }
@@ -47,6 +47,10 @@
         .icon-group { display: flex; gap: 15px; font-size: 18px; }
         .sub-btn { background: var(--red); color: white; border: none; padding: 5px 12px; border-radius: 15px; font-weight: bold; font-size: 11px; }
         .sub-btn.is-sub { background: #333; }
+        
+        .rshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .rshot-item { aspect-ratio: 9/16; background: #111; border-radius: 12px; overflow: hidden; position: relative; }
+        .rshot-item video { width: 100%; height: 100%; object-fit: cover; }
 
         /* --- CHAT & IA --- */
         #chat-container { height: calc(100vh - 320px); overflow-y: auto; background: #080808; border-radius: 15px; padding: 15px; border: 1px solid #222; display: flex; flex-direction: column; }
@@ -87,10 +91,19 @@
         <div id="feed-home"></div>
     </div>
 
+    <div id="p-rshot" class="page">
+        <h3 style="color:#ff0055;"><i class="fas fa-bolt"></i> RShots</h3>
+        <div id="feed-rshot" class="rshot-grid"></div>
+    </div>
+
     <div id="p-upload" class="page">
-        <h3>Publier une vidéo</h3>
+        <h3>Publier du contenu</h3>
         <input type="file" id="post-file" class="auth-input" accept="video/*,image/*">
         <input type="text" id="post-title" class="auth-input" placeholder="Titre...">
+        <select id="post-type" class="auth-input">
+            <option value="video">Vidéo Classique</option>
+            <option value="rshot">RShot (Vertical)</option>
+        </select>
         <button class="btn-main" onclick="publish()">PUBLIER</button>
     </div>
 
@@ -114,16 +127,16 @@
 
 <nav class="bottom-nav" id="app-nav" style="display:none;">
     <div class="nav-item active" onclick="nav('p-home', this)"><i class="fas fa-home"></i><br>Accueil</div>
-    <div class="nav-item" onclick="nav('p-chat', this)"><i class="fas fa-comments"></i><br>Chat</div>
+    <div class="nav-item" onclick="nav('p-rshot', this)"><i class="fas fa-bolt"></i><br>RShot</div>
     <div class="nav-item" onclick="nav('p-upload', this)"><i class="fas fa-plus btn-plus"></i></div>
+    <div class="nav-item" onclick="nav('p-chat', this)"><i class="fas fa-comments"></i><br>Chat</div>
     <div class="nav-item" onclick="nav('p-fav', this)"><i class="fas fa-heart"></i><br>Favoris</div>
-    <div class="nav-item" onclick="logout()"><i class="fas fa-user-circle"></i><br>Quitter</div>
 </nav>
 
 <script>
     let user = JSON.parse(localStorage.getItem('rs_user_v5'));
     let posts = JSON.parse(localStorage.getItem('rs_posts_v5')) || [
-        {id: 1, title: 'Bienvenue sur Rasstube !', user: 'Admin', url: 'https://www.w3schools.com/html/mov_bbb.mp4', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin'}
+        {id: 1, title: 'Bienvenue sur Rasstube !', user: 'Admin', url: 'https://www.w3schools.com/html/mov_bbb.mp4', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin', type:'video'}
     ];
     let favorites = JSON.parse(localStorage.getItem('rs_favs_v5') || '[]');
     let messages = JSON.parse(localStorage.getItem('rs_msgs_v5') || '[]');
@@ -170,17 +183,19 @@
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         if(el) el.classList.add('active');
         if(id === 'p-chat') renderChat();
+        if(id === 'p-home' || id === 'p-rshot') renderHome();
     }
 
     // --- PUBLICATION ---
     function publish() {
         const title = document.getElementById('post-title').value;
         const file = document.getElementById('post-file').files[0];
+        const type = document.getElementById('post-type').value;
         if(!title || !file) return alert("Remplis tout !");
         
         const reader = new FileReader();
         reader.onload = (e) => {
-            posts.push({ id: Date.now(), title, user: user.name, avatar: user.avatar, url: e.target.result });
+            posts.push({ id: Date.now(), title, user: user.name, avatar: user.avatar, url: e.target.result, type: type });
             localStorage.setItem('rs_posts_v5', JSON.stringify(posts));
             alert("Publié !");
             location.reload();
@@ -191,7 +206,9 @@
     // --- RENDU ---
     function renderHome(f = "") {
         const feed = document.getElementById('feed-home');
-        feed.innerHTML = posts.filter(p => p.title.toLowerCase().includes(f.toLowerCase())).reverse().map(p => `
+        const rfeed = document.getElementById('feed-rshot');
+        
+        feed.innerHTML = posts.filter(p => p.type === 'video' && p.title.toLowerCase().includes(f.toLowerCase())).reverse().map(p => `
             <div class="v-card">
                 <video src="${p.url}" controls></video>
                 <div class="v-body">
@@ -207,6 +224,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        `).join('');
+
+        rfeed.innerHTML = posts.filter(p => p.type === 'rshot').reverse().map(p => `
+            <div class="rshot-item">
+                <video src="${p.url}" loop onclick="this.paused?this.play():this.pause()"></video>
             </div>
         `).join('');
     }
@@ -238,7 +261,7 @@
         messages.push({ text: input.value, user: user.name, mode: chatMode, me: true });
         if(chatMode === 'ai') {
             setTimeout(() => {
-                messages.push({ text: "Salut " + user.name + ", je suis Gemini IA ! Ton application est superbe.", user: "Gemini", mode: "ai", me: false });
+                messages.push({ text: "Salut " + user.name + ", je suis Gemini IA !", user: "Gemini", mode: "ai", me: false });
                 renderChat();
             }, 800);
         }
@@ -274,3 +297,4 @@
 </script>
 </body>
 </html>
+
