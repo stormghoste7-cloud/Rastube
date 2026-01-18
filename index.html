@@ -2,238 +2,389 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE ULTRA | Edition Rapide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RASSTUBE ULTIMATE</title>
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <style>
-        :root { --primary: #ff0000; --bg: #0f0f0f; --card-bg: #1e1e1e; --text: #ffffff; }
-        body { background-color: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 0; }
-        header { background: #0f0f0f; padding: 10px 5%; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .search-bar { width: 100%; background: #121212; border: 1px solid #333; padding: 10px; border-radius: 20px; color: white; outline: none; }
-        .main-container { max-width: 900px; margin: 10px auto; padding: 0 15px; }
-        .upload-drawer { display: none; background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; }
-        .progress-bar-wrap { width: 100%; background: #000; height: 10px; border-radius: 5px; margin-top: 15px; display: none; overflow: hidden; }
-        #progressFill { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; }
-        #mainPlayerContainer { display: none; margin-bottom: 30px; }
-        video { width: 100%; border-radius: 12px; background: #000; }
-        .video-actions { display: flex; gap: 10px; margin-top: 10px; align-items: center; }
-        .btn-action { background: #272727; border: none; color: white; padding: 10px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .section-title { font-size: 18px; margin: 25px 0 15px 0; border-left: 4px solid var(--primary); padding-left: 10px; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-        .video-card { cursor: pointer; background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
-        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; overflow: hidden; }
-        .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; margin-bottom: 10px; box-sizing: border-box; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
+        :root { --primary: #ff0000; --bg: #000000; --card: #121212; --text: #fff; --nav: #0f0f0f; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; padding-bottom: 70px; overflow-x: hidden; }
+
+        /* HEADER */
+        header { 
+            position: sticky; top: 0; z-index: 100; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222;
+        }
+        .logo { color: var(--primary); font-weight: 900; font-size: 22px; letter-spacing: -1px; }
+
+        /* NAVIGATION BAS (STYLE APP) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: var(--nav);
+            display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #222; z-index: 1000;
+        }
+        .nav-item { color: #888; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: white; }
+        .nav-upload { 
+            background: var(--primary); color: white; width: 45px; height: 45px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; margin-bottom: 20px; border: 3px solid var(--bg);
+            font-size: 20px; box-shadow: 0 4px 10px rgba(255,0,0,0.3);
+        }
+
+        /* PAGES (Système d'onglets) */
+        .page-section { display: none; padding: 10px; animation: fadeIn 0.3s; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- STYLE VIDÉOS (HOME) --- */
+        .video-card { background: var(--card); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+        .vid-player { width: 100%; aspect-ratio: 16/9; background: #000; display: block; }
+        .vid-info { padding: 12px; }
+        .vid-title { font-weight: bold; font-size: 15px; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .vid-author { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #aaa; margin-top: 8px; }
+        .avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #333; }
+
+        /* --- STYLE RSHOT (TIKTOK) --- */
+        #rshot-feed { display: grid; gap: 2px; grid-template-columns: repeat(2, 1fr); }
+        .rshot-card { position: relative; aspect-ratio: 9/16; background: #222; border-radius: 8px; overflow: hidden; cursor: pointer; }
+        .rshot-card video { width: 100%; height: 100%; object-fit: cover; }
+        .rshot-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 10px; background: linear-gradient(transparent, black); }
+
+        /* --- STYLE PHOTOS (INSTA) --- */
+        .photo-card { background: var(--card); margin-bottom: 20px; border-radius: 12px; overflow: hidden; }
+        .photo-header { padding: 10px; display: flex; align-items: center; gap: 10px; }
+        .photo-img { width: 100%; display: block; }
+        .photo-actions { padding: 10px; display: flex; gap: 15px; font-size: 20px; }
+
+        /* MODAL UPLOAD */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: flex-end; }
+        .modal-content { background: #1e1e1e; width: 100%; padding: 20px 20px 80px 20px; border-radius: 20px 20px 0 0; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .upload-options { display: flex; gap: 10px; margin-bottom: 20px; }
+        .type-btn { flex: 1; padding: 10px; background: #333; border: none; color: white; border-radius: 8px; font-size: 13px; cursor: pointer; }
+        .type-btn.active { background: var(--primary); font-weight: bold; }
+        
+        input, button { font-family: inherit; }
+        .full-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 10px; }
+        .action-btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 16px; margin-top: 10px; }
+        
+        #progressContainer { display: none; margin-top: 15px; background: #333; height: 6px; border-radius: 3px; }
+        #progressBar { width: 0%; height: 100%; background: #0f0; transition: 0.3s; }
+        
+        /* FULLSCREEN PLAYER (Pour RShot) */
+        #fsPlayer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 3000; }
+        #fsVideo { width: 100%; height: 100%; object-fit: contain; }
+        #fsClose { position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; z-index: 3001; cursor: pointer; text-shadow: 0 0 5px black; }
     </style>
 </head>
 <body>
 
-<div class="modal" id="loginModal">
-    <div style="background:var(--card-bg); padding:30px; border-radius:20px; width:80%; max-width:300px; text-align:center;">
-        <h2 style="color:red">Rasstube Pro</h2>
-        <input type="text" id="usernameInput" placeholder="Ton Pseudo">
-        <input type="file" id="avatarInput" accept="image/*">
-        <button onclick="login()" style="background:red; color:white; border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold;">LANCER</button>
-    </div>
+<div id="loginScreen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:5000; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
+    <h1 style="color:red; font-size:40px; margin-bottom:30px">RASSTUBE</h1>
+    <input type="text" id="loginName" placeholder="Ton Pseudo" class="full-input">
+    <label style="color:#aaa; font-size:12px; margin:10px 0;">Photo de profil :</label>
+    <input type="file" id="loginAvatar" accept="image/*" class="full-input">
+    <button onclick="authUser()" class="action-btn">ENTRER</button>
 </div>
 
 <header>
-    <div class="header-top">
-        <span style="color:red; font-weight:900; font-size:24px;">RASSTUBE</span>
-        <div style="display:flex; align-items:center; gap:12px;">
-            <button onclick="toggleUpload()" style="background:#272727; color:white; border:none; padding:8px 15px; border-radius:20px; font-weight:bold;">+ Créer</button>
-            <div id="navUser"></div>
-        </div>
-    </div>
-    <input type="text" class="search-bar" id="searchBar" placeholder="🔍 Rechercher une vidéo..." onkeyup="searchVideo()">
+    <div class="logo">RASSTUBE</div>
+    <div id="userHead"></div>
 </header>
 
-<div class="main-container">
-    <section class="upload-drawer" id="uploadDrawer">
-        <label style="font-size:12px; color:#aaa;">Vidéo :</label><input type="file" id="videoFile" accept="video/*">
-        <label style="font-size:12px; color:#aaa;">Miniature :</label><input type="file" id="thumbFile" accept="image/*">
-        <input type="text" id="vTitle" placeholder="Titre...">
-        <button id="pubBtn" onclick="publishVideo()" style="background:red; color:white; border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold;">PUBLIER MAINTENANT</button>
-        <div class="progress-bar-wrap" id="progWrap"><div id="progressFill"></div></div>
-    </section>
+<div id="appContainer">
+    
+    <div id="tab-home" class="page-section active">
+        <h3 style="margin: 0 0 15px 0;">Vidéos Récentes</h3>
+        <div id="feed-home"></div>
+    </div>
 
-    <div id="mainPlayerContainer">
-        <video id="videoPlayer" controls autoplay></video>
-        <div class="video-meta">
-            <h2 id="nowPlayingTitle" style="margin:0; font-size:18px;"></h2>
-            <div class="video-actions">
-                <button class="btn-action" onclick="toggleFav()">⭐ Favoris</button>
-                <select id="quality" onchange="adjQ()" style="background:#272727; color:white; border:none; border-radius:18px; padding:8px 12px; font-size:12px;">
-                    <option value="1">720p (Max)</option>
-                    <option value="0.5">360p (Éco)</option>
-                </select>
-                <button class="btn-action">👍 Like</button>
-            </div>
+    <div id="tab-rshot" class="page-section">
+        <h3 style="margin: 0 0 15px 0; color:#ff0055"><i class="fas fa-bolt"></i> RShot (Max 30s)</h3>
+        <div id="rshot-feed"></div>
+    </div>
+
+    <div id="tab-photos" class="page-section">
+        <h3 style="margin: 0 0 15px 0; color:#00aaff"><i class="fas fa-camera"></i> Photos</h3>
+        <div id="feed-photos"></div>
+    </div>
+
+    <div id="tab-profile" class="page-section">
+        <div style="text-align:center; padding:40px 0;">
+            <img id="profilePic" src="" style="width:100px; height:100px; border-radius:50%; border:3px solid red;">
+            <h2 id="profileName"></h2>
+            <button onclick="logout()" style="background:#333; color:white; border:none; padding:8px 20px; border-radius:20px; margin-top:10px;">Se déconnecter</button>
         </div>
     </div>
 
-    <div class="section-title">Nouveautés</div>
-    <div class="video-grid" id="videoGrid"></div>
+</div>
 
-    <div class="section-title">Mes Favoris</div>
-    <div class="video-grid" id="favGrid"></div>
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('home', this)"><i class="fas fa-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="switchTab('rshot', this)"><i class="fas fa-bolt"></i><span>RShot</span></div>
+    <div class="nav-upload" onclick="openUpload()"><i class="fas fa-plus"></i></div>
+    <div class="nav-item" onclick="switchTab('photos', this)"><i class="fas fa-image"></i><span>Photos</span></div>
+    <div class="nav-item" onclick="switchTab('profile', this)"><i class="fas fa-user"></i><span>Moi</span></div>
+</div>
+
+<div id="uploadModal" class="modal">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="margin:0">Créer</h3>
+            <span onclick="closeUpload()" style="font-size:24px; color:#666;">&times;</span>
+        </div>
+
+        <div class="upload-options">
+            <button class="type-btn active" onclick="setUploadType('video')" id="btn-video">Vidéo</button>
+            <button class="type-btn" onclick="setUploadType('rshot')" id="btn-rshot">RShot (30s)</button>
+            <button class="type-btn" onclick="setUploadType('photo')" id="btn-photo">Photo</button>
+        </div>
+
+        <input type="file" id="fileInput" class="full-input" style="padding:20px; border:2px dashed #444;">
+        <p id="fileWarning" style="color:orange; font-size:12px; display:none;"></p>
+        
+        <input type="text" id="uploadTitle" placeholder="Légende ou titre..." class="full-input">
+        
+        <div id="progressContainer"><div id="progressBar"></div></div>
+        <button id="publishBtn" onclick="startUpload()" class="action-btn">PUBLIER</button>
+    </div>
+</div>
+
+<div id="fsPlayer">
+    <span id="fsClose" onclick="closeFs()">&times;</span>
+    <video id="fsVideo" controls autoplay loop></video>
 </div>
 
 <script>
-    // --- CONFIGURATION À VÉRIFIER ---
+    // --- CONFIG FIREBASE ---
     const firebaseConfig = {
         databaseURL: "https://rastube-default-rtdb.firebaseio.com/",
-        storageBucket: "rastube-default.appspot.com" // Vérifie bien ce nom dans ta console Firebase !
+        storageBucket: "rastube-default.appspot.com" // Vérifie ça dans ta console !
     };
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    const db = firebase.database();
     const storage = firebase.storage();
-    let currentVideo = null;
 
-    window.onload = function() {
-        if (!localStorage.getItem('rasstube_name')) document.getElementById('loginModal').style.display = "flex";
-        else { showUser(); loadVideos(); loadFavs(); }
+    let currentUser = null;
+    let currentUploadType = 'video'; // video, rshot, photo
+
+    // --- INITIALISATION ---
+    window.onload = () => {
+        const localUser = localStorage.getItem('rt_user');
+        if(localUser) {
+            currentUser = JSON.parse(localUser);
+            document.getElementById('loginScreen').style.display = 'none';
+            initApp();
+        }
     };
 
-    function login() {
-        const name = document.getElementById('usernameInput').value;
-        const file = document.getElementById('avatarInput').files[0];
-        if(!name || !file) return alert("Remplis tout !");
+    function authUser() {
+        const name = document.getElementById('loginName').value;
+        const file = document.getElementById('loginAvatar').files[0];
+        if(!name || !file) return alert("Pseudo et image obligatoires !");
+
         const reader = new FileReader();
         reader.onload = (e) => {
-            localStorage.setItem('rasstube_name', name);
-            localStorage.setItem('rasstube_avatar', e.target.result);
-            localStorage.setItem('rasstube_favs', JSON.stringify([]));
-            location.reload();
+            currentUser = { name: name, avatar: e.target.result };
+            localStorage.setItem('rt_user', JSON.stringify(currentUser));
+            document.getElementById('loginScreen').style.display = 'none';
+            initApp();
         };
         reader.readAsDataURL(file);
     }
 
-    function showUser() {
-        document.getElementById('navUser').innerHTML = `<img src="${localStorage.getItem('rasstube_avatar')}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">`;
+    function initApp() {
+        document.getElementById('userHead').innerHTML = `<img src="${currentUser.avatar}" class="avatar">`;
+        document.getElementById('profilePic').src = currentUser.avatar;
+        document.getElementById('profileName').innerText = currentUser.name;
+        
+        loadContent('videos', 'feed-home');
+        loadContent('rshots', 'rshot-feed');
+        loadContent('photos', 'feed-photos');
     }
 
-    async function publishVideo() {
-        const vFile = document.getElementById('videoFile').files[0];
-        const tFile = document.getElementById('thumbFile').files[0];
-        const title = document.getElementById('vTitle').value;
-        const btn = document.getElementById('pubBtn');
-        const fill = document.getElementById('progressFill');
-        const wrap = document.getElementById('progWrap');
-
-        if(!vFile || !tFile || !title) return alert("Champs vides !");
+    // --- NAVIGATION ---
+    function switchTab(tabName, el) {
+        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-'+tabName).classList.add('active');
         
-        // LIMITE DE SÉCURITÉ : 40 Mo max pour éviter le plantage
-        if(vFile.size > 40 * 1024 * 1024) return alert("Vidéo trop lourde. Prends-en une plus courte !");
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        if(el) el.classList.add('active');
+    }
 
+    function logout() {
+        localStorage.removeItem('rt_user');
+        location.reload();
+    }
+
+    // --- SYSTEME D'UPLOAD INTELLIGENT ---
+    function openUpload() { document.getElementById('uploadModal').style.display = 'flex'; }
+    function closeUpload() { document.getElementById('uploadModal').style.display = 'none'; }
+
+    function setUploadType(type) {
+        currentUploadType = type;
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-'+type).classList.add('active');
+        
+        const input = document.getElementById('fileInput');
+        document.getElementById('fileWarning').style.display = 'none';
+        
+        if(type === 'photo') {
+            input.accept = 'image/*';
+            input.onchange = null;
+        } else {
+            input.accept = 'video/*';
+            // Vérification Durée pour RShot
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if(file && type === 'rshot') {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    video.onloadedmetadata = function() {
+                        window.URL.revokeObjectURL(video.src);
+                        if (video.duration > 31) { // Marge de 1s
+                            alert("⚠️ RShot trop long ! Maximum 30 secondes.");
+                            input.value = ""; // Reset
+                        }
+                    }
+                    video.src = URL.createObjectURL(file);
+                }
+            };
+        }
+    }
+
+    async function startUpload() {
+        const file = document.getElementById('fileInput').files[0];
+        const title = document.getElementById('uploadTitle').value;
+        if(!file || !title) return alert("Fichier et titre requis !");
+
+        // Bouton loading
+        const btn = document.getElementById('publishBtn');
+        const prog = document.getElementById('progressBar');
+        const progCont = document.getElementById('progressContainer');
         btn.disabled = true;
-        btn.innerText = "Démarrage...";
-        wrap.style.display = "block";
+        btn.innerText = "Compression & Envoi...";
+        progCont.style.display = "block";
 
         try {
-            // 1. Upload Miniature
-            const tRef = storage.ref('thumbs/' + Date.now() + "_" + tFile.name);
-            await tRef.put(tFile);
-            const tUrl = await tRef.getDownloadURL();
-            fill.style.width = "15%";
+            // Dossier de stockage selon le type
+            const folder = currentUploadType + 's'; // videos, rshots, photos
+            const ref = storage.ref(`${folder}/${Date.now()}_${file.name}`);
+            
+            const task = ref.put(file);
 
-            // 2. Upload Vidéo DIRECT (Firebase Storage est bcp plus robuste)
-            const vRef = storage.ref('videos/' + Date.now() + "_" + vFile.name);
-            const uploadTask = vRef.put(vFile);
-
-            uploadTask.on('state_changed', 
+            task.on('state_changed', 
                 (snap) => {
-                    const p = (snap.bytesTransferred / snap.totalBytes) * 80 + 15;
-                    fill.style.width = p + "%";
-                    btn.innerText = "Envoi : " + Math.round(p) + "%";
-                }, 
-                (err) => { alert("Erreur : " + err.message + ". Vérifie si Storage est activé !"); btn.disabled = false; }, 
+                    const p = (snap.bytesTransferred / snap.totalBytes) * 100;
+                    prog.style.width = p + "%";
+                },
+                (err) => { alert(err.message); btn.disabled = false; },
                 async () => {
-                    const vUrl = await uploadTask.snapshot.ref.getDownloadURL();
-                    database.ref('videos').push({
-                        title, thumb: tUrl, video: vUrl, likes: 0,
-                        author: localStorage.getItem('rasstube_name'),
-                        authorPic: localStorage.getItem('rasstube_avatar')
+                    const url = await task.snapshot.ref.getDownloadURL();
+                    
+                    // Enregistrement Base de Données
+                    db.ref(folder).push({
+                        url: url,
+                        title: title,
+                        author: currentUser.name,
+                        avatar: currentUser.avatar,
+                        timestamp: Date.now()
                     });
-                    fill.style.width = "100%";
-                    btn.innerText = "RÉUSSI !";
-                    setTimeout(() => location.reload(), 1000);
+
+                    // Reset
+                    closeUpload();
+                    btn.disabled = false;
+                    btn.innerText = "PUBLIER";
+                    progCont.style.display = "none";
+                    document.getElementById('fileInput').value = "";
+                    document.getElementById('uploadTitle').value = "";
+                    alert("Publié avec succès !");
                 }
             );
-        } catch (e) {
-            alert("Erreur critique d'envoi.");
+
+        } catch (error) {
+            console.error(error);
+            alert("Erreur système.");
             btn.disabled = false;
         }
     }
 
-    function loadVideos() {
-        database.ref('videos').limitToLast(20).on('value', snap => {
-            const grid = document.getElementById('videoGrid');
-            grid.innerHTML = "";
-            snap.forEach(child => {
-                const v = child.val();
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                card.innerHTML = `<div class="v-thumb"><img src="${v.thumb}"></div><div style="padding:10px;"><b>${v.title}</b><br><small style="color:gray">${v.author}</small></div>`;
-                card.onclick = () => playVideo(child.key, v);
-                grid.prepend(card);
+    // --- AFFICHAGE DU CONTENU ---
+    function loadContent(node, containerId) {
+        db.ref(node).limitToLast(20).on('value', snap => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            const list = [];
+            snap.forEach(c => list.push(c.val()));
+            list.reverse(); // Plus récent en haut
+
+            list.forEach(item => {
+                let html = "";
+                
+                if(node === 'videos') {
+                    html = `
+                    <div class="video-card">
+                        <video class="vid-player" src="${item.url}" controls playsinline preload="metadata"></video>
+                        <div class="vid-info">
+                            <div class="vid-title">${item.title}</div>
+                            <div class="vid-author"><img src="${item.avatar}" class="avatar"> ${item.author}</div>
+                        </div>
+                    </div>`;
+                } 
+                else if (node === 'rshots') {
+                    // Pour RShot on ne charge pas la vidéo tout de suite pour la vitesse
+                    // On met un placeholder ou une lecture au clic
+                    html = `
+                    <div class="rshot-card" onclick="playFs('${item.url}')">
+                        <video src="${item.url}#t=0.1" preload="metadata"></video>
+                        <div class="rshot-overlay">
+                            <div style="color:white; font-size:12px; font-weight:bold;">${item.author}</div>
+                        </div>
+                    </div>`;
+                }
+                else if (node === 'photos') {
+                    html = `
+                    <div class="photo-card">
+                        <div class="photo-header">
+                            <img src="${item.avatar}" class="avatar"> <b>${item.author}</b>
+                        </div>
+                        <img src="${item.url}" class="photo-img" loading="lazy">
+                        <div class="photo-actions">
+                            <i class="far fa-heart" onclick="this.classList.toggle('fas');this.style.color='red'"></i>
+                            <i class="far fa-comment"></i>
+                        </div>
+                        <div style="padding:0 10px 10px 10px; font-size:13px;"><b>${item.author}</b> ${item.title}</div>
+                    </div>`;
+                }
+
+                container.insertAdjacentHTML('beforeend', html);
             });
         });
     }
 
-    function playVideo(id, v) {
-        currentVideo = {id, ...v};
-        const p = document.getElementById('videoPlayer');
-        p.src = v.video;
-        document.getElementById('nowPlayingTitle').innerText = v.title;
-        document.getElementById('mainPlayerContainer').style.display = "block";
-        window.scrollTo({top: 0, behavior: 'smooth'});
+    // --- LECTEUR PLEIN ÉCRAN (RSHOT) ---
+    function playFs(url) {
+        const fs = document.getElementById('fsPlayer');
+        const v = document.getElementById('fsVideo');
+        v.src = url;
+        fs.style.display = 'block';
+        v.play();
+    }
+    function closeFs() {
+        const fs = document.getElementById('fsPlayer');
+        const v = document.getElementById('fsVideo');
+        v.pause();
+        fs.style.display = 'none';
+        v.src = "";
     }
 
-    function adjQ() {
-        const q = document.getElementById('quality').value;
-        document.getElementById('videoPlayer').style.transform = `scale(${q})`;
-    }
-
-    function toggleFav() {
-        let favs = JSON.parse(localStorage.getItem('rasstube_favs') || "[]");
-        if(!currentVideo) return;
-        if(!favs.find(f => f.id === currentVideo.id)) {
-            favs.push(currentVideo);
-            localStorage.setItem('rasstube_favs', JSON.stringify(favs));
-            alert("Ajouté aux favoris !");
-            loadFavs();
-        }
-    }
-
-    function loadFavs() {
-        const grid = document.getElementById('favGrid');
-        grid.innerHTML = "";
-        const favs = JSON.parse(localStorage.getItem('rasstube_favs') || "[]");
-        favs.forEach(v => {
-            const card = document.createElement('div');
-            card.className = 'video-card';
-            card.innerHTML = `<div class="v-thumb"><img src="${v.thumb}"></div><div style="padding:10px;"><b>${v.title}</b></div>`;
-            card.onclick = () => playVideo(v.id, v);
-            grid.appendChild(card);
-        });
-    }
-
-    function toggleUpload() {
-        const d = document.getElementById('uploadDrawer');
-        d.style.display = (d.style.display === 'block') ? 'none' : 'block';
-    }
-
-    function searchVideo() {
-        const q = document.getElementById('searchBar').value.toLowerCase();
-        document.querySelectorAll('#videoGrid .video-card').forEach(c => {
-            c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none";
-        });
-    }
 </script>
 </body>
 </html>
