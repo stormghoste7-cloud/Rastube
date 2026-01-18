@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Officiel</title>
+    <title>RASSTUBE .NET | Réseau Mondial</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
     <style>
         :root { --primary: #ff0000; --bg: #050505; --card-bg: #121212; --text: #ffffff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
@@ -16,7 +19,6 @@
 
         .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .search-bar { width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 10px; border-radius: 20px; color: white; outline: none; }
-        .search-bar:focus { border-color: var(--primary); }
 
         .user-info { display: flex; align-items: center; gap: 10px; }
         .avatar-nav { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
@@ -26,7 +28,7 @@
         video { width: 100%; max-height: 500px; }
 
         .upload-box { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 30px; }
-        input, textarea { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
+        input { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
         .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
 
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
@@ -44,10 +46,10 @@
 
 <div class="modal" id="loginModal">
     <div class="modal-content">
-        <h2 style="color:red">Connexion Rasstube</h2>
+        <h2 style="color:red">Rejoindre Rasstube</h2>
         <input type="text" id="usernameInput" placeholder="Ton pseudo...">
         <input type="file" id="avatarInput" accept="image/*">
-        <button class="btn" onclick="login()">COMMENCER</button>
+        <button class="btn" onclick="login()">CRÉER MON COMPTE</button>
     </div>
 </div>
 
@@ -59,7 +61,7 @@
             <img src="" id="navAvatar" class="avatar-nav" style="display:none">
         </div>
     </div>
-    <input type="text" class="search-bar" id="searchBar" placeholder="Rechercher une vidéo..." onkeyup="searchVideo()">
+    <input type="text" class="search-bar" id="searchBar" placeholder="Rechercher sur Rasstube..." onkeyup="searchVideo()">
 </header>
 
 <div class="main-container">
@@ -69,27 +71,41 @@
     </div>
     
     <section class="upload-box">
-        <h2 style="margin-top:0; color:red;">Publier</h2>
+        <h2 style="margin-top:0; color:red;">Publier mondialement</h2>
+        <label style="font-size:11px; color:gray">Fichier Vidéo :</label>
         <input type="file" id="videoFile" accept="video/*">
+        <label style="font-size:11px; color:gray">Image Miniature :</label>
         <input type="file" id="thumbFile" accept="image/*">
-        <input type="text" id="vTitle" placeholder="Titre...">
-        <button class="btn" onclick="publishVideo()">PUBLIER</button>
+        <input type="text" id="vTitle" placeholder="Titre de la vidéo...">
+        <button class="btn" id="publishBtn" onclick="publishVideo()">PUBLIER POUR TOUS</button>
     </section>
 
     <div class="video-grid" id="videoGrid"></div>
 </div>
 
 <script>
-    // --- MÉMOIRE DU COMPTE ---
+    // --- CONFIGURATION DU SERVEUR (BASE DE DONNÉES) ---
+    // Note: C'est une base de test gratuite pour ton projet
+    const firebaseConfig = {
+        databaseURL: "https://rastube-default-rtdb.firebaseio.com/"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
     window.onload = function() {
         const savedName = localStorage.getItem('rasstube_name');
         const savedAvatar = localStorage.getItem('rasstube_avatar');
-        
         if (savedName && savedAvatar) {
             showUser(savedName, savedAvatar);
         } else {
             document.getElementById('loginModal').style.display = "flex";
         }
+
+        // ÉCOUTER LE SERVEUR : Quand quelqu'un poste, ça apparaît chez tout le monde
+        database.ref('videos').on('child_added', (snapshot) => {
+            const v = snapshot.val();
+            addCardToUI(v.title, v.thumb, v.video, v.authorName, v.authorAvatar);
+        });
     }
 
     function login() {
@@ -114,38 +130,44 @@
         document.getElementById('navUsername').innerText = name;
     }
 
-    // --- RECHERCHE ---
-    function searchVideo() {
-        let input = document.getElementById('searchBar').value.toLowerCase();
-        let cards = document.getElementsByClassName('video-card');
-        
-        for (let i = 0; i < cards.length; i++) {
-            let title = cards[i].getAttribute('data-title').toLowerCase();
-            cards[i].style.display = title.includes(input) ? "" : "none";
-        }
-    }
-
-    // --- PUBLICATION ---
     function publishVideo() {
         const title = document.getElementById('vTitle').value;
         const vFile = document.getElementById('videoFile').files[0];
         const tFile = document.getElementById('thumbFile').files[0];
+        const btn = document.getElementById('publishBtn');
 
         if(!title || !vFile || !tFile) return alert("Remplis tout !");
+
+        btn.innerText = "ENVOI AU SERVEUR...";
+        btn.disabled = true;
 
         const tReader = new FileReader();
         tReader.onload = (e) => {
             const thumbSrc = e.target.result;
             const vReader = new FileReader();
             vReader.onload = (ev) => {
-                addCard(title, thumbSrc, ev.target.result);
+                const videoSrc = ev.target.result;
+                
+                // ENVOYER AU SERVEUR MONDIAL
+                database.ref('videos').push({
+                    title: title,
+                    thumb: thumbSrc,
+                    video: videoSrc,
+                    authorName: localStorage.getItem('rasstube_name'),
+                    authorAvatar: localStorage.getItem('rasstube_avatar')
+                }).then(() => {
+                    btn.innerText = "PUBLIER POUR TOUS";
+                    btn.disabled = false;
+                    document.getElementById('vTitle').value = "";
+                    alert("C'est en ligne pour tout le monde !");
+                });
             };
             vReader.readAsDataURL(vFile);
         };
         tReader.readAsDataURL(tFile);
     }
 
-    function addCard(title, thumb, video) {
+    function addCardToUI(title, thumb, video, authorN, authorA) {
         const grid = document.getElementById('videoGrid');
         const card = document.createElement('div');
         card.className = 'video-card';
@@ -159,14 +181,23 @@
         card.innerHTML = `
             <div class="v-thumb"><img src="${thumb}"></div>
             <div class="v-info">
-                <img src="${localStorage.getItem('rasstube_avatar')}" class="author-img">
+                <img src="${authorA}" class="author-img">
                 <div class="v-text">
                     <span style="font-weight:bold; font-size:14px;">${title}</span><br>
-                    <small style="color:gray;">${localStorage.getItem('rasstube_name')} • 0 vue</small>
+                    <small style="color:gray;">${authorN} • 0 vue</small>
                 </div>
             </div>
         `;
         grid.prepend(card);
+    }
+
+    function searchVideo() {
+        let input = document.getElementById('searchBar').value.toLowerCase();
+        let cards = document.getElementsByClassName('video-card');
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getAttribute('data-title').toLowerCase();
+            cards[i].style.display = title.includes(input) ? "" : "none";
+        }
     }
 </script>
 </body>
