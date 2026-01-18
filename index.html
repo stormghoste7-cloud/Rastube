@@ -3,42 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Social Pro</title>
+    <title>RASSTUBE .NET | Compact</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         :root { --primary: #ff0000; --bg: #050505; --card-bg: #121212; --text: #ffffff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         
-        header { background: rgba(0,0,0,0.95); padding: 10px 5%; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center;}
-        
-        .main-container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
-        
-        /* BARRE DE CHARGEMENT */
-        #progressContainer { display: none; background: #222; height: 10px; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
-        #progressBar { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; }
+        header { 
+            background: rgba(0,0,0,0.95); padding: 10px 5%; border-bottom: 1px solid #222; 
+            position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center;
+        }
 
-        /* LECTEUR */
-        #mainPlayerContainer { display: none; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px; border: 1px solid #333; }
-        video { width: 100%; max-height: 450px; background: #000; }
-        
-        .video-actions { display: flex; gap: 20px; padding: 15px; border-bottom: 1px solid #222; }
-        .action-btn { cursor: pointer; font-size: 14px; transition: 0.3s; }
-        .action-btn:hover { color: var(--primary); }
+        .main-container { max-width: 900px; margin: 10px auto; padding: 0 15px; }
 
-        /* GRILLE */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid #1a1a1a; }
-        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; position: relative; }
+        /* BOUTON CRÉER DISCRET */
+        .create-btn {
+            background: var(--primary); color: white; border: none; padding: 8px 15px;
+            border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px;
+        }
+
+        /* SECTION PUBLIER CACHÉE PAR DÉFAUT */
+        .upload-drawer {
+            display: none; background: var(--card-bg); padding: 15px; border-radius: 12px;
+            border: 1px solid #333; margin-bottom: 20px; animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* INPUTS COMPACTS */
+        input { 
+            width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; 
+            padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;
+        }
+
+        /* LECTEUR ET GRILLE */
+        #mainPlayerContainer { display: none; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 20px; border: 1px solid #333; }
+        video { width: 100%; max-height: 400px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+        .video-card { background: var(--card-bg); border-radius: 10px; overflow: hidden; cursor: pointer; border: 1px solid #1a1a1a; transition: 0.2s; }
+        .video-card:hover { border-color: var(--primary); }
+        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .v-info { padding: 10px; display: flex; gap: 10px; }
-        .author-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
-
-        /* FORMULAIRE */
-        .upload-box { background: var(--card-bg); padding: 20px; border-radius: 15px; margin-bottom: 30px; border: 1px solid #333; }
-        input { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
-        .btn:disabled { background: #555; cursor: not-allowed; }
+        .v-info { padding: 8px; display: flex; gap: 8px; align-items: center; }
+        .author-img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
     </style>
@@ -47,54 +55,39 @@
 
 <div class="modal" id="loginModal">
     <div style="background:var(--card-bg); padding:30px; border-radius:20px; width:80%; max-width:300px; text-align:center; border: 1px solid var(--primary);">
-        <h2 style="color:red">Connexion Rasstube</h2>
+        <h2 style="color:red">Rasstube</h2>
         <input type="text" id="usernameInput" placeholder="Ton Pseudo">
-        <label style="font-size: 10px; color: gray;">Photo de profil :</label>
         <input type="file" id="avatarInput" accept="image/*">
-        <button class="btn" onclick="login()">ENTRER</button>
+        <button onclick="login()" style="background:red; color:white; border:none; padding:10px; width:100%; border-radius:8px; font-weight:bold;">ENTRER</button>
     </div>
 </div>
 
 <header>
     <span style="color:red; font-weight:900; font-size:20px;">RASSTUBE</span>
-    <div id="navUser" style="display:flex; align-items:center; gap:10px;"></div>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <button class="create-btn" onclick="toggleUpload()"><span>+</span> Créer</button>
+        <div id="navUser"></div>
+    </div>
 </header>
 
 <div class="main-container">
-    <div id="progressContainer"><div id="progressBar"></div></div>
+    <section class="upload-drawer" id="uploadDrawer">
+        <h4 style="margin:0 0 10px 0;">Nouvelle vidéo</h4>
+        <input type="file" id="videoFile" accept="video/*">
+        <input type="file" id="thumbFile" accept="image/*">
+        <input type="text" id="vTitle" placeholder="Titre...">
+        <button id="pubBtn" onclick="publishVideo()" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:5px; font-weight:bold; cursor:pointer;">PUBLIER</button>
+    </section>
 
     <div id="mainPlayerContainer">
         <video id="videoPlayer" controls autoplay></video>
-        <div style="padding:15px;">
-            <h2 id="nowPlayingTitle" style="margin:0; font-size:18px;"></h2>
-            <div class="video-actions">
-                <div class="action-btn" onclick="this.style.color='red'">❤️ Like</div>
-                <div class="action-btn" onclick="this.style.color='blue'">👎 Dislike</div>
-                <div class="action-btn" onclick="copyUrl()">🔗 Partager</div>
-            </div>
-            <div id="commentSection" style="margin-top:20px;">
-                <input type="text" id="comInput" placeholder="Ajouter un commentaire..." style="width:70%">
-                <button class="btn" style="width:25%" onclick="addComment()">OK</button>
-                <div id="commentList" style="margin-top:10px; font-size:13px; color:#ccc;"></div>
-            </div>
-        </div>
+        <div style="padding:10px;"><h3 id="nowPlayingTitle" style="margin:0; font-size:16px;"></h3></div>
     </div>
-    
-    <section class="upload-box">
-        <h3 style="margin:0 0 10px 0; color:red;">Publier une vidéo</h3>
-        <label style="font-size: 11px; color: gray;">Le fichier vidéo :</label>
-        <input type="file" id="videoFile" accept="video/*">
-        <label style="font-size: 11px; color: gray;">La miniature :</label>
-        <input type="file" id="thumbFile" accept="image/*">
-        <input type="text" id="vTitle" placeholder="Titre de la vidéo...">
-        <button class="btn" id="pubBtn" onclick="publishVideo()">PUBLIER SUR LE RÉSEAU</button>
-    </section>
 
     <div class="video-grid" id="videoGrid"></div>
 </div>
 
 <script>
-    // Configuration Firebase (Base de test publique)
     const firebaseConfig = { databaseURL: "https://rastube-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
@@ -110,11 +103,15 @@
         });
     };
 
+    function toggleUpload() {
+        const drawer = document.getElementById('uploadDrawer');
+        drawer.style.display = (drawer.style.display === 'block') ? 'none' : 'block';
+    }
+
     function login() {
         const name = document.getElementById('usernameInput').value;
         const file = document.getElementById('avatarInput').files[0];
-        if(!name || !file) return alert("Pseudo et photo obligatoires !");
-        
+        if(!name || !file) return alert("Pseudo et photo requis !");
         const reader = new FileReader();
         reader.onload = (e) => {
             localStorage.setItem('rasstube_name', name);
@@ -125,7 +122,7 @@
     }
 
     function showUser(name, avatar) {
-        document.getElementById('navUser').innerHTML = `<span>${name}</span><img src="${avatar}" style="width:30px;height:30px;border-radius:50%;object-fit:cover">`;
+        document.getElementById('navUser').innerHTML = `<img src="${avatar}" style="width:30px;height:30px;border-radius:50%;object-fit:cover">`;
     }
 
     function publishVideo() {
@@ -134,45 +131,26 @@
         const tFile = document.getElementById('thumbFile').files[0];
         const btn = document.getElementById('pubBtn');
 
-        if(!title || !vFile || !tFile) return alert("Veuillez remplir tous les champs !");
-
-        // Vérification taille (Max 15Mo pour éviter les bugs)
-        if(vFile.size > 15 * 1024 * 1024) return alert("Vidéo trop lourde ! (Max 15Mo)");
-
+        if(!title || !vFile || !tFile) return alert("Champs manquants");
+        btn.innerText = "Chargement...";
         btn.disabled = true;
-        btn.innerText = "Traitement...";
-        document.getElementById('progressContainer').style.display = "block";
-        document.getElementById('progressBar').style.width = "30%";
 
         Promise.all([readFile(vFile), readFile(tFile)]).then(results => {
-            document.getElementById('progressBar').style.width = "60%";
-            
             database.ref('videos').push({
                 title, video: results[0], thumb: results[1],
                 authorName: localStorage.getItem('rasstube_name'),
                 authorAvatar: localStorage.getItem('rasstube_avatar')
-            }, (error) => {
-                if(error) {
-                    alert("Erreur serveur : fichier sans doute trop gros.");
-                } else {
-                    document.getElementById('progressBar').style.width = "100%";
-                    setTimeout(() => {
-                        alert("Succès ! Ta vidéo est en ligne.");
-                        location.reload();
-                    }, 500);
-                }
+            }, () => {
+                alert("Publié !");
+                location.reload();
             });
-        }).catch(() => {
-            alert("Erreur lors de la lecture des fichiers.");
-            btn.disabled = false;
         });
     }
 
     function readFile(file) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const reader = new FileReader();
             reader.onload = (e) => resolve(e.target.result);
-            reader.onerror = () => reject();
             reader.readAsDataURL(file);
         });
     }
@@ -181,29 +159,14 @@
         const grid = document.getElementById('videoGrid');
         const card = document.createElement('div');
         card.className = 'video-card';
-        card.innerHTML = `<div class="v-thumb"><img src="${thumb}"></div><div class="v-info"><img src="${authorA}" class="author-img"><div><b>${title}</b><br><small>${authorN}</small></div></div>`;
+        card.innerHTML = `<div class="v-thumb"><img src="${thumb}"></div><div class="v-info"><img src="${authorA}" class="author-img"><div><b style="font-size:13px">${title}</b><br><small style="color:gray; font-size:11px">${authorN}</small></div></div>`;
         card.onclick = () => {
-            const player = document.getElementById('videoPlayer');
-            player.src = video;
+            document.getElementById('videoPlayer').src = video;
             document.getElementById('nowPlayingTitle').innerText = title;
             document.getElementById('mainPlayerContainer').style.display = "block";
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
         grid.prepend(card);
-    }
-
-    function addComment() {
-        const val = document.getElementById('comInput').value;
-        if(!val) return;
-        const div = document.createElement('div');
-        div.innerHTML = `<b>Moi :</b> ${val}`;
-        document.getElementById('commentList').prepend(div);
-        document.getElementById('comInput').value = "";
-    }
-
-    function copyUrl() {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Lien du site copié !");
     }
 </script>
 </body>
