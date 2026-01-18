@@ -3,201 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Réseau Mondial</title>
+    <title>RASSTUBE .NET | Social</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
     <style>
         :root { --primary: #ff0000; --bg: #050505; --card-bg: #121212; --text: #ffffff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         
-        header { 
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); padding: 10px 5%; 
-            display: flex; flex-direction: column; gap: 10px;
-            border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000;
-        }
+        header { background: rgba(0,0,0,0.95); padding: 10px 5%; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .search-bar { width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 10px; border-radius: 20px; color: white; margin-top: 10px; }
 
-        .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .search-bar { width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 10px; border-radius: 20px; color: white; outline: none; }
+        .main-container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+        
+        /* LECTEUR ET INTERACTIONS */
+        #mainPlayerContainer { display: none; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px; border: 1px solid #333; }
+        video { width: 100%; max-height: 450px; }
+        .video-actions { display: flex; gap: 20px; padding: 15px; border-bottom: 1px solid #222; }
+        .action-btn { cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px; }
+        .action-btn:hover { color: var(--primary); }
 
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .avatar-nav { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+        /* COMMENTAIRES */
+        .comment-section { padding: 15px; }
+        .comment-input { display: flex; gap: 10px; margin-bottom: 20px; }
+        .comment-list { display: flex; flex-direction: column; gap: 15px; }
+        .comment-item { display: flex; gap: 10px; font-size: 14px; }
 
-        .main-container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-        #mainPlayerContainer { display: none; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 30px; border: 1px solid #333; }
-        video { width: 100%; max-height: 500px; }
-
-        .upload-box { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 30px; }
-        input { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
-        .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
-
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; }
+        /* GRILLE */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid #1a1a1a; }
         .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .v-info { padding: 12px; display: flex; gap: 10px; align-items: center; }
+        .v-info { padding: 10px; display: flex; gap: 10px; }
         .author-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
 
+        .btn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .upload-box { background: var(--card-bg); padding: 20px; border-radius: 15px; margin-bottom: 30px; }
+        input { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; width: 85%; max-width: 350px; text-align: center; border: 1px solid var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="modal" id="loginModal">
-    <div class="modal-content">
-        <h2 style="color:red">Rejoindre Rasstube</h2>
-        <input type="text" id="usernameInput" placeholder="Ton pseudo...">
-        <input type="file" id="avatarInput" accept="image/*">
-        <button class="btn" onclick="login()">CRÉER MON COMPTE</button>
+    <div style="background:var(--card-bg); padding:30px; border-radius:20px; width:80%; max-width:300px; text-align:center;">
+        <h2 style="color:red">Connexion</h2>
+        <input type="text" id="usernameInput" placeholder="Pseudo">
+        <input type="file" id="avatarInput">
+        <button class="btn" style="width:100%" onclick="login()">ENTRER</button>
     </div>
 </div>
 
 <header>
     <div class="header-top">
-        <a href="#" style="color:red; font-weight:900; text-decoration:none; font-size:22px;">RASSTUBE</a>
-        <div class="user-info">
-            <span id="navUsername" style="font-weight:bold; font-size:14px;"></span>
-            <img src="" id="navAvatar" class="avatar-nav" style="display:none">
-        </div>
+        <span style="color:red; font-weight:900; font-size:20px;">RASSTUBE</span>
+        <div id="navUser" style="display:flex; align-items:center; gap:10px;"></div>
     </div>
-    <input type="text" class="search-bar" id="searchBar" placeholder="Rechercher sur Rasstube..." onkeyup="searchVideo()">
+    <input type="text" class="search-bar" placeholder="Rechercher..." onkeyup="searchVideo()">
 </header>
 
 <div class="main-container">
     <div id="mainPlayerContainer">
         <video id="videoPlayer" controls autoplay></video>
-        <div style="padding:15px;"><h2 id="nowPlayingTitle" style="margin:0; font-size:18px;"></h2></div>
+        <div style="padding:15px;">
+            <h2 id="nowPlayingTitle" style="margin:0; font-size:18px;"></h2>
+            <div class="video-actions">
+                <div class="action-btn" onclick="alert('Like ajouté !')">👍 <span>12</span></div>
+                <div class="action-btn" onclick="alert('Dislike !')">👎</div>
+                <div class="action-btn" onclick="shareVideo()">🔗 Partager</div>
+            </div>
+            <div class="comment-section">
+                <h4>Commentaires</h4>
+                <div class="comment-input">
+                    <input type="text" id="comInput" placeholder="Ajouter un commentaire..." style="margin:0">
+                    <button class="btn" onclick="addComment()">Envoyer</button>
+                </div>
+                <div class="comment-list" id="commentList"></div>
+            </div>
+        </div>
     </div>
     
     <section class="upload-box">
-        <h2 style="margin-top:0; color:red;">Publier mondialement</h2>
-        <label style="font-size:11px; color:gray">Fichier Vidéo :</label>
+        <h3 style="margin:0 0 10px 0; color:red;">Publier vite</h3>
         <input type="file" id="videoFile" accept="video/*">
-        <label style="font-size:11px; color:gray">Image Miniature :</label>
         <input type="file" id="thumbFile" accept="image/*">
-        <input type="text" id="vTitle" placeholder="Titre de la vidéo...">
-        <button class="btn" id="publishBtn" onclick="publishVideo()">PUBLIER POUR TOUS</button>
+        <input type="text" id="vTitle" placeholder="Titre...">
+        <button class="btn" id="pubBtn" onclick="publishVideo()" style="width:100%">PUBLIER MAINTENANT</button>
     </section>
 
     <div class="video-grid" id="videoGrid"></div>
 </div>
 
 <script>
-    // --- CONFIGURATION DU SERVEUR (BASE DE DONNÉES) ---
-    // Note: C'est une base de test gratuite pour ton projet
-    const firebaseConfig = {
-        databaseURL: "https://rastube-default-rtdb.firebaseio.com/"
-    };
+    const firebaseConfig = { databaseURL: "https://rastube-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
     window.onload = function() {
-        const savedName = localStorage.getItem('rasstube_name');
-        const savedAvatar = localStorage.getItem('rasstube_avatar');
-        if (savedName && savedAvatar) {
-            showUser(savedName, savedAvatar);
-        } else {
-            document.getElementById('loginModal').style.display = "flex";
-        }
+        const name = localStorage.getItem('rasstube_name');
+        const avatar = localStorage.getItem('rasstube_avatar');
+        if (name) showUser(name, avatar); else document.getElementById('loginModal').style.display = "flex";
 
-        // ÉCOUTER LE SERVEUR : Quand quelqu'un poste, ça apparaît chez tout le monde
-        database.ref('videos').on('child_added', (snapshot) => {
-            const v = snapshot.val();
+        database.ref('videos').on('child_added', (snap) => {
+            const v = snap.val();
             addCardToUI(v.title, v.thumb, v.video, v.authorName, v.authorAvatar);
         });
     }
 
     function login() {
         const name = document.getElementById('usernameInput').value;
-        const avatarFile = document.getElementById('avatarInput').files[0];
-        if(!name || !avatarFile) return alert("Nom et photo requis !");
-        
+        const file = document.getElementById('avatarInput').files[0];
         const reader = new FileReader();
         reader.onload = (e) => {
-            const avatarData = e.target.result;
             localStorage.setItem('rasstube_name', name);
-            localStorage.setItem('rasstube_avatar', avatarData);
-            showUser(name, avatarData);
-            document.getElementById('loginModal').style.display = "none";
+            localStorage.setItem('rasstube_avatar', e.target.result);
+            location.reload();
         };
-        reader.readAsDataURL(avatarFile);
+        reader.readAsDataURL(file);
     }
 
     function showUser(name, avatar) {
-        document.getElementById('navAvatar').src = avatar;
-        document.getElementById('navAvatar').style.display = "block";
-        document.getElementById('navUsername').innerText = name;
+        document.getElementById('navUser').innerHTML = `<span style="font-size:12px">${name}</span><img src="${avatar}" style="width:30px;height:30px;border-radius:50%">`;
     }
 
     function publishVideo() {
         const title = document.getElementById('vTitle').value;
         const vFile = document.getElementById('videoFile').files[0];
         const tFile = document.getElementById('thumbFile').files[0];
-        const btn = document.getElementById('publishBtn');
+        if(!vFile || !tFile) return;
 
-        if(!title || !vFile || !tFile) return alert("Remplis tout !");
+        // On lance la lecture des fichiers en parallèle pour aller plus vite
+        Promise.all([readFile(vFile), readFile(tFile)]).then(results => {
+            database.ref('videos').push({
+                title, video: results[0], thumb: results[1],
+                authorName: localStorage.getItem('rasstube_name'),
+                authorAvatar: localStorage.getItem('rasstube_avatar')
+            });
+            alert("Vidéo envoyée !");
+        });
+    }
 
-        btn.innerText = "ENVOI AU SERVEUR...";
-        btn.disabled = true;
-
-        const tReader = new FileReader();
-        tReader.onload = (e) => {
-            const thumbSrc = e.target.result;
-            const vReader = new FileReader();
-            vReader.onload = (ev) => {
-                const videoSrc = ev.target.result;
-                
-                // ENVOYER AU SERVEUR MONDIAL
-                database.ref('videos').push({
-                    title: title,
-                    thumb: thumbSrc,
-                    video: videoSrc,
-                    authorName: localStorage.getItem('rasstube_name'),
-                    authorAvatar: localStorage.getItem('rasstube_avatar')
-                }).then(() => {
-                    btn.innerText = "PUBLIER POUR TOUS";
-                    btn.disabled = false;
-                    document.getElementById('vTitle').value = "";
-                    alert("C'est en ligne pour tout le monde !");
-                });
-            };
-            vReader.readAsDataURL(vFile);
-        };
-        tReader.readAsDataURL(tFile);
+    function readFile(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+        });
     }
 
     function addCardToUI(title, thumb, video, authorN, authorA) {
-        const grid = document.getElementById('videoGrid');
         const card = document.createElement('div');
         card.className = 'video-card';
-        card.setAttribute('data-title', title);
+        card.innerHTML = `<div class="v-thumb"><img src="${thumb}"></div><div class="v-info"><img src="${authorA}" class="author-img"><div><b>${title}</b><br><small>${authorN}</small></div></div>`;
         card.onclick = () => {
             document.getElementById('videoPlayer').src = video;
             document.getElementById('nowPlayingTitle').innerText = title;
             document.getElementById('mainPlayerContainer').style.display = "block";
-            window.scrollTo({top:0, behavior:'smooth'});
+            window.scrollTo(0,0);
         };
-        card.innerHTML = `
-            <div class="v-thumb"><img src="${thumb}"></div>
-            <div class="v-info">
-                <img src="${authorA}" class="author-img">
-                <div class="v-text">
-                    <span style="font-weight:bold; font-size:14px;">${title}</span><br>
-                    <small style="color:gray;">${authorN} • 0 vue</small>
-                </div>
-            </div>
-        `;
-        grid.prepend(card);
+        document.getElementById('videoGrid').prepend(card);
     }
 
-    function searchVideo() {
-        let input = document.getElementById('searchBar').value.toLowerCase();
-        let cards = document.getElementsByClassName('video-card');
-        for (let i = 0; i < cards.length; i++) {
-            let title = cards[i].getAttribute('data-title').toLowerCase();
-            cards[i].style.display = title.includes(input) ? "" : "none";
-        }
+    function addComment() {
+        const txt = document.getElementById('comInput').value;
+        if(!txt) return;
+        const item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = `<img src="${localStorage.getItem('rasstube_avatar')}" style="width:25px;height:25px;border-radius:50%"> <div><b>Moi:</b> ${txt}</div>`;
+        document.getElementById('commentList').prepend(item);
+        document.getElementById('comInput').value = "";
+    }
+
+    function shareVideo() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url);
+        alert("Lien copié ! Partage-le avec tes amis.");
     }
 </script>
 </body>
