@@ -3,58 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Compact</title>
+    <title>RASSTUBE .NET | Premium Social</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        :root { --primary: #ff0000; --bg: #050505; --card-bg: #121212; --text: #ffffff; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        :root { --primary: #ff0000; --bg: #0f0f0f; --card-bg: #1e1e1e; --text: #ffffff; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
         
         header { 
-            background: rgba(0,0,0,0.95); padding: 10px 5%; border-bottom: 1px solid #222; 
+            background: #0f0f0f; padding: 10px 5%; border-bottom: 1px solid #333; 
             position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center;
         }
 
         .main-container { max-width: 900px; margin: 10px auto; padding: 0 15px; }
 
-        /* BOUTON CRÉER DISCRET */
+        /* BOUTON CRÉER */
         .create-btn {
-            background: var(--primary); color: white; border: none; padding: 8px 15px;
-            border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px;
+            background: #272727; color: white; border: none; padding: 8px 15px;
+            border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
+        .create-btn:hover { background: #3f3f3f; }
 
-        /* SECTION PUBLIER CACHÉE PAR DÉFAUT */
+        /* TIROIR */
         .upload-drawer {
             display: none; background: var(--card-bg); padding: 15px; border-radius: 12px;
-            border: 1px solid #333; margin-bottom: 20px; animation: slideDown 0.3s ease;
+            margin-bottom: 20px; border: 1px solid #333;
         }
 
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* INPUTS COMPACTS */
-        input { 
-            width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; 
-            padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;
+        /* LECTEUR PRO */
+        #mainPlayerContainer { display: none; margin-bottom: 20px; }
+        video { width: 100%; border-radius: 12px; background: #000; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        
+        .video-meta { padding: 12px 0; border-bottom: 1px solid #333; }
+        .video-actions { display: flex; gap: 15px; margin-top: 10px; }
+        .btn-action { 
+            background: #272727; border: none; color: white; padding: 6px 15px; 
+            border-radius: 18px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 5px;
         }
 
-        /* LECTEUR ET GRILLE */
-        #mainPlayerContainer { display: none; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 20px; border: 1px solid #333; }
-        video { width: 100%; max-height: 400px; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
-        .video-card { background: var(--card-bg); border-radius: 10px; overflow: hidden; cursor: pointer; border: 1px solid #1a1a1a; transition: 0.2s; }
-        .video-card:hover { border-color: var(--primary); }
-        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; }
+        /* COMMENTAIRES */
+        .comments-box { margin-top: 15px; }
+        .com-input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .com-list { display: flex; flex-direction: column; gap: 12px; }
+        .com-item { display: flex; gap: 10px; font-size: 13px; background: #1a1a1a; padding: 10px; border-radius: 8px; }
+
+        /* GRILLE */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
+        .video-card { cursor: pointer; transition: 0.2s; }
+        .v-thumb { width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: #222; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .v-info { padding: 8px; display: flex; gap: 8px; align-items: center; }
-        .author-img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+        .v-info { display: flex; gap: 10px; margin-top: 8px; }
+        .auth-pic { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
+        input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; margin-bottom: 8px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
 <div class="modal" id="loginModal">
-    <div style="background:var(--card-bg); padding:30px; border-radius:20px; width:80%; max-width:300px; text-align:center; border: 1px solid var(--primary);">
+    <div style="background:var(--card-bg); padding:30px; border-radius:20px; width:80%; max-width:300px; text-align:center;">
         <h2 style="color:red">Rasstube</h2>
         <input type="text" id="usernameInput" placeholder="Ton Pseudo">
         <input type="file" id="avatarInput" accept="image/*">
@@ -63,25 +71,38 @@
 </div>
 
 <header>
-    <span style="color:red; font-weight:900; font-size:20px;">RASSTUBE</span>
-    <div style="display:flex; align-items:center; gap:10px;">
-        <button class="create-btn" onclick="toggleUpload()"><span>+</span> Créer</button>
+    <span style="color:red; font-weight:900; font-size:20px; letter-spacing:-1px;">RASSTUBE</span>
+    <div style="display:flex; align-items:center; gap:12px;">
+        <button class="create-btn" onclick="toggleUpload()">+ Créer</button>
         <div id="navUser"></div>
     </div>
 </header>
 
 <div class="main-container">
     <section class="upload-drawer" id="uploadDrawer">
-        <h4 style="margin:0 0 10px 0;">Nouvelle vidéo</h4>
         <input type="file" id="videoFile" accept="video/*">
         <input type="file" id="thumbFile" accept="image/*">
-        <input type="text" id="vTitle" placeholder="Titre...">
-        <button id="pubBtn" onclick="publishVideo()" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:5px; font-weight:bold; cursor:pointer;">PUBLIER</button>
+        <input type="text" id="vTitle" placeholder="Titre de la vidéo...">
+        <button id="pubBtn" onclick="publishVideo()" style="background:red; color:white; border:none; padding:10px; width:100%; border-radius:5px; font-weight:bold;">PUBLIER</button>
     </section>
 
     <div id="mainPlayerContainer">
         <video id="videoPlayer" controls autoplay></video>
-        <div style="padding:10px;"><h3 id="nowPlayingTitle" style="margin:0; font-size:16px;"></h3></div>
+        <div class="video-meta">
+            <h2 id="nowPlayingTitle" style="margin:0; font-size:18px;"></h2>
+            <div class="video-actions">
+                <button class="btn-action" onclick="this.style.color='red'">👍 24</button>
+                <button class="btn-action">👎</button>
+                <button class="btn-action" onclick="alert('Lien copié !')">🔗 Partager</button>
+            </div>
+        </div>
+        <div class="comments-box">
+            <div class="com-input-group">
+                <input type="text" id="comInput" placeholder="Ajouter un commentaire..." style="margin:0">
+                <button onclick="addComment()" style="background:red; color:white; border:none; padding:0 15px; border-radius:6px;">OK</button>
+            </div>
+            <div class="com-list" id="commentList"></div>
+        </div>
     </div>
 
     <div class="video-grid" id="videoGrid"></div>
@@ -104,14 +125,14 @@
     };
 
     function toggleUpload() {
-        const drawer = document.getElementById('uploadDrawer');
-        drawer.style.display = (drawer.style.display === 'block') ? 'none' : 'block';
+        const d = document.getElementById('uploadDrawer');
+        d.style.display = (d.style.display === 'block') ? 'none' : 'block';
     }
 
     function login() {
         const name = document.getElementById('usernameInput').value;
         const file = document.getElementById('avatarInput').files[0];
-        if(!name || !file) return alert("Pseudo et photo requis !");
+        if(!name || !file) return;
         const reader = new FileReader();
         reader.onload = (e) => {
             localStorage.setItem('rasstube_name', name);
@@ -122,51 +143,48 @@
     }
 
     function showUser(name, avatar) {
-        document.getElementById('navUser').innerHTML = `<img src="${avatar}" style="width:30px;height:30px;border-radius:50%;object-fit:cover">`;
+        document.getElementById('navUser').innerHTML = `<img src="${avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid #333">`;
     }
 
     function publishVideo() {
         const title = document.getElementById('vTitle').value;
         const vFile = document.getElementById('videoFile').files[0];
         const tFile = document.getElementById('thumbFile').files[0];
-        const btn = document.getElementById('pubBtn');
-
-        if(!title || !vFile || !tFile) return alert("Champs manquants");
-        btn.innerText = "Chargement...";
-        btn.disabled = true;
-
-        Promise.all([readFile(vFile), readFile(tFile)]).then(results => {
+        if(!title || !vFile || !tFile) return alert("Champs vides");
+        
+        document.getElementById('pubBtn').innerText = "Envoi...";
+        Promise.all([readFile(vFile), readFile(tFile)]).then(res => {
             database.ref('videos').push({
-                title, video: results[0], thumb: results[1],
+                title, video: res[0], thumb: res[1],
                 authorName: localStorage.getItem('rasstube_name'),
                 authorAvatar: localStorage.getItem('rasstube_avatar')
-            }, () => {
-                alert("Publié !");
-                location.reload();
-            });
+            }, () => location.reload());
         });
     }
 
-    function readFile(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(file);
-        });
-    }
+    function readFile(file) { return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); }); }
 
     function addCardToUI(title, thumb, video, authorN, authorA) {
-        const grid = document.getElementById('videoGrid');
         const card = document.createElement('div');
         card.className = 'video-card';
-        card.innerHTML = `<div class="v-thumb"><img src="${thumb}"></div><div class="v-info"><img src="${authorA}" class="author-img"><div><b style="font-size:13px">${title}</b><br><small style="color:gray; font-size:11px">${authorN}</small></div></div>`;
+        card.innerHTML = `<div class="v-thumb"><img src="${thumb}"></div><div class="v-info"><img src="${authorA}" class="auth-pic"><div><b style="font-size:14px;display:block;line-height:1.2">${title}</b><small style="color:#aaa">${authorN} • 0 vue</small></div></div>`;
         card.onclick = () => {
             document.getElementById('videoPlayer').src = video;
             document.getElementById('nowPlayingTitle').innerText = title;
             document.getElementById('mainPlayerContainer').style.display = "block";
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
-        grid.prepend(card);
+        document.getElementById('videoGrid').prepend(card);
+    }
+
+    function addComment() {
+        const val = document.getElementById('comInput').value;
+        if(!val) return;
+        const div = document.createElement('div');
+        div.className = 'com-item';
+        div.innerHTML = `<img src="${localStorage.getItem('rasstube_avatar')}" style="width:24px;height:24px;border-radius:50%"> <div><b>${localStorage.getItem('rasstube_name')}</b>: ${val}</div>`;
+        document.getElementById('commentList').prepend(div);
+        document.getElementById('comInput').value = "";
     }
 </script>
 </body>
