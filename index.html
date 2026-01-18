@@ -2,289 +2,156 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RASSTUBE ULTIMATE</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rasstube Light</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #ff0000; --bg: #000; --card: #121212; --text: #fff; --nav: #0f0f0f; --ai-color: #4285f4; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); font-family: -apple-system, system-ui, sans-serif; margin: 0; padding-bottom: 70px; }
-
-        /* HEADER */
-        header { position: sticky; top: 0; z-index: 100; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
-        .logo { color: var(--primary); font-weight: 900; font-size: 24px; letter-spacing: -1px; }
-
-        /* BOTTOM NAV */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; background: var(--nav); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #222; z-index: 1000; }
-        .nav-item { color: #888; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex: 1; }
-        .nav-item i { font-size: 20px; }
-        .nav-item.active { color: white; }
-        .nav-plus { background: var(--primary); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 15px rgba(255,0,0,0.4); border: 3px solid var(--bg); margin-bottom: 25px; }
-
-        /* PAGES */
-        .page-section { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
-        .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* CONTENT CARDS */
-        .v-card { background: var(--card); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
-        .v-video { width: 100%; aspect-ratio: 16/9; background: #000; display: block; }
-        .rshot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .r-card { position: relative; aspect-ratio: 9/16; background: #222; border-radius: 12px; overflow: hidden; }
-        .r-card video { width: 100%; height: 100%; object-fit: cover; }
-        .photo-img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
-
-        /* CHAT SYSTEMS */
-        .chat-box { height: 60vh; overflow-y: auto; background: #080808; border-radius: 12px; padding: 15px; border: 1px solid #222; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 10px 14px; border-radius: 15px; max-width: 80%; font-size: 14px; line-height: 1.4; }
-        .msg.me { align-self: flex-end; background: var(--primary); color: white; }
-        .msg.other { align-self: flex-start; background: #222; color: #eee; }
-
-        /* UPLOAD MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: flex-end; }
-        .modal-content { background: #1a1a1a; width: 100%; padding: 25px; border-radius: 25px 25px 0 0; }
-        .upload-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .utab { flex: 1; padding: 10px; border: none; background: #333; color: white; border-radius: 10px; font-size: 12px; }
-        .utab.active { background: var(--primary); font-weight: bold; }
-        
-        /* INPUTS */
-        .f-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 15px; outline: none; }
-        .btn-pub { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 16px; }
-        #progWrap { display: none; background: #333; height: 6px; border-radius: 3px; margin-top: 15px; overflow: hidden; }
-        #progFill { width: 0%; height: 100%; background: #00ff00; transition: 0.3s; }
-
-        /* LOGIN */
-        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; padding: 40px; text-align: center; }
+        body { background: #000; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 70px; }
+        header { background: #111; padding: 15px; text-align: center; border-bottom: 1px solid #333; }
+        .page { display: none; padding: 15px; }
+        .active { display: block; }
+        .card { background: #1a1a1a; margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
+        video, img { width: 100%; display: block; }
+        .nav { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; }
+        .nav-item { color: #888; text-align: center; font-size: 12px; cursor: pointer; }
+        .nav-item.active { color: red; }
+        input, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 5px; border: none; }
+        input { background: #222; color: #fff; }
+        button { background: red; color: #fff; font-weight: bold; }
+        #chat-box { height: 300px; overflow-y: auto; background: #0a0a0a; padding: 10px; }
     </style>
 </head>
 <body>
 
-<div id="loginOverlay">
-    <h1 style="color:red; font-size:42px; margin-bottom:10px;">RASSTUBE</h1>
-    <p style="color:#666; margin-bottom:30px;">L'ULTIME PLATEFORME VIDÉO</p>
-    <input type="text" id="logName" placeholder="Ton Pseudo" class="f-input">
-    <input type="file" id="logAv" accept="image/*" class="f-input">
-    <button onclick="saveUser()" class="btn-pub">DÉMARRER</button>
+<header><h1 style="color:red; margin:0;">RASSTUBE</h1></header>
+
+<div id="home" class="page active">
+    <h3>🎥 Vidéos & RShots</h3>
+    <div id="video-list"></div>
 </div>
 
-<header>
-    <div class="logo">RASSTUBE</div>
-    <div id="uAv"></div>
-</header>
-
-<div id="main">
-    <div id="p-home" class="page-section active">
-        <h3 style="margin-top:0">Découvrir</h3>
-        <div id="feed-v"></div>
-    </div>
-
-    <div id="p-rshot" class="page-section">
-        <h3 style="color:#ff0055"><i class="fas fa-bolt"></i> RShot (Max 30s)</h3>
-        <div id="feed-r" class="rshot-grid"></div>
-    </div>
-
-    <div id="p-photo" class="page-section">
-        <h3 style="color:#00aaff"><i class="fas fa-camera"></i> Photos</h3>
-        <div id="feed-p"></div>
-    </div>
-
-    <div id="p-chat" class="page-section">
-        <h3><i class="fas fa-comments"></i> Chat Global</h3>
-        <div id="chat-v" class="chat-box"></div>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <input type="text" id="chatIn" placeholder="Dire quelque chose..." class="f-input" style="margin:0">
-            <button onclick="sendMsg()" class="btn-pub" style="width:60px; margin:0;"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
-
-    <div id="p-ai" class="page-section">
-        <h3 style="color:var(--ai-color)"><i class="fas fa-robot"></i> Assistant Gemini</h3>
-        <div id="ai-v" class="chat-box" style="height:55vh;">
-            <div class="msg other">Salut ! Je suis Gemini. Pose-moi une question sur tes vidéos !</div>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <input type="text" id="aiIn" placeholder="Demander à l'IA..." class="f-input" style="margin:0">
-            <button onclick="askAI()" class="btn-pub" style="width:60px; margin:0; background:var(--ai-color);"><i class="fas fa-magic"></i></button>
-        </div>
-    </div>
+<div id="chat" class="page">
+    <h3>💬 Chat & IA Gemini</h3>
+    <div id="chat-box"></div>
+    <input type="text" id="chatMsg" placeholder="Message ou question IA...">
+    <button onclick="sendMsg()">Envoyer</button>
 </div>
 
-<div class="bottom-nav">
-    <div class="nav-item active" onclick="go('home', this)"><i class="fas fa-home"></i><span>Home</span></div>
-    <div class="nav-item" onclick="go('rshot', this)"><i class="fas fa-bolt"></i><span>RShot</span></div>
-    <div class="nav-plus" onclick="openU()"><i class="fas fa-plus"></i></div>
-    <div class="nav-item" onclick="go('chat', this)"><i class="fas fa-comments"></i><span>Chat</span></div>
-    <div class="nav-item" onclick="go('ai', this)"><i class="fas fa-robot"></i><span>Gemini</span></div>
+<div id="upload" class="page">
+    <h3>📤 Publier</h3>
+    <input type="file" id="fileInput" accept="video/*,image/*">
+    <input type="text" id="fileTitle" placeholder="Titre...">
+    <button id="upBtn" onclick="uploadToCloudinary()">PUBLIER SUR LE CLOUD</button>
+    <p id="status" style="text-align:center; color:orange;"></p>
 </div>
 
-<div id="uModal" class="modal">
-    <div class="modal-content">
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <h3 style="margin:0">Publier</h3>
-            <i class="fas fa-times" onclick="closeU()" style="font-size:24px;"></i>
-        </div>
-        <div class="upload-tabs">
-            <button class="utab active" onclick="setUT('video', this)">Vidéo</button>
-            <button class="utab" onclick="setUT('rshot', this)">RShot (30s)</button>
-            <button class="utab" onclick="setUT('photo', this)">Photo</button>
-        </div>
-        <input type="file" id="fIn" class="f-input" style="padding:20px; border:2px dashed #444;">
-        <input type="text" id="fTit" placeholder="Titre ou description..." class="f-input">
-        <div id="progWrap"><div id="progFill"></div></div>
-        <button id="pBtn" onclick="up()" class="btn-pub" style="margin-top:10px;">PUBLIER</button>
-    </div>
+<div class="nav">
+    <div class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><br>Home</div>
+    <div class="nav-item" onclick="showPage('upload', this)"><i class="fas fa-plus-circle"></i><br>Poster</div>
+    <div class="nav-item" onclick="showPage('chat', this)"><i class="fas fa-comments"></i><br>Chat</div>
 </div>
 
 <script>
-    // --- FIREBASE ---
-    const config = {
-        databaseURL: "https://rastube-default-rtdb.firebaseio.com/",
-        storageBucket: "rastube-default.appspot.com"
-    };
-    firebase.initializeApp(config);
-    const db = firebase.database();
-    const st = firebase.storage();
+    // --- CONFIGURATION SIMPLE ---
+    // Utilise ce compte de test pour l'instant (Cloudinary)
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/demo/upload";
+    const UPLOAD_PRESET = "docs_upload_example_us_preset";
 
-    let user = null;
-    let uType = 'video';
+    let contents = JSON.parse(localStorage.getItem('rt_contents') || "[]");
+    let messages = JSON.parse(localStorage.getItem('rt_messages') || "[]");
 
-    // --- USER ---
-    function saveUser() {
-        const n = document.getElementById('logName').value;
-        const f = document.getElementById('logAv').files[0];
-        if(!n || !f) return alert("Pseudo + Photo !");
-        const r = new FileReader();
-        r.onload = (e) => {
-            user = { name: n, av: e.target.result };
-            localStorage.setItem('rt_u', JSON.stringify(user));
-            location.reload();
-        };
-        r.readAsDataURL(f);
+    function showPage(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        if(id === 'home') renderHome();
     }
 
-    window.onload = () => {
-        const saved = localStorage.getItem('rt_u');
-        if(saved) {
-            user = JSON.parse(saved);
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('uAv').innerHTML = `<img src="${user.av}" style="width:35px;height:35px;border-radius:50%;object-fit:cover;">`;
-            init();
+    // --- UPLOAD ULTRA SIMPLE ---
+    async function uploadToCloudinary() {
+        const file = document.getElementById('fileInput').files[0];
+        const title = document.getElementById('fileTitle').value;
+        const btn = document.getElementById('upBtn');
+        const status = document.getElementById('status');
+
+        if(!file || !title) return alert("Choisis un fichier et un titre !");
+
+        btn.disabled = true;
+        status.innerText = "Téléchargement vers le cloud... ☁️";
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+
+        try {
+            const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+            const data = await res.json();
+
+            const newContent = {
+                url: data.secure_url,
+                title: title,
+                type: file.type.includes('video') ? 'video' : 'photo',
+                date: new Date().toLocaleTimeString()
+            };
+
+            contents.push(newContent);
+            localStorage.setItem('rt_contents', JSON.stringify(contents));
+            
+            status.innerText = "Réussi ! ✅";
+            setTimeout(() => showPage('home', document.querySelector('.nav-item')), 1000);
+        } catch (e) {
+            alert("Erreur d'envoi. Vérifie ta connexion.");
+        } finally {
+            btn.disabled = false;
         }
-    };
-
-    // --- NAV ---
-    function go(p, el) {
-        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-        document.getElementById('p-'+p).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        if(el) el.classList.add('active');
     }
 
-    function openU() { document.getElementById('uModal').style.display = 'flex'; }
-    function closeU() { document.getElementById('uModal').style.display = 'none'; }
-    
-    function setUT(t, b) {
-        uType = t;
-        document.querySelectorAll('.utab').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        const f = document.getElementById('fIn');
-        f.accept = (t === 'photo') ? 'image/*' : 'video/*';
-        f.onchange = (e) => {
-            if(t === 'rshot' && e.target.files[0]) {
-                const v = document.createElement('video');
-                v.preload = 'metadata';
-                v.onloadedmetadata = () => { if(v.duration > 31) { alert("Max 30s !"); f.value=""; } };
-                v.src = URL.createObjectURL(e.target.files[0]);
-            }
-        };
+    // --- AFFICHAGE ---
+    function renderHome() {
+        const list = document.getElementById('video-list');
+        list.innerHTML = contents.map(c => `
+            <div class="card">
+                ${c.type === 'video' ? `<video src="${c.url}" controls></video>` : `<img src="${c.url}">`}
+                <div style="padding:10px;"><b>${c.title}</b> <small style="color:gray;">${c.date}</small></div>
+            </div>
+        `).reverse().join('');
     }
 
-    // --- UPLOAD ---
-    async function up() {
-        const file = document.getElementById('fIn').files[0];
-        const title = document.getElementById('fTit').value;
-        if(!file || !title) return alert("Manque des infos !");
-
-        const btn = document.getElementById('pBtn');
-        const fill = document.getElementById('progFill');
-        const wrap = document.getElementById('progWrap');
-
-        btn.disabled = true; wrap.style.display = "block";
-
-        const ref = st.ref(uType+'s/'+Date.now()+'_'+file.name);
-        const task = ref.put(file);
-
-        task.on('state_changed', (s) => {
-            fill.style.width = (s.bytesTransferred/s.totalBytes)*100 + '%';
-        }, null, async () => {
-            const url = await task.snapshot.ref.getDownloadURL();
-            db.ref(uType+'s').push({ url, title, author: user.name, av: user.av, time: Date.now() });
-            alert("Publié !");
-            location.reload();
-        });
-    }
-
-    // --- LOAD CONTENT ---
-    function init() {
-        load('videos', 'feed-v');
-        load('rshots', 'feed-r');
-        load('photos', 'feed-p');
-        loadChat();
-    }
-
-    function load(node, id) {
-        db.ref(node).limitToLast(15).on('value', snap => {
-            const div = document.getElementById(id);
-            div.innerHTML = "";
-            snap.forEach(c => {
-                const i = c.val();
-                let html = "";
-                if(node==='videos') html = `<div class="v-card"><video class="v-video" src="${i.url}" controls></video><div style="padding:12px;"><b>${i.title}</b><br><small>${i.author}</small></div></div>`;
-                else if(node==='rshots') html = `<div class="r-card"><video src="${i.url}" loop onclick="this.paused?this.play():this.pause()"></video><div style="position:absolute;bottom:10px;left:10px;font-size:11px;">@${i.author}</div></div>`;
-                else html = `<div class="v-card"><div style="padding:10px;"><b>${i.author}</b></div><img src="${i.url}" class="photo-img"><div style="padding:0 10px 10px;">${i.title}</div></div>`;
-                div.insertAdjacentHTML('afterbegin', html);
-            });
-        });
-    }
-
-    // --- CHAT & IA ---
+    // --- CHAT & IA SIMULÉE ---
     function sendMsg() {
-        const t = document.getElementById('chatIn').value;
-        if(!t) return;
-        db.ref('chat').push({ u: user.name, a: user.av, t, time: Date.now() });
-        document.getElementById('chatIn').value = "";
+        const input = document.getElementById('chatMsg');
+        const box = document.getElementById('chat-box');
+        if(!input.value) return;
+
+        // Ton message
+        const myMsg = { text: input.value, user: 'Moi' };
+        messages.push(myMsg);
+        
+        // IA Gemini simplifiée
+        if(input.value.toLowerCase().includes('gemini')) {
+            messages.push({ text: "Je suis ton IA Gemini locale. Je t'aide sans serveur !", user: 'Gemini' });
+        }
+
+        localStorage.setItem('rt_messages', JSON.stringify(messages));
+        renderChat();
+        input.value = "";
     }
 
-    function loadChat() {
-        db.ref('chat').limitToLast(30).on('value', snap => {
-            const v = document.getElementById('chat-v');
-            v.innerHTML = "";
-            snap.forEach(c => {
-                const m = c.val();
-                const isMe = m.u === user.name;
-                v.innerHTML += `<div class="msg ${isMe?'me':'other'}"><b>${m.u}:</b><br>${m.t}</div>`;
-            });
-            v.scrollTop = v.scrollHeight;
-        });
+    function renderChat() {
+        const box = document.getElementById('chat-box');
+        box.innerHTML = messages.map(m => `
+            <div style="margin-bottom:10px; text-align: ${m.user === 'Moi' ? 'right' : 'left'}">
+                <b style="color:${m.user === 'Gemini' ? '#4285f4' : 'red'}">${m.user}:</b><br>
+                <span style="background:#222; padding:5px 10px; border-radius:10px; display:inline-block;">${m.text}</span>
+            </div>
+        `).join('');
+        box.scrollTop = box.scrollHeight;
     }
 
-    async function askAI() {
-        const q = document.getElementById('aiIn').value;
-        if(!q) return;
-        const v = document.getElementById('ai-v');
-        v.innerHTML += `<div class="msg me">${q}</div>`;
-        document.getElementById('aiIn').value = "";
-
-        setTimeout(() => {
-            v.innerHTML += `<div class="msg other" style="border-left:3px solid var(--ai-color)"><b>Gemini:</b><br>Je suis en train d'analyser ta question sur Rasstube... C'est une super idée de plateforme !</div>`;
-            v.scrollTop = v.scrollHeight;
-        }, 1000);
-    }
+    renderHome();
+    renderChat();
 </script>
+
 </body>
 </html>
