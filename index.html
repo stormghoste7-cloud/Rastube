@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Version Finale</title>
+    <title>RASSTUBE .NET | Officiel</title>
     <style>
         :root { --primary: #ff0000; --bg: #050505; --card-bg: #121212; --text: #ffffff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         
         header { 
             background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); padding: 10px 5%; 
-            display: flex; justify-content: space-between; align-items: center; 
+            display: flex; flex-direction: column; gap: 10px;
             border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000;
         }
 
+        .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .search-bar { width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 10px; border-radius: 20px; color: white; outline: none; }
+        .search-bar:focus { border-color: var(--primary); }
+
         .user-info { display: flex; align-items: center; gap: 10px; }
-        .avatar-nav { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); display: none; object-fit: cover; }
+        .avatar-nav { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
         .main-container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-
-        /* LECTEUR */
         #mainPlayerContainer { display: none; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 30px; border: 1px solid #333; }
         video { width: 100%; max-height: 500px; }
 
-        /* FORMULAIRE */
         .upload-box { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 30px; }
         input, textarea { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
         .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
 
-        /* GRILLE */
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; }
-        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; position: relative; }
+        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .v-info { padding: 12px; display: flex; gap: 10px; align-items: center; }
         .author-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
 
-        /* MODAL */
-        .modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
         .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; width: 85%; max-width: 350px; text-align: center; border: 1px solid var(--primary); }
     </style>
 </head>
@@ -45,20 +44,22 @@
 
 <div class="modal" id="loginModal">
     <div class="modal-content">
-        <h2 style="color:red">Bienvenue sur Rasstube</h2>
+        <h2 style="color:red">Connexion Rasstube</h2>
         <input type="text" id="usernameInput" placeholder="Ton pseudo...">
-        <label style="font-size:12px; color:gray;">Photo de profil :</label>
         <input type="file" id="avatarInput" accept="image/*">
-        <button class="btn" onclick="login()">CRÉER MON COMPTE</button>
+        <button class="btn" onclick="login()">COMMENCER</button>
     </div>
 </div>
 
 <header>
-    <a href="#" style="color:red; font-weight:900; text-decoration:none; font-size:22px;">RASSTUBE</a>
-    <div class="user-info">
-        <span id="navUsername" style="font-weight:bold; font-size:14px;"></span>
-        <img src="" id="navAvatar" class="avatar-nav">
+    <div class="header-top">
+        <a href="#" style="color:red; font-weight:900; text-decoration:none; font-size:22px;">RASSTUBE</a>
+        <div class="user-info">
+            <span id="navUsername" style="font-weight:bold; font-size:14px;"></span>
+            <img src="" id="navAvatar" class="avatar-nav" style="display:none">
+        </div>
     </div>
+    <input type="text" class="search-bar" id="searchBar" placeholder="Rechercher une vidéo..." onkeyup="searchVideo()">
 </header>
 
 <div class="main-container">
@@ -68,10 +69,8 @@
     </div>
     
     <section class="upload-box">
-        <h2 style="margin-top:0; color:red;">Partager une vidéo</h2>
-        <label style="font-size:12px; color:gray;">Vidéo :</label>
+        <h2 style="margin-top:0; color:red;">Publier</h2>
         <input type="file" id="videoFile" accept="video/*">
-        <label style="font-size:12px; color:gray;">Miniature :</label>
         <input type="file" id="thumbFile" accept="image/*">
         <input type="text" id="vTitle" placeholder="Titre...">
         <button class="btn" onclick="publishVideo()">PUBLIER</button>
@@ -81,28 +80,52 @@
 </div>
 
 <script>
-    let userData = { name: "", avatar: "" };
-    let tempVideo = ""; let tempThumb = "";
+    // --- MÉMOIRE DU COMPTE ---
+    window.onload = function() {
+        const savedName = localStorage.getItem('rasstube_name');
+        const savedAvatar = localStorage.getItem('rasstube_avatar');
+        
+        if (savedName && savedAvatar) {
+            showUser(savedName, savedAvatar);
+        } else {
+            document.getElementById('loginModal').style.display = "flex";
+        }
+    }
 
     function login() {
         const name = document.getElementById('usernameInput').value;
         const avatarFile = document.getElementById('avatarInput').files[0];
-        if(!name) return alert("Pseudo requis !");
+        if(!name || !avatarFile) return alert("Nom et photo requis !");
         
-        userData.name = name;
         const reader = new FileReader();
         reader.onload = (e) => {
-            userData.avatar = e.target.result;
-            document.getElementById('navAvatar').src = userData.avatar;
-            document.getElementById('navAvatar').style.display = "block";
-            document.getElementById('navUsername').innerText = userData.name;
+            const avatarData = e.target.result;
+            localStorage.setItem('rasstube_name', name);
+            localStorage.setItem('rasstube_avatar', avatarData);
+            showUser(name, avatarData);
             document.getElementById('loginModal').style.display = "none";
         };
-        if(avatarFile) reader.readAsDataURL(avatarFile);
-        else { userData.avatar = "https://via.placeholder.com/50"; document.getElementById('loginModal').style.display = "none"; }
+        reader.readAsDataURL(avatarFile);
     }
 
-    // Gestion des fichiers au moment du clic publier pour gagner du temps
+    function showUser(name, avatar) {
+        document.getElementById('navAvatar').src = avatar;
+        document.getElementById('navAvatar').style.display = "block";
+        document.getElementById('navUsername').innerText = name;
+    }
+
+    // --- RECHERCHE ---
+    function searchVideo() {
+        let input = document.getElementById('searchBar').value.toLowerCase();
+        let cards = document.getElementsByClassName('video-card');
+        
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getAttribute('data-title').toLowerCase();
+            cards[i].style.display = title.includes(input) ? "" : "none";
+        }
+    }
+
+    // --- PUBLICATION ---
     function publishVideo() {
         const title = document.getElementById('vTitle').value;
         const vFile = document.getElementById('videoFile').files[0];
@@ -110,14 +133,12 @@
 
         if(!title || !vFile || !tFile) return alert("Remplis tout !");
 
-        const vReader = new FileReader();
         const tReader = new FileReader();
-
         tReader.onload = (e) => {
             const thumbSrc = e.target.result;
+            const vReader = new FileReader();
             vReader.onload = (ev) => {
-                const videoSrc = ev.target.result;
-                addCard(title, thumbSrc, videoSrc);
+                addCard(title, thumbSrc, ev.target.result);
             };
             vReader.readAsDataURL(vFile);
         };
@@ -128,6 +149,7 @@
         const grid = document.getElementById('videoGrid');
         const card = document.createElement('div');
         card.className = 'video-card';
+        card.setAttribute('data-title', title);
         card.onclick = () => {
             document.getElementById('videoPlayer').src = video;
             document.getElementById('nowPlayingTitle').innerText = title;
@@ -137,15 +159,14 @@
         card.innerHTML = `
             <div class="v-thumb"><img src="${thumb}"></div>
             <div class="v-info">
-                <img src="${userData.avatar}" class="author-img">
+                <img src="${localStorage.getItem('rasstube_avatar')}" class="author-img">
                 <div class="v-text">
                     <span style="font-weight:bold; font-size:14px;">${title}</span><br>
-                    <small style="color:gray;">${userData.name} • 0 vue</small>
+                    <small style="color:gray;">${localStorage.getItem('rasstube_name')} • 0 vue</small>
                 </div>
             </div>
         `;
         grid.prepend(card);
-        alert("Vidéo en ligne !");
     }
 </script>
 </body>
