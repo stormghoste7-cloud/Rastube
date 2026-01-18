@@ -2,156 +2,215 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rasstube Light</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RASSTUBE ULTIMATE</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 70px; }
-        header { background: #111; padding: 15px; text-align: center; border-bottom: 1px solid #333; }
-        .page { display: none; padding: 15px; }
-        .active { display: block; }
-        .card { background: #1a1a1a; margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
+        :root { --red: #ff0000; --bg: #000; --card: #121212; --text: #fff; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 80px; }
+        
+        /* HEADER AVEC RECHERCHE */
+        header { sticky: top; background: #000; padding: 10px; border-bottom: 1px solid #222; z-index: 100; }
+        .search-bar { display: flex; background: #1a1a1a; border-radius: 20px; padding: 5px 15px; align-items: center; margin-top: 10px; }
+        .search-bar input { background: transparent; border: none; color: #fff; flex: 1; padding: 8px; outline: none; }
+
+        /* NAVIGATION */
+        .nav { position: fixed; bottom: 0; width: 100%; background: #0a0a0a; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #222; z-index: 1000; }
+        .nav-item { color: #888; text-align: center; font-size: 10px; cursor: pointer; }
+        .nav-item.active { color: var(--red); }
+        .nav-item i { font-size: 20px; margin-bottom: 3px; }
+
+        /* PAGES */
+        .page { display: none; padding: 15px; animation: fadeIn 0.3s; }
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* CARTES VIDÉO / PHOTOS */
+        .card { background: var(--card); border-radius: 12px; overflow: hidden; margin-bottom: 20px; position: relative; }
         video, img { width: 100%; display: block; }
-        .nav { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; }
-        .nav-item { color: #888; text-align: center; font-size: 12px; cursor: pointer; }
-        .nav-item.active { color: red; }
-        input, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 5px; border: none; }
-        input { background: #222; color: #fff; }
-        button { background: red; color: #fff; font-weight: bold; }
-        #chat-box { height: 300px; overflow-y: auto; background: #0a0a0a; padding: 10px; }
+        .card-info { padding: 12px; }
+        .actions { display: flex; gap: 20px; padding: 10px 0; font-size: 18px; }
+        .btn-sub { background: var(--red); color: white; border: none; padding: 5px 12px; border-radius: 15px; font-weight: bold; float: right; }
+        .is-sub { background: #333; }
+
+        /* CHAT & IA */
+        #chat-container { height: 60vh; overflow-y: auto; background: #080808; border-radius: 10px; padding: 10px; border: 1px solid #222; }
+        .msg { margin-bottom: 10px; padding: 10px; border-radius: 10px; max-width: 85%; }
+        .msg-me { background: var(--red); margin-left: auto; }
+        .msg-other { background: #222; }
+        .msg-ai { border-left: 4px solid #4285f4; background: #1a1a1a; }
+
+        /* BOUTON FLOTTANT UPLOAD */
+        .fab { position: fixed; bottom: 90px; right: 20px; background: var(--red); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(255,0,0,0.5); z-index: 999; }
     </style>
 </head>
 <body>
 
-<header><h1 style="color:red; margin:0;">RASSTUBE</h1></header>
+<header>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="color:var(--red); margin:0;">RASSTUBE</h2>
+        <i class="fas fa-user-circle" style="font-size:24px;"></i>
+    </div>
+    <div class="search-bar">
+        <i class="fas fa-search" style="color:#666;"></i>
+        <input type="text" id="searchInput" placeholder="Rechercher sur Rasstube..." onkeyup="search()">
+    </div>
+</header>
 
-<div id="home" class="page active">
-    <h3>🎥 Vidéos & RShots</h3>
-    <div id="video-list"></div>
+<div id="home-page" class="page active-page">
+    <div id="video-feed"></div>
 </div>
 
-<div id="chat" class="page">
-    <h3>💬 Chat & IA Gemini</h3>
-    <div id="chat-box"></div>
-    <input type="text" id="chatMsg" placeholder="Message ou question IA...">
-    <button onclick="sendMsg()">Envoyer</button>
+<div id="rshot-page" class="page">
+    <h3 style="color:#ff0055"><i class="fas fa-bolt"></i> RShots</h3>
+    <div id="rshot-feed" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;"></div>
 </div>
 
-<div id="upload" class="page">
-    <h3>📤 Publier</h3>
-    <input type="file" id="fileInput" accept="video/*,image/*">
-    <input type="text" id="fileTitle" placeholder="Titre...">
-    <button id="upBtn" onclick="uploadToCloudinary()">PUBLIER SUR LE CLOUD</button>
-    <p id="status" style="text-align:center; color:orange;"></p>
+<div id="fav-page" class="page">
+    <h3><i class="fas fa-heart" style="color:var(--red)"></i> Mes Favoris</h3>
+    <div id="fav-feed"></div>
+</div>
+
+<div id="chat-page" class="page">
+    <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <button onclick="setChatMode('global')" id="btn-global" style="flex:1; background:var(--red); border:none; color:white; padding:10px; border-radius:5px;">Chat Global</button>
+        <button onclick="setChatMode('ai')" id="btn-ai" style="flex:1; background:#333; border:none; color:white; padding:10px; border-radius:5px;">IA Gemini</button>
+    </div>
+    <div id="chat-container"></div>
+    <div style="display:flex; gap:10px; margin-top:10px;">
+        <input type="text" id="chatInput" placeholder="Écris ici..." style="flex:1; background:#1a1a1a; border:none; color:white; padding:12px; border-radius:5px;">
+        <button onclick="handleSend()" style="background:var(--red); border:none; color:white; width:50px; border-radius:5px;"><i class="fas fa-paper-plane"></i></button>
+    </div>
 </div>
 
 <div class="nav">
-    <div class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><br>Home</div>
-    <div class="nav-item" onclick="showPage('upload', this)"><i class="fas fa-plus-circle"></i><br>Poster</div>
-    <div class="nav-item" onclick="showPage('chat', this)"><i class="fas fa-comments"></i><br>Chat</div>
+    <div class="nav-item active" onclick="show('home-page', this)"><i class="fas fa-home"></i><br>Accueil</div>
+    <div class="nav-item" onclick="show('rshot-page', this)"><i class="fas fa-bolt"></i><br>RShot</div>
+    <div class="nav-item" onclick="show('fav-page', this)"><i class="fas fa-heart"></i><br>Favoris</div>
+    <div class="nav-item" onclick="show('chat-page', this)"><i class="fas fa-comments"></i><br>Chat/IA</div>
 </div>
 
+<div class="fab" onclick="alert('Bouton Créer activé ! Utilise le menu Upload.')"><i class="fas fa-plus"></i></div>
+
 <script>
-    // --- CONFIGURATION SIMPLE ---
-    // Utilise ce compte de test pour l'instant (Cloudinary)
-    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/demo/upload";
-    const UPLOAD_PRESET = "docs_upload_example_us_preset";
+    // DONNÉES LOCALES (SIMULATION)
+    let contents = JSON.parse(localStorage.getItem('rs_contents') || '[]');
+    let favorites = JSON.parse(localStorage.getItem('rs_favs') || '[]');
+    let chatHistory = JSON.parse(localStorage.getItem('rs_chat') || '[]');
+    let chatMode = 'global';
 
-    let contents = JSON.parse(localStorage.getItem('rt_contents') || "[]");
-    let messages = JSON.parse(localStorage.getItem('rt_messages') || "[]");
-
-    function showPage(id, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+    // INITIALISATION DES PAGES
+    function show(pageId, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(pageId).classList.add('active-page');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
-        if(id === 'home') renderHome();
+        render();
     }
 
-    // --- UPLOAD ULTRA SIMPLE ---
-    async function uploadToCloudinary() {
-        const file = document.getElementById('fileInput').files[0];
-        const title = document.getElementById('fileTitle').value;
-        const btn = document.getElementById('upBtn');
-        const status = document.getElementById('status');
-
-        if(!file || !title) return alert("Choisis un fichier et un titre !");
-
-        btn.disabled = true;
-        status.innerText = "Téléchargement vers le cloud... ☁️";
-
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', UPLOAD_PRESET);
-
-        try {
-            const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
-            const data = await res.json();
-
-            const newContent = {
-                url: data.secure_url,
-                title: title,
-                type: file.type.includes('video') ? 'video' : 'photo',
-                date: new Date().toLocaleTimeString()
-            };
-
-            contents.push(newContent);
-            localStorage.setItem('rt_contents', JSON.stringify(contents));
-            
-            status.innerText = "Réussi ! ✅";
-            setTimeout(() => showPage('home', document.querySelector('.nav-item')), 1000);
-        } catch (e) {
-            alert("Erreur d'envoi. Vérifie ta connexion.");
-        } finally {
-            btn.disabled = false;
-        }
+    // GESTION DU CHAT
+    function setChatMode(mode) {
+        chatMode = mode;
+        document.getElementById('btn-global').style.background = mode === 'global' ? 'var(--red)' : '#333';
+        document.getElementById('btn-ai').style.background = mode === 'ai' ? '#4285f4' : '#333';
+        renderChat();
     }
 
-    // --- AFFICHAGE ---
-    function renderHome() {
-        const list = document.getElementById('video-list');
-        list.innerHTML = contents.map(c => `
-            <div class="card">
-                ${c.type === 'video' ? `<video src="${c.url}" controls></video>` : `<img src="${c.url}">`}
-                <div style="padding:10px;"><b>${c.title}</b> <small style="color:gray;">${c.date}</small></div>
-            </div>
-        `).reverse().join('');
-    }
-
-    // --- CHAT & IA SIMULÉE ---
-    function sendMsg() {
-        const input = document.getElementById('chatMsg');
-        const box = document.getElementById('chat-box');
+    function handleSend() {
+        const input = document.getElementById('chatInput');
         if(!input.value) return;
 
-        // Ton message
-        const myMsg = { text: input.value, user: 'Moi' };
-        messages.push(myMsg);
-        
-        // IA Gemini simplifiée
-        if(input.value.toLowerCase().includes('gemini')) {
-            messages.push({ text: "Je suis ton IA Gemini locale. Je t'aide sans serveur !", user: 'Gemini' });
-        }
+        const msg = { text: input.value, type: 'me', mode: chatMode };
+        chatHistory.push(msg);
 
-        localStorage.setItem('rt_messages', JSON.stringify(messages));
-        renderChat();
+        if(chatMode === 'ai') {
+            setTimeout(() => {
+                chatHistory.push({ text: "Je suis ton assistant Gemini. Je t'aide à gérer ton app Rasstube !", type: 'ai', mode: 'ai' });
+                renderChat();
+            }, 800);
+        }
+        
         input.value = "";
+        renderChat();
+        localStorage.setItem('rs_chat', JSON.stringify(chatHistory));
     }
 
     function renderChat() {
-        const box = document.getElementById('chat-box');
-        box.innerHTML = messages.map(m => `
-            <div style="margin-bottom:10px; text-align: ${m.user === 'Moi' ? 'right' : 'left'}">
-                <b style="color:${m.user === 'Gemini' ? '#4285f4' : 'red'}">${m.user}:</b><br>
-                <span style="background:#222; padding:5px 10px; border-radius:10px; display:inline-block;">${m.text}</span>
+        const cont = document.getElementById('chat-container');
+        cont.innerHTML = chatHistory.filter(m => m.mode === chatMode).map(m => `
+            <div class="msg ${m.type === 'me' ? 'msg-me' : (m.type === 'ai' ? 'msg-ai' : 'msg-other')}">
+                ${m.type === 'ai' ? '<b>Gemini:</b><br>' : ''}${m.text}
             </div>
         `).join('');
-        box.scrollTop = box.scrollHeight;
+        cont.scrollTop = cont.scrollHeight;
     }
 
-    renderHome();
+    // SYSTÈME DE LIKES ET ABONNEMENTS (LOCAUX)
+    function toggleLike(btn) {
+        btn.classList.toggle('fas');
+        btn.style.color = btn.classList.contains('fas') ? 'red' : 'white';
+    }
+
+    function toggleFav(id) {
+        if(favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+        else favorites.push(id);
+        localStorage.setItem('rs_favs', JSON.stringify(favorites));
+        render();
+    }
+
+    // RECHERCHE
+    function search() {
+        const term = document.getElementById('searchInput').value.toLowerCase();
+        render(term);
+    }
+
+    // AFFICHAGE DES VIDÉOS
+    function render(filter = "") {
+        const feed = document.getElementById('video-feed');
+        const rfeed = document.getElementById('rshot-feed');
+        const ffeed = document.getElementById('fav-feed');
+        
+        // Exemple de contenu si vide
+        if(contents.length === 0) {
+            contents = [
+                {id: 1, type:'video', title: 'Ma première vidéo', url: 'https://www.w3schools.com/html/mov_bbb.mp4', author: 'Rass'},
+                {id: 2, type:'rshot', title: 'RShot Fun', url: 'https://www.w3schools.com/html/movie.mp4', author: 'User1'}
+            ];
+        }
+
+        const filtered = contents.filter(c => c.title.toLowerCase().includes(filter));
+
+        feed.innerHTML = filtered.filter(c => c.type === 'video').map(c => `
+            <div class="card">
+                <video src="${c.url}" controls></video>
+                <div class="card-info">
+                    <button class="btn-sub" onclick="this.classList.toggle('is-sub'); this.innerText = this.classList.contains('is-sub') ? 'Abonné' : 'S\'abonner'">S'abonner</button>
+                    <b style="font-size:18px;">${c.title}</b><br>
+                    <small>@${c.author}</small>
+                    <div class="actions">
+                        <i class="far fa-heart" onclick="toggleLike(this)"></i>
+                        <i class="far fa-star" onclick="toggleFav(${c.id})" style="${favorites.includes(c.id) ? 'color:gold' : ''}"></i>
+                        <i class="fas fa-share"></i>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        rfeed.innerHTML = filtered.filter(c => c.type === 'rshot').map(c => `
+            <div class="card" style="margin:0;">
+                <video src="${c.url}" loop onclick="this.paused ? this.play() : this.pause()"></video>
+                <div style="position:absolute; bottom:10px; left:10px; font-size:12px;">@${c.author}</div>
+            </div>
+        `).join('');
+
+        ffeed.innerHTML = contents.filter(c => favorites.includes(c.id)).map(c => `
+             <div class="card"><video src="${c.url}" controls></video><div class="card-info"><b>${c.title}</b></div></div>
+        `).join('');
+    }
+
+    // Lancement
+    render();
     renderChat();
 </script>
-
 </body>
 </html>
