@@ -3,190 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE .NET | Plateforme Communautaire</title>
+    <title>RASSTUBE .NET | Player Pro</title>
     <style>
-        :root {
-            --primary: #ff0000;
-            --bg: #050505;
-            --card-bg: #121212;
-            --text: #ffffff;
-            --accent: #252525;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0; padding: 0;
-        }
-
-        /* --- BARRE DE NAVIGATION --- */
-        header {
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 10px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--accent);
+        :root { --primary: #ff0000; --bg: #050505; --card-bg: #121212; --text: #ffffff; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        
+        header { 
+            background: rgba(0,0,0,0.9); padding: 10px 5%; display: flex; 
+            justify-content: space-between; align-items: center; border-bottom: 1px solid #222;
             position: sticky; top: 0; z-index: 1000;
         }
 
-        .logo { font-size: 22px; font-weight: 900; color: var(--primary); text-decoration: none; letter-spacing: -1px; }
+        .main-container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
 
-        .user-status { display: flex; align-items: center; gap: 12px; }
+        /* --- LECTEUR PRINCIPAL --- */
+        #mainPlayerContainer { 
+            display: none; background: #000; border-radius: 15px; 
+            overflow: hidden; margin-bottom: 30px; border: 1px solid #333;
+        }
+        video { width: 100%; display: block; max-height: 500px; }
 
-        .profile-pic-nav {
-            width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary);
-            object-fit: cover; display: none;
+        /* --- FORMULAIRE --- */
+        .upload-box { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 30px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; color: #888; margin-bottom: 5px; }
+        input, textarea { 
+            width: 100%; background: #1a1a1a; border: 1px solid #333; 
+            color: white; padding: 12px; border-radius: 8px; box-sizing: border-box;
         }
 
-        .login-btn {
-            background: var(--primary); color: white; border: none;
-            padding: 8px 18px; border-radius: 20px; font-weight: bold; cursor: pointer;
+        .btn { 
+            background: var(--primary); color: white; border: none; padding: 12px; 
+            border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;
         }
 
-        /* --- MODAL DE CONNEXION --- */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center;
-        }
-
-        .modal-content {
-            background: var(--card-bg); padding: 30px; border-radius: 20px;
-            width: 85%; max-width: 350px; border: 1px solid var(--accent); text-align: center;
-        }
-
-        /* --- CONTENU --- */
-        .main-container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
-
-        .upload-box {
-            background: var(--card-bg); padding: 20px; border-radius: 15px;
-            border: 1px solid var(--accent); margin-bottom: 30px;
-        }
-
-        input, textarea {
-            width: 100%; background: #1a1a1a; border: 1px solid #333;
-            color: white; padding: 12px; margin: 8px 0; border-radius: 8px; box-sizing: border-box;
-        }
-
-        .publish-btn {
-            background: var(--primary); width: 100%; border: none; padding: 15px;
-            color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 10px;
-        }
-
-        /* --- GRILLE VIDÉO --- */
+        /* --- GRILLE --- */
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; }
-        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; }
+        .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; }
+        .video-card:hover { transform: scale(1.02); }
+        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #222; position: relative; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .v-info { padding: 12px; display: flex; gap: 10px; }
-        .author-img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
-        .v-text { flex: 1; }
-        .v-title { font-weight: bold; display: block; font-size: 15px; }
-        .v-meta { color: #888; font-size: 12px; margin-top: 4px; }
+        .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; opacity: 0.7; }
+        .v-info { padding: 12px; }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="#" class="logo">🎬 RASSTUBE</a>
-    <div class="user-status" id="userStatus">
-        <button class="login-btn" onclick="openModal()">Connexion</button>
-        <img src="" id="navAvatar" class="profile-pic-nav">
-        <span id="navUsername" style="font-weight:bold; font-size:14px;"></span>
-    </div>
+    <a href="#" style="color:red; font-weight:900; text-decoration:none; font-size:22px;">RASSTUBE</a>
+    <div id="userInfo"></div>
 </header>
 
 <div class="main-container">
-    <section class="upload-box" id="postArea">
-        <h2 style="color:var(--primary); margin-top:0;">Créer un post</h2>
-        <img id="previewImg" style="width:100%; border-radius:10px; display:none; margin-bottom:10px;">
-        <label style="background:#252525; display:block; padding:10px; text-align:center; border-radius:8px; cursor:pointer;">
-            🖼️ Choisir la miniature
-            <input type="file" id="vFile" accept="image/*" style="display:none" onchange="previewFile()">
-        </label>
-        <input type="text" id="vTitle" placeholder="Titre de la vidéo">
-        <button class="publish-btn" onclick="publishVideo()">PUBLIER</button>
+
+    <div id="mainPlayerContainer">
+        <video id="videoPlayer" controls autoplay></video>
+        <div style="padding:15px;">
+            <h2 id="nowPlayingTitle" style="margin:0; font-size:18px;"></h2>
+        </div>
+    </div>
+    
+    <section class="upload-box">
+        <h2 style="margin-top:0; color:red;">Poster une vidéo</h2>
+        
+        <div class="input-group">
+            <label>1. Choisir le fichier vidéo (.mp4, .mov)</label>
+            <input type="file" id="videoFile" accept="video/*" onchange="handleVideoSelect()">
+        </div>
+
+        <div class="input-group">
+            <label>2. Choisir la miniature (Image)</label>
+            <input type="file" id="thumbFile" accept="image/*" onchange="handleThumbSelect()">
+        </div>
+
+        <input type="text" id="vTitle" placeholder="Titre de la vidéo..." style="margin-bottom:15px;">
+        
+        <button class="btn" onclick="publishVideo()">PUBLIER SUR LA PLATEFORME</button>
     </section>
 
+    <h2>Vidéos récentes</h2>
     <div class="video-grid" id="videoGrid"></div>
 </div>
 
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <h2 style="color:var(--primary)">Créer ton compte</h2>
-        <input type="text" id="usernameInput" placeholder="Nom d'utilisateur">
-        <label style="font-size:12px; color:#888; display:block; margin-top:10px;">Photo de profil :</label>
-        <input type="file" id="avatarInput" accept="image/*">
-        <button class="publish-btn" onclick="login()">REJOINDRE</button>
-    </div>
-</div>
-
 <script>
-    let currentUser = { name: "Anonyme", avatar: "https://via.placeholder.com/50" };
-    let currentThumb = "";
+    let tempVideoData = "";
+    let tempThumbData = "";
 
-    function openModal() { document.getElementById('loginModal').style.display = 'flex'; }
-    
-    function login() {
-        const name = document.getElementById('usernameInput').value;
-        const avatarFile = document.getElementById('avatarInput').files[0];
-
-        if(!name) return alert("Choisis un nom !");
-
-        currentUser.name = name;
-        if(avatarFile) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                currentUser.avatar = e.target.result;
-                updateHeader();
-            }
-            reader.readAsDataURL(avatarFile);
-        } else {
-            updateHeader();
-        }
-        document.getElementById('loginModal').style.display = 'none';
-    }
-
-    function updateHeader() {
-        document.querySelector('.login-btn').style.display = 'none';
-        document.getElementById('navAvatar').src = currentUser.avatar;
-        document.getElementById('navAvatar').style.display = 'block';
-        document.getElementById('navUsername').innerText = currentUser.name;
-    }
-
-    function previewFile() {
-        const file = document.getElementById('vFile').files[0];
+    // Lire la vidéo du téléphone
+    function handleVideoSelect() {
+        const file = document.getElementById('videoFile').files[0];
         const reader = new FileReader();
-        reader.onload = (e) => {
-            currentThumb = e.target.result;
-            document.getElementById('previewImg').src = currentThumb;
-            document.getElementById('previewImg').style.display = 'block';
-        };
+        reader.onload = (e) => { tempVideoData = e.target.result; };
+        reader.readAsDataURL(file);
+    }
+
+    // Lire la miniature du téléphone
+    function handleThumbSelect() {
+        const file = document.getElementById('thumbFile').files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => { tempThumbData = e.target.result; };
         reader.readAsDataURL(file);
     }
 
     function publishVideo() {
         const title = document.getElementById('vTitle').value;
-        if(!title || !currentThumb) return alert("Titre et image requis !");
+        if(!title || !tempVideoData || !tempThumbData) {
+            alert("Il manque quelque chose (vidéo, image ou titre) !");
+            return;
+        }
 
         const grid = document.getElementById('videoGrid');
         const card = document.createElement('div');
         card.className = 'video-card';
+        
+        // Stocker les données dans la carte pour pouvoir les lire après
+        card.onclick = function() { playVideo(tempVideoData, title); };
+        
         card.innerHTML = `
-            <div class="v-thumb"><img src="${currentThumb}"></div>
+            <div class="v-thumb">
+                <img src="${tempThumbData}">
+                <div class="play-icon">▶</div>
+            </div>
             <div class="v-info">
-                <img src="${currentUser.avatar}" class="author-img">
-                <div class="v-text">
-                    <span class="v-title">${title}</span>
-                    <div class="v-meta">${currentUser.name} • 0 vue • À l'instant</div>
-                </div>
+                <span style="font-weight:bold;">${title}</span><br>
+                <small style="color:gray;">Posté par toi • À l'instant</small>
             </div>
         `;
+        
         grid.prepend(card);
+        alert("Vidéo ajoutée à la liste !");
+        
         // Reset
         document.getElementById('vTitle').value = "";
-        document.getElementById('previewImg').style.display = "none";
-        currentThumb = "";
+    }
+
+    function playVideo(source, title) {
+        const container = document.getElementById('mainPlayerContainer');
+        const player = document.getElementById('videoPlayer');
+        const titleDisplay = document.getElementById('nowPlayingTitle');
+
+        player.src = source;
+        titleDisplay.innerText = title;
+        container.style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
 
