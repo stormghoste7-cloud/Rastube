@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimeHub Pro | Anime & Manga Officiels</title>
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎌</text></svg>">
-    
-    <!-- Fonts & Icons -->
+    <title>AnimeSama RASS Tube - Streaming Anime Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #FF4757;
-            --primary-dark: #E84142;
-            --primary-light: #FF6B81;
-            --secondary: #1E90FF;
-            --dark: #0F0F1A;
+            --primary: #FF3366;
+            --primary-dark: #CC0044;
+            --primary-light: #FF6699;
+            --secondary: #6C63FF;
+            --accent: #FFD166;
+            --dark: #0F0F23;
             --dark-light: #1A1A2E;
-            --darker: #090910;
+            --darker: #090915;
             --light: #FFFFFF;
             --gray: #8A8AA3;
             --gray-dark: #4A4A6A;
@@ -29,12 +26,12 @@
             --radius-md: 12px;
             --radius-lg: 16px;
             --radius-xl: 24px;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 20px rgba(0,0,0,0.2);
-            --shadow-lg: 0 8px 40px rgba(0,0,0,0.3);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --header-height: 70px;
-            --nav-height: 60px;
+            --header-height: 80px;
+            --nav-height: 70px;
         }
 
         /* Reset & Base */
@@ -69,167 +66,11 @@
             flex-direction: column;
         }
 
-        .content {
-            flex: 1;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Auth Screen */
-        .auth-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-screen::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,71,87,0.1) 0%, transparent 70%);
-        }
-
-        .auth-container {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: var(--radius-xl);
-            padding: 40px;
-            width: 100%;
-            max-width: 480px;
-            position: relative;
-            z-index: 1;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .brand-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .logo {
-            font-size: 42px;
-            font-weight: 900;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        .tagline {
-            color: var(--gray);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            color: var(--gray);
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: var(--radius-md);
-            color: var(--light);
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255,255,255,0.08);
-            box-shadow: 0 0 0 3px rgba(255,71,87,0.1);
-        }
-
-        .btn {
-            padding: 16px 32px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary), var(--primary-light));
-            color: white;
-            width: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.15);
-        }
-
-        /* Tabs */
-        .auth-tabs {
-            display: flex;
-            background: rgba(255,255,255,0.05);
-            border-radius: var(--radius-md);
-            padding: 4px;
-            margin-bottom: 32px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            background: none;
-            border: none;
-            color: var(--gray);
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-        }
-
-        .tab-btn.active {
-            background: rgba(255,71,87,0.2);
-            color: var(--primary);
-        }
-
         /* Header */
         .header {
-            background: rgba(15, 15, 26, 0.95);
+            background: rgba(15, 15, 35, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 51, 102, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -246,181 +87,146 @@
             justify-content: space-between;
         }
 
-        .logo-small {
-            font-size: 24px;
+        .logo {
+            font-size: 28px;
             font-weight: 900;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .search-container {
-            flex: 1;
-            max-width: 600px;
-            margin: 0 20px;
-            position: relative;
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
         }
 
-        .search-input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: var(--radius-md);
-            color: white;
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255,255,255,0.08);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+        .nav-link {
             color: var(--gray);
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .notification-btn {
-            position: relative;
-            background: none;
-            border: none;
-            color: var(--gray);
-            font-size: 18px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .notification-btn:hover {
-            color: var(--light);
-            background: rgba(255,255,255,0.05);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--primary);
-            color: white;
-            font-size: 10px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-            cursor: pointer;
-        }
-
-        /* Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            height: var(--nav-height);
-            display: flex;
-            z-index: 1000;
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             text-decoration: none;
-            color: var(--gray);
-            font-size: 12px;
             font-weight: 500;
+            font-size: 15px;
             transition: var(--transition);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
             position: relative;
         }
 
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 4px;
+        .nav-link:hover {
+            color: var(--light);
+            background: rgba(255, 51, 102, 0.1);
         }
 
-        .nav-item.active {
+        .nav-link.active {
             color: var(--primary);
         }
 
-        .nav-item.active::after {
+        .nav-link.active::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40%;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
             height: 3px;
             background: var(--primary);
-            border-radius: 0 0 2px 2px;
+            border-radius: 2px;
         }
 
-        /* Hero Section */
-        .hero {
-            height: 400px;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
+        /* Hero Section with AnimeSama Character */
+        .hero-section {
             position: relative;
-            margin-bottom: 40px;
-            background: linear-gradient(45deg, var(--dark-light), var(--darker));
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow: hidden;
         }
 
         .hero-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 40px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            flex: 1;
+            max-width: 600px;
+            z-index: 2;
         }
 
         .hero-title {
-            font-size: 36px;
-            margin-bottom: 12px;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.1;
         }
 
-        .hero-description {
+        .hero-subtitle {
+            font-size: 18px;
             color: var(--gray);
-            margin-bottom: 24px;
-            max-width: 600px;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* AnimeSama Character Container */
+        .animesama-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .animesama-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 51, 102, 0.4) 0%, rgba(255, 51, 102, 0) 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: pulse 4s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        .animesama-character {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            z-index: 2;
+            animation: floating 8s infinite ease-in-out;
         }
 
         /* Anime Grid */
+        .content {
+            flex: 1;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 30px;
         }
 
         .section-title {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .view-all {
@@ -429,6 +235,9 @@
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .view-all:hover {
@@ -437,9 +246,9 @@
 
         .anime-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
         }
 
         .anime-card {
@@ -453,24 +262,24 @@
         }
 
         .anime-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-10px);
             border-color: var(--primary);
             box-shadow: var(--shadow-lg);
         }
 
         .anime-poster {
             width: 100%;
-            height: 250px;
+            height: 280px;
             object-fit: cover;
             display: block;
         }
 
         .anime-info {
-            padding: 16px;
+            padding: 15px;
         }
 
         .anime-title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             margin-bottom: 8px;
             display: -webkit-box;
@@ -483,12 +292,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
+            font-size: 13px;
             color: var(--gray);
         }
 
         .anime-rating {
-            color: var(--warning);
+            color: var(--accent);
             font-weight: 600;
         }
 
@@ -498,142 +307,47 @@
             right: 12px;
             background: var(--primary);
             color: white;
-            padding: 4px 8px;
+            padding: 5px 10px;
             border-radius: var(--radius-sm);
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
         }
 
-        /* Details Page */
-        .anime-details {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .anime-details {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .details-poster {
-            width: 100%;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .details-content h1 {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .details-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 24px;
-            color: var(--gray);
-            font-size: 14px;
-        }
-
-        .details-meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .details-genres {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 16px 0;
-        }
-
-        .genre-tag {
-            background: rgba(255,71,87,0.1);
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .details-description {
-            color: var(--gray);
-            line-height: 1.8;
-            margin-bottom: 32px;
-            font-size: 15px;
-        }
-
-        .details-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 32px;
-        }
-
-        /* Episodes */
-        .episodes-section {
-            background: var(--dark-light);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-top: 32px;
-        }
-
-        .episodes-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .episodes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 8px;
-        }
-
-        .episode-card {
-            background: rgba(255,255,255,0.05);
+        /* Buttons */
+        .btn {
+            padding: 14px 28px;
+            border: none;
             border-radius: var(--radius-md);
-            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
         }
 
-        .episode-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            color: white;
         }
 
-        .episode-card.watched {
-            background: rgba(255,71,87,0.1);
-            border-color: var(--primary);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
 
-        .episode-number {
-            font-size: 12px;
-            color: var(--gray);
-            margin-bottom: 8px;
-            font-weight: 600;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .episode-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .episode-duration {
-            font-size: 11px;
-            color: var(--gray);
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
         }
 
         /* Player */
@@ -647,7 +361,7 @@
         }
 
         .player-header {
-            padding: 16px 24px;
+            padding: 20px 30px;
             background: rgba(0,0,0,0.8);
             display: flex;
             justify-content: space-between;
@@ -656,7 +370,7 @@
         }
 
         .player-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: var(--light);
         }
@@ -665,7 +379,7 @@
             background: none;
             border: none;
             color: var(--gray);
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             padding: 8px;
             border-radius: 50%;
@@ -694,331 +408,249 @@
             background: black;
         }
 
-        /* Profile */
-        .profile-header {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-            background: var(--dark-light);
-            padding: 32px;
-            border-radius: var(--radius-lg);
-            margin-bottom: 40px;
-        }
-
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--primary);
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-name {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .profile-email {
-            color: var(--gray);
-            margin-bottom: 16px;
-        }
-
-        .profile-meta {
-            display: flex;
-            gap: 24px;
-            color: var(--gray);
-            font-size: 14px;
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: var(--dark-light);
-            border-radius: var(--radius-md);
-            padding: 24px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .stat-label {
-            color: var(--gray);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Toast */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: var(--dark-light);
-            border-left: 4px solid var(--primary);
-            border-radius: var(--radius-md);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: var(--shadow-lg);
-            animation: slideInRight 0.3s ease;
-            min-width: 300px;
-            max-width: 400px;
-        }
-
-        .toast-success {
-            border-left-color: var(--success);
-        }
-
-        .toast-error {
-            border-left-color: var(--error);
-        }
-
-        .toast-warning {
-            border-left-color: var(--warning);
-        }
-
-        .toast-icon {
-            font-size: 20px;
-            color: var(--primary);
-        }
-
-        .toast-success .toast-icon {
-            color: var(--success);
-        }
-
-        .toast-error .toast-icon {
-            color: var(--error);
-        }
-
-        .toast-warning .toast-icon {
-            color: var(--warning);
-        }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-close {
-            background: none;
-            border: none;
-            color: var(--gray);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .toast-close:hover {
-            color: var(--light);
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--gray);
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-description {
-            margin-bottom: 24px;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9998;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
-            display: none;
-        }
-
-        .modal-content {
-            background: var(--dark-light);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            max-width: 480px;
-            width: 100%;
-            position: relative;
-            animation: scaleIn 0.3s ease;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .modal-close {
+        /* AnimeSama Speech Bubble */
+        .speech-bubble {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: var(--gray);
-            font-size: 20px;
-            cursor: pointer;
-            padding: 8px;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(255, 255, 255, 0.95);
+            color: #4a4a9c;
+            padding: 20px 25px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 300px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 10;
+            border: 3px solid var(--primary);
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 15px 15px 0;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.95) transparent transparent;
+        }
+
+        .speech-bubble.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Background Elements */
+        .background-elements {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-star {
+            position: absolute;
+            background: white;
             border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .cherry-blossom {
+            position: absolute;
+            color: var(--primary-light);
+            font-size: 20px;
+            opacity: 0.7;
+            animation: float 15s infinite linear;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker);
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 51, 102, 0.2);
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
             transition: var(--transition);
         }
 
-        .modal-close:hover {
-            color: var(--light);
-            background: rgba(255,255,255,0.1);
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
         }
 
-        .modal-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-light);
+        .copyright {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 14px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 40px;
         }
 
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
         }
 
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
         }
 
-        @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 0 16px;
-            }
-
-            .search-container {
-                margin: 0 12px;
-            }
-
-            .content {
-                padding: 16px;
-            }
-
-            .anime-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 16px;
-            }
-
-            .hero {
-                height: 300px;
+        @media (max-width: 1024px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 20px;
+                min-height: auto;
             }
 
             .hero-content {
-                padding: 24px;
+                margin-bottom: 40px;
             }
 
             .hero-title {
-                font-size: 24px;
+                font-size: 36px;
             }
 
-            .auth-container {
-                padding: 24px;
-                margin: 16px;
+            .animesama-container {
+                width: 350px;
+                height: 400px;
             }
 
-            .profile-header {
+            .animesama-character {
+                width: 350px;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
                 flex-direction: column;
-                text-align: center;
-                gap: 20px;
+                padding: 15px;
+                height: auto;
+                gap: 15px;
             }
 
-            .profile-meta {
-                justify-content: center;
+            .nav-links {
+                gap: 15px;
                 flex-wrap: wrap;
-                gap: 16px;
+                justify-content: center;
             }
 
-            .episodes-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            .anime-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            .animesama-container {
+                width: 280px;
+                height: 350px;
+            }
+
+            .animesama-character {
+                width: 280px;
+                height: 350px;
+            }
+
+            .speech-bubble {
+                top: -100px;
+                max-width: 250px;
+                font-size: 16px;
+                padding: 15px 20px;
             }
         }
 
         @media (max-width: 480px) {
+            .hero-title {
+                font-size: 28px;
+            }
+
             .anime-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .details-actions {
+            .hero-cta {
                 flex-direction: column;
+                align-items: center;
             }
 
-            .details-actions .btn {
+            .btn {
                 width: 100%;
+                max-width: 300px;
             }
         }
 
@@ -1038,1568 +670,827 @@
         .text-center {
             text-align: center;
         }
-
-        .mb-1 { margin-bottom: 8px; }
-        .mb-2 { margin-bottom: 16px; }
-        .mb-3 { margin-bottom: 24px; }
-        .mb-4 { margin-bottom: 32px; }
-        .mb-5 { margin-bottom: 40px; }
-
-        .mt-1 { margin-top: 8px; }
-        .mt-2 { margin-top: 16px; }
-        .mt-3 { margin-top: 24px; }
-        .mt-4 { margin-top: 32px; }
-        .mt-5 { margin-top: 40px; }
     </style>
 </head>
 <body>
-    <!-- Toast Container -->
-    <div class="toast-container"></div>
-
-    <!-- Modal Overlay -->
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal-content" id="modal-content">
-            <button class="modal-close" id="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <div id="modal-body"></div>
-        </div>
-    </div>
-
-    <!-- Auth Screen -->
-    <div class="auth-screen" id="auth-screen">
-        <div class="auth-container">
-            <div class="brand-header">
-                <div class="logo text-gradient">AnimeHub Pro</div>
-                <div class="tagline">Anime & Manga Officiels - Streaming Légal</div>
-            </div>
-
-            <div class="auth-tabs">
-                <button class="tab-btn active" id="tab-login" onclick="AnimeHub.toggleAuth('login')">Connexion</button>
-                <button class="tab-btn" id="tab-signup" onclick="AnimeHub.toggleAuth('signup')">Inscription</button>
-            </div>
-
-            <form id="auth-form" onsubmit="event.preventDefault(); AnimeHub.handleAuth();">
-                <div class="form-group">
-                    <label class="form-label" for="auth-email">Adresse email</label>
-                    <input type="email" class="form-control" id="auth-email" placeholder="votre@email.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="auth-password">Mot de passe</label>
-                    <input type="password" class="form-control" id="auth-password" placeholder="••••••••" minlength="6" required>
-                </div>
-
-                <div class="form-group hidden" id="username-group">
-                    <label class="form-label" for="auth-username">Nom d'utilisateur</label>
-                    <input type="text" class="form-control" id="auth-username" placeholder="Votre pseudo">
-                </div>
-
-                <button type="submit" class="btn btn-primary" id="auth-submit">
-                    <span id="auth-submit-text">Se connecter</span>
-                </button>
-            </form>
-
-            <div class="text-center mt-3">
-                <p style="color: var(--gray); font-size: 14px;">
-                    <i class="fas fa-shield-alt"></i> Plateforme 100% légale - Supportez les créateurs
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main App -->
-    <div class="app hidden" id="app">
+    <!-- App Container -->
+    <div class="app">
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <a href="#" class="logo-small text-gradient" onclick="AnimeHub.go('home'); return false;">AnimeHub Pro</a>
+                <a href="#" class="logo text-gradient">
+                    <i class="fas fa-crown"></i>
+                    AnimeSama RASS Tube
+                </a>
                 
-                <div class="search-container">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" id="search-input" placeholder="Rechercher un anime..." oninput="AnimeHub.searchAnime(this.value)">
-                </div>
-
-                <div class="user-menu">
-                    <button class="notification-btn" onclick="AnimeHub.showNotifications()">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="notification-badge">3</span>
-                    </button>
-                    <img src="" class="avatar" id="user-avatar" alt="Avatar" onclick="AnimeHub.go('profile')">
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" onclick="goToSection('home')">
+                        <i class="fas fa-home"></i>
+                        Accueil
+                    </a>
+                    <a href="#" class="nav-link" onclick="goToSection('anime')">
+                        <i class="fas fa-play-circle"></i>
+                        Anime
+                    </a>
+                    <a href="#" class="nav-link" onclick="goToSection('manga')">
+                        <i class="fas fa-book"></i>
+                        Manga
+                    </a>
+                    <a href="#" class="nav-link" onclick="goToSection('trending')">
+                        <i class="fas fa-fire"></i>
+                        Tendances
+                    </a>
+                    <a href="#" class="nav-link" onclick="showLogin()">
+                        <i class="fas fa-user"></i>
+                        Connexion
+                    </a>
                 </div>
             </div>
         </header>
 
-        <!-- Content -->
-        <main class="content" id="content">
-            <!-- Home Page -->
-            <section id="page-home">
-                <div class="hero">
-                    <div class="hero-content">
-                        <h1 class="hero-title">Anime & Manga Officiels</h1>
-                        <p class="hero-description">Streaming légal HD, traductions officielles, nouveautés en simulcast. Soutenez l'industrie de l'anime !</p>
-                        <div class="details-actions">
-                            <button class="btn btn-primary" onclick="AnimeHub.exploreAnime()">
-                                <i class="fas fa-play"></i>
-                                Découvrir les nouveautés
-                            </button>
-                            <button class="btn btn-secondary" onclick="AnimeHub.showLegalInfo()">
-                                <i class="fas fa-gavel"></i>
-                                Streaming Légal
-                            </button>
-                        </div>
+        <!-- Background Elements -->
+        <div class="background-elements" id="background-elements"></div>
+
+        <!-- Hero Section with AnimeSama -->
+        <section class="hero-section" id="home-section">
+            <div class="hero-content">
+                <h1 class="hero-title text-gradient">
+                    Bienvenue sur AnimeSama RASS Tube
+                </h1>
+                <p class="hero-subtitle">
+                    La première plateforme de streaming anime avec votre guide personnel AnimeSama. 
+                    Regardez vos anime préférés en HD, découvrez des nouveautés exclusives et 
+                    profitez d'une expérience unique avec notre reine virtuelle.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="showPlayer('attack_on_titan', 1)">
+                        <i class="fas fa-play"></i>
+                        Commencer à regarder
+                    </button>
+                    <button class="btn btn-secondary" onclick="goToSection('trending')">
+                        <i class="fas fa-compass"></i>
+                        Explorer
+                    </button>
+                </div>
+            </div>
+
+            <!-- AnimeSama Character -->
+            <div class="animesama-container" id="animesama-container">
+                <div class="animesama-glow" id="animesama-glow"></div>
+                
+                <!-- SVG Character -->
+                <svg class="animesama-character" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid meet">
+                    <!-- Cape -->
+                    <g>
+                        <path d="M200,100 C250,150 300,200 300,300 C300,400 250,450 200,450 C150,450 100,400 100,300 C100,200 150,150 200,100 Z" 
+                              fill="#FF3366" opacity="0.8"/>
+                    </g>
+                    
+                    <!-- Dress -->
+                    <g>
+                        <path d="M150,200 L250,200 C270,250 280,300 280,400 C280,450 250,480 200,480 C150,480 120,450 120,400 C120,300 130,250 150,200 Z" 
+                              fill="#6C63FF"/>
+                        
+                        <!-- Dress Details -->
+                        <path d="M170,250 L230,250" stroke="#FFD166" stroke-width="2" fill="none"/>
+                        <path d="M165,300 L235,300" stroke="#FFD166" stroke-width="2" fill="none"/>
+                        <path d="M160,350 L240,350" stroke="#FFD166" stroke-width="2" fill="none"/>
+                    </g>
+                    
+                    <!-- Body -->
+                    <circle cx="200" cy="170" r="25" fill="#ffccb3"/>
+                    
+                    <!-- Hair -->
+                    <g>
+                        <path d="M180,150 C150,140 130,120 140,90 C150,60 180,50 200,60 C220,50 250,60 260,90 C270,120 250,140 220,150 Z" 
+                              fill="#8b4513"/>
+                        <path d="M180,150 L170,200 C175,210 190,220 200,220 C210,220 225,210 230,200 L220,150 Z" 
+                              fill="#8b4513"/>
+                    </g>
+                    
+                    <!-- Face -->
+                    <circle cx="200" cy="170" r="22" fill="#ffccb3"/>
+                    
+                    <!-- Eyes -->
+                    <g>
+                        <ellipse cx="185" cy="165" rx="5" ry="7" fill="#0F0F23"/>
+                        <circle cx="185" cy="163" r="2" fill="white"/>
+                    </g>
+                    <g>
+                        <ellipse cx="215" cy="165" rx="5" ry="7" fill="#0F0F23"/>
+                        <circle cx="215" cy="163" r="2" fill="white"/>
+                    </g>
+                    
+                    <!-- Mouth -->
+                    <path d="M190,185 Q200,190 210,185" fill="none" stroke="#FF3366" stroke-width="2"/>
+                    
+                    <!-- Crown -->
+                    <path d="M185,130 L200,100 L215,130 L210,128 L200,110 L190,128 Z" fill="#FFD166"/>
+                    <circle cx="200" cy="100" r="6" fill="#FFD166"/>
+                    <circle cx="188" cy="115" r="4" fill="#FFD166"/>
+                    <circle cx="212" cy="115" r="4" fill="#FFD166"/>
+                    
+                    <!-- Arms -->
+                    <path d="M160,195 C150,205 145,225 150,245" stroke="#ffccb3" stroke-width="10" fill="none"/>
+                    <path d="M240,195 C250,205 255,225 250,245" stroke="#ffccb3" stroke-width="10" fill="none"/>
+                    
+                    <!-- Magic Orb -->
+                    <circle cx="250" cy="245" r="15" fill="url(#orbGradient)" opacity="0.9">
+                        <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Gradients -->
+                    <defs>
+                        <radialGradient id="orbGradient">
+                            <stop offset="0%" stop-color="#FFD166"/>
+                            <stop offset="100%" stop-color="#FF3366"/>
+                        </radialGradient>
+                    </defs>
+                </svg>
+                
+                <!-- Speech Bubble -->
+                <div class="speech-bubble" id="speech-bubble">
+                    💖 Bienvenue, cher otaku ! Clique sur moi 💖
+                </div>
+            </div>
+        </section>
+
+        <!-- Anime Content -->
+        <main class="content">
+            <!-- Trending Section -->
+            <section id="trending-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-fire"></i>
+                        Anime Tendances
+                    </h2>
+                    <div class="view-all" onclick="viewAll('trending')">
+                        Tout voir <i class="fas fa-arrow-right"></i>
                     </div>
                 </div>
-
-                <!-- Trending Anime -->
-                <div class="section-header">
-                    <h2 class="section-title">🔥 Tendances actuelles</h2>
-                    <div class="view-all" onclick="AnimeHub.viewAll('trending')">Tout voir</div>
-                </div>
                 <div class="anime-grid" id="trending-grid"></div>
+            </section>
 
-                <!-- Continue Watching -->
+            <!-- New Releases -->
+            <section id="new-section">
                 <div class="section-header">
-                    <h2 class="section-title">▶️ Continuer à regarder</h2>
-                    <div class="view-all" onclick="AnimeHub.go('profile')">Historique</div>
-                </div>
-                <div class="anime-grid" id="continue-grid"></div>
-
-                <!-- New Releases -->
-                <div class="section-header">
-                    <h2 class="section-title">🎬 Simulcast Automne 2023</h2>
-                    <div class="view-all" onclick="AnimeHub.viewAll('new')">Tout voir</div>
+                    <h2 class="section-title">
+                        <i class="fas fa-bolt"></i>
+                        Nouveautés 2023
+                    </h2>
+                    <div class="view-all" onclick="viewAll('new')">
+                        Tout voir <i class="fas fa-arrow-right"></i>
+                    </div>
                 </div>
                 <div class="anime-grid" id="new-grid"></div>
+            </section>
 
-                <!-- Classic Anime -->
+            <!-- Popular Anime -->
+            <section id="popular-section">
                 <div class="section-header">
-                    <h2 class="section-title">⭐ Classiques incontournables</h2>
-                    <div class="view-all" onclick="AnimeHub.viewAll('classic')">Tout voir</div>
+                    <h2 class="section-title">
+                        <i class="fas fa-star"></i>
+                        Les Plus Populaires
+                    </h2>
+                    <div class="view-all" onclick="viewAll('popular')">
+                        Tout voir <i class="fas fa-arrow-right"></i>
+                    </div>
                 </div>
-                <div class="anime-grid" id="classic-grid"></div>
+                <div class="anime-grid" id="popular-grid"></div>
+            </section>
 
-                <!-- Manga Section -->
+            <!-- Manga Section -->
+            <section id="manga-section">
                 <div class="section-header">
-                    <h2 class="section-title">📚 Manga du moment</h2>
-                    <div class="view-all" onclick="AnimeHub.showManga()">Bibliothèque manga</div>
+                    <h2 class="section-title">
+                        <i class="fas fa-book"></i>
+                        Manga à Lire
+                    </h2>
+                    <div class="view-all" onclick="viewAll('manga')">
+                        Tout voir <i class="fas fa-arrow-right"></i>
+                    </div>
                 </div>
                 <div class="anime-grid" id="manga-grid"></div>
             </section>
-
-            <!-- Library Page -->
-            <section id="page-library" class="hidden">
-                <div class="section-header">
-                    <h2 class="section-title">📚 Ma Bibliothèque</h2>
-                    <div class="details-actions">
-                        <button class="btn btn-secondary" onclick="AnimeHub.filterLibrary('all')">
-                            Tous
-                        </button>
-                        <button class="btn btn-secondary" onclick="AnimeHub.filterLibrary('watching')">
-                            En cours
-                        </button>
-                        <button class="btn btn-secondary" onclick="AnimeHub.filterLibrary('favorites')">
-                            Favoris
-                        </button>
-                        <button class="btn btn-secondary" onclick="AnimeHub.filterLibrary('completed')">
-                            Terminés
-                        </button>
-                    </div>
-                </div>
-                <div class="anime-grid" id="library-grid"></div>
-            </section>
-
-            <!-- Profile Page -->
-            <section id="page-profile" class="hidden">
-                <div class="profile-header">
-                    <img src="" class="profile-avatar" id="profile-avatar" alt="Avatar">
-                    <div class="profile-info">
-                        <h1 class="profile-name" id="profile-name"></h1>
-                        <div class="profile-email" id="profile-email"></div>
-                        <div class="profile-meta">
-                            <span><i class="fas fa-calendar"></i> Membre depuis <span id="member-since"></span></span>
-                            <span><i class="fas fa-crown"></i> <span id="account-type">Compte Gratuit</span></span>
-                            <span><i class="fas fa-shield-alt"></i> Streaming légal</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <h2 class="section-title">📊 Mes Statistiques</h2>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-value" id="stat-anime">0</span>
-                        <span class="stat-label">Animés regardés</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value" id="stat-episodes">0</span>
-                        <span class="stat-label">Épisodes</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value" id="stat-hours">0</span>
-                        <span class="stat-label">Heures</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value" id="stat-streak">0</span>
-                        <span class="stat-label">Jours streak</span>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <h2 class="section-title">🎯 Mes Objectifs</h2>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-value" id="goal-anime">0/10</span>
-                        <span class="stat-label">Animés terminés</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value" id="goal-hours">0/50</span>
-                        <span class="stat-label">Heures regardées</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value" id="goal-streak">0/7</span>
-                        <span class="stat-label">Streak de 7 jours</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value" id="goal-favorites">0/10</span>
-                        <span class="stat-label">Favoris ajoutés</span>
-                    </div>
-                </div>
-
-                <div class="details-actions mt-4">
-                    <button class="btn btn-secondary" onclick="AnimeHub.showLegalInfo()">
-                        <i class="fas fa-gavel"></i>
-                        Info streaming légal
-                    </button>
-                    <button class="btn btn-primary" onclick="AnimeHub.logout()">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Déconnexion
-                    </button>
-                </div>
-            </section>
-
-            <!-- Details Page -->
-            <section id="page-details" class="hidden">
-                <!-- Dynamic content -->
-            </section>
         </main>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="#" class="nav-item active" onclick="AnimeHub.go('home'); return false;">
-                <i class="fas fa-home"></i>
-                Accueil
-            </a>
-            <a href="#" class="nav-item" onclick="AnimeHub.go('library'); return false;">
-                <i class="fas fa-book"></i>
-                Bibliothèque
-            </a>
-            <a href="#" class="nav-item" onclick="AnimeHub.go('search'); return false;">
-                <i class="fas fa-search"></i>
-                Recherche
-            </a>
-            <a href="#" class="nav-item" onclick="AnimeHub.go('profile'); return false;">
-                <i class="fas fa-user"></i>
-                Profil
-            </a>
-        </nav>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AnimeSama RASS Tube</h3>
+                    <p style="color: var(--gray); margin-top: 10px;">
+                        La plateforme ultime pour les fans d'anime et manga. 
+                        Streaming HD, simulcast, et expérience interactive unique.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Navigation</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="goToSection('home')">Accueil</a></li>
+                        <li><a href="#" onclick="goToSection('anime')">Anime</a></li>
+                        <li><a href="#" onclick="goToSection('manga')">Manga</a></li>
+                        <li><a href="#" onclick="goToSection('trending')">Tendances</a></li>
+                        <li><a href="#" onclick="showLogin()">Connexion</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Légal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showLegalInfo()">Mentions légales</a></li>
+                        <li><a href="#" onclick="showLegalInfo()">Politique de confidentialité</a></li>
+                        <li><a href="#" onclick="showLegalInfo()">Conditions d'utilisation</a></li>
+                        <li><a href="#" onclick="showLegalStreaming()">Streaming légal</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:support@animesama.com">support@animesama.com</a></li>
+                        <li><a href="#">Support technique</a></li>
+                        <li><a href="#">Partenariats</a></li>
+                        <li><a href="#">Devenir contributeur</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 AnimeSama RASS Tube. Tous droits réservés. 
+                Anime et manga sont des marques de leurs propriétaires respectifs.
+                <br>
+                <small style="color: var(--gray-dark); margin-top: 10px; display: block;">
+                    Cette plateforme promeut le streaming légal et soutient l'industrie de l'anime.
+                </small>
+            </div>
+        </footer>
     </div>
 
     <!-- Video Player -->
     <div class="player-overlay" id="player-overlay">
         <div class="player-header">
             <div class="player-title" id="player-title"></div>
-            <button class="player-close" onclick="AnimeHub.closePlayer()">
+            <button class="player-close" onclick="closePlayer()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="player-container">
-            <div style="text-align: center; padding: 40px;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--warning); margin-bottom: 20px;"></i>
-                <h2 style="margin-bottom: 16px;">Streaming Légal Recommandé</h2>
-                <p style="color: var(--gray); margin-bottom: 24px; max-width: 600px;">
-                    Pour regarder cet anime légalement et soutenir les créateurs, veuillez utiliser les services officiels de streaming.
+            <div style="text-align: center; padding: 40px; max-width: 800px;">
+                <i class="fas fa-crown" style="font-size: 60px; color: var(--primary); margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 20px;">Streaming Légal Recommandé</h2>
+                <p style="color: var(--gray); margin-bottom: 30px; font-size: 18px;">
+                    AnimeSama RASS Tube promeut le streaming légal pour soutenir l'industrie de l'anime.
+                    Pour regarder cet anime, veuillez utiliser les plateformes officielles ci-dessous.
                 </p>
-                <div class="details-actions">
-                    <button class="btn btn-primary" onclick="AnimeHub.openLegalStreaming()">
-                        <i class="fas fa-external-link-alt"></i>
-                        Voir les plateformes légales
-                    </button>
-                    <button class="btn btn-secondary" onclick="AnimeHub.closePlayer()">
-                        <i class="fas fa-times"></i>
-                        Fermer
-                    </button>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--primary); cursor: pointer;" 
+                         onclick="window.open('https://www.crunchyroll.com', '_blank')">
+                        <div style="font-size: 32px; margin-bottom: 10px;">🎬</div>
+                        <div style="font-weight: 600;">Crunchyroll</div>
+                        <div style="font-size: 14px; color: var(--gray);">Le plus grand catalogue</div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--primary); cursor: pointer;" 
+                         onclick="window.open('https://www.wakanim.tv', '_blank')">
+                        <div style="font-size: 32px; margin-bottom: 10px;">🇫🇷</div>
+                        <div style="font-weight: 600;">Wakanim</div>
+                        <div style="font-size: 14px; color: var(--gray);">Simulcast VF/VOSTFR</div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--primary); cursor: pointer;" 
+                         onclick="window.open('https://www.netflix.com', '_blank')">
+                        <div style="font-size: 32px; margin-bottom: 10px;">🎥</div>
+                        <div style="font-weight: 600;">Netflix</div>
+                        <div style="font-size: 14px; color: var(--gray);">Sélection d'anime</div>
+                    </div>
                 </div>
+                
+                <button class="btn btn-primary" onclick="closePlayer()" style="margin-top: 20px;">
+                    <i class="fas fa-check"></i>
+                    J'ai compris, merci AnimeSama !
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        class AnimeHub {
-            static VERSION = '3.0.0';
-            static STORAGE_KEYS = {
-                USERS: 'animehub_users_v3',
-                SESSION: 'animehub_session_v3',
-                LIBRARY: 'animehub_library_v3',
-                HISTORY: 'animehub_history_v3',
-                FAVORITES: 'animehub_favorites_v3',
-                WATCHLIST: 'animehub_watchlist_v3',
-                STATS: 'animehub_stats_v3'
-            };
-
-            static state = {
-                currentUser: null,
-                users: [],
-                animeData: [],
-                mangaData: [],
-                currentAnime: null,
-                currentPage: 'home',
-                searchQuery: '',
-                filters: {
-                    library: 'all',
-                    sort: 'popularity',
-                    year: null,
-                    genre: null
-                }
-            };
-
-            // RÉELS ANIME ET MANGA DATA
-            static REAL_ANIME_DATA = [
+        class AnimeSamaRASSTube {
+            static animeData = [
                 {
                     id: 'attack_on_titan',
-                    title: 'Attack on Titan',
-                    originalTitle: '進撃の巨人',
-                    description: "Dans un monde où l'humanité vit retranchée à l'intérieur d'énormes murs pour se protéger des Titans, des créatures géantes qui dévorent les humains, Eren Yeager rêve de découvrir le monde extérieur. Lorsque les murs sont détruits et que sa mère est tuée, il jure de venger l'humanité en éliminant tous les Titans.",
+                    title: 'Attack on Titan: Final Season',
+                    description: "La guerre finale pour l'humanité atteint son paroxysme alors que Eren déclenche le Rumbling.",
                     type: 'anime',
-                    episodes: 75,
-                    duration: 24,
-                    status: 'Terminé',
-                    genres: ['Action', 'Drame', 'Fantasy', 'Mystère'],
-                    rating: 9.0,
-                    year: 2013,
-                    season: 'Printemps 2013',
-                    studio: 'Wit Studio, MAPPA',
+                    episodes: 28,
+                    rating: 9.2,
+                    year: 2023,
+                    season: 'Part 3',
                     cover: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     popularity: 1000,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll', 'Wakanim', 'Netflix']
+                    badge: 'Nouveau'
                 },
                 {
                     id: 'demon_slayer',
-                    title: 'Demon Slayer',
-                    originalTitle: '鬼滅の刃',
-                    description: "Tanjiro Kamado est un jeune garçon qui devient un pourfendeur de démons après que sa famille a été massacrée et sa petite sœur transformée en démon. Il se lance dans un voyage dangereux pour trouver un remède et venger sa famille.",
+                    title: 'Demon Slayer: Swordsmith Village',
+                    description: "Tanjiro se rend au village des forgerons pour réparer son épée et affronte de nouveaux démons.",
                     type: 'anime',
-                    episodes: 55,
-                    duration: 24,
-                    status: 'En cours',
-                    genres: ['Action', 'Aventure', 'Fantasy'],
-                    rating: 8.7,
-                    year: 2019,
-                    season: 'Printemps 2019',
-                    studio: 'ufotable',
+                    episodes: 11,
+                    rating: 8.9,
+                    year: 2023,
+                    season: 'Arc 3',
                     cover: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     popularity: 950,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll', 'Netflix']
+                    badge: 'Populaire'
                 },
                 {
                     id: 'jujutsu_kaisen',
-                    title: 'Jujutsu Kaisen',
-                    originalTitle: '呪術廻戦',
-                    description: "Yuji Itadori mange un doigt maudit pour sauver ses amis et devient l'hôte d'une puissante malédiction. Il intègre l'école de jujutsu de Tokyo pour apprendre à contrôler ses pouvoirs et trouver tous les doigts maudits.",
+                    title: 'Jujutsu Kaisen Season 2',
+                    description: "Retour sur le passé de Gojo et Geto, puis le tournoi entre les écoles de Tokyo et Kyoto.",
                     type: 'anime',
-                    episodes: 47,
-                    duration: 24,
-                    status: 'En cours',
-                    genres: ['Action', 'Fantasy', 'Surnaturel'],
-                    rating: 8.6,
-                    year: 2020,
-                    season: 'Automne 2020',
-                    studio: 'MAPPA',
+                    episodes: 23,
+                    rating: 9.1,
+                    year: 2023,
+                    season: 'Saison 2',
                     cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 920,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll']
-                },
-                {
-                    id: 'one_piece',
-                    title: 'One Piece',
-                    originalTitle: 'ワンピース',
-                    description: "Monkey D. Luffy et son équipage de pirates recherchent le légendaire trésor 'One Piece' pour devenir le Roi des Pirates. Leur voyage les mène à travers des îles étranges et les confronte à de puissants ennemis.",
-                    type: 'anime',
-                    episodes: 1070,
-                    duration: 24,
-                    status: 'En cours',
-                    genres: ['Action', 'Aventure', 'Comédie', 'Fantasy'],
-                    rating: 8.7,
-                    year: 1999,
-                    season: 'Automne 1999',
-                    studio: 'Toei Animation',
-                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     popularity: 980,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll']
-                },
-                {
-                    id: 'my_hero_academia',
-                    title: 'My Hero Academia',
-                    originalTitle: '僕のヒーローアカデミア',
-                    description: "Dans un monde où 80% de la population possède des super-pouvoirs appelés 'Alters', Izuku Midoriya rêve de devenir un héros malgré son absence de pouvoir. Il hérite finalement du pouvoir du plus grand héros, All Might.",
-                    type: 'anime',
-                    episodes: 138,
-                    duration: 24,
-                    status: 'En cours',
-                    genres: ['Action', 'Comédie', 'Surnaturel'],
-                    rating: 8.4,
-                    year: 2016,
-                    season: 'Printemps 2016',
-                    studio: 'Bones',
-                    cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 890,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll']
-                },
-                {
-                    id: 'spy_x_family',
-                    title: 'Spy x Family',
-                    originalTitle: 'スパイファミリー',
-                    description: "Un esprit de classe mondiale doit créer une famille de façade pour accomplir sa mission. Il adopte une fille télépathe et épouse une tueuse à gages, sans savoir leurs véritables identités.",
-                    type: 'anime',
-                    episodes: 25,
-                    duration: 24,
-                    status: 'En cours',
-                    genres: ['Action', 'Comédie', 'Surnaturel'],
-                    rating: 8.8,
-                    year: 2022,
-                    season: 'Printemps 2022',
-                    studio: 'Wit Studio, CloverWorks',
-                    cover: 'https://images.unsplash.com/photo-1639322537502-9e1a6bfdc403?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 940,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll']
+                    badge: 'Simulcast'
                 },
                 {
                     id: 'chainsaw_man',
                     title: 'Chainsaw Man',
-                    originalTitle: 'チェンソーマン',
-                    description: "Denji est un jeune homme endetté qui fusionne avec son chien-démon Chainsaw pour devenir Chainsaw Man, un chasseur de démons travaillant pour le gouvernement.",
+                    description: "Denji, un jeune homme endetté, devient Chainsaw Man après avoir fusionné avec son démon-chien.",
                     type: 'anime',
                     episodes: 12,
-                    duration: 24,
-                    status: 'En cours',
-                    genres: ['Action', 'Aventure', 'Horreur'],
-                    rating: 8.5,
+                    rating: 8.7,
                     year: 2022,
-                    season: 'Automne 2022',
-                    studio: 'MAPPA',
+                    season: 'Saison 1',
+                    cover: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 920,
+                    badge: 'Action'
+                },
+                {
+                    id: 'spy_x_family',
+                    title: 'Spy x Family Part 2',
+                    description: "La famille Forger continue ses aventures avec de nouvelles missions et quiproquos hilarants.",
+                    type: 'anime',
+                    episodes: 25,
+                    rating: 8.8,
+                    year: 2023,
+                    season: 'Part 2',
+                    cover: 'https://images.unsplash.com/photo-1639322537502-9e1a6bfdc403?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 940,
+                    badge: 'Comédie'
+                },
+                {
+                    id: 'bleach_tybw',
+                    title: 'Bleach: Thousand-Year Blood War',
+                    description: "Ichigo affronte les Quincys dans la guerre sanglante de mille ans pour sauver le Soul Society.",
+                    type: 'anime',
+                    episodes: 26,
+                    rating: 9.0,
+                    year: 2023,
+                    season: 'Part 2',
                     cover: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     popularity: 910,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll']
+                    badge: 'Retour'
                 },
                 {
-                    id: 'death_note',
-                    title: 'Death Note',
-                    originalTitle: 'デスノート',
-                    description: "Light Yagami trouve un carnet surnaturel qui permet de tuer quiconque dont le nom y est écrit. Il décide d'utiliser ce pouvoir pour créer un monde parfait, mais est traqué par le détective L.",
+                    id: 'my_hero_academia',
+                    title: 'My Hero Academia Season 6',
+                    description: "La guerre contre les Paranormal Liberation Front atteint son climax avec des batailles épiques.",
                     type: 'anime',
-                    episodes: 37,
-                    duration: 23,
-                    status: 'Terminé',
-                    genres: ['Mystère', 'Psychologique', 'Surnaturel', 'Thriller'],
+                    episodes: 25,
                     rating: 8.6,
-                    year: 2006,
-                    season: 'Automne 2006',
-                    studio: 'Madhouse',
-                    cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 850,
-                    isFilm: false,
-                    streamingPlatforms: ['Netflix']
+                    year: 2023,
+                    season: 'Saison 6',
+                    cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 890,
+                    badge: 'Super-héros'
                 },
                 {
-                    id: 'fullmetal_alchemist',
-                    title: 'Fullmetal Alchemist: Brotherhood',
-                    originalTitle: '鋼の錬金術師',
-                    description: "Les frères Edward et Alphonse Elric utilisent l'alchimie pour tenter de ressusciter leur mère décédée, ce qui leur coûte cher. Ils partent à la recherche de la Pierre Philosophale pour récupérer leurs corps.",
+                    id: 'one_piece',
+                    title: 'One Piece: Wano Kuni',
+                    description: "Luffy et ses alliés affrontent Kaido dans l'arc final de Wano pour libérer le pays.",
                     type: 'anime',
-                    episodes: 64,
-                    duration: 24,
-                    status: 'Terminé',
-                    genres: ['Action', 'Aventure', 'Drame', 'Fantasy'],
-                    rating: 9.1,
-                    year: 2009,
-                    season: 'Printemps 2009',
-                    studio: 'Bones',
-                    cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    episodes: 100,
+                    rating: 9.3,
+                    year: 2023,
+                    season: 'Arc Wano',
+                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     popularity: 970,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll', 'Netflix']
-                },
-                {
-                    id: 'naruto',
-                    title: 'Naruto',
-                    originalTitle: 'ナルト',
-                    description: "Naruto Uzumaki, un ninja adolescent, rêve de devenir Hokage, le chef de son village. Il doit faire face à des défis, des combats et découvrir les secrets de son passé.",
-                    type: 'anime',
-                    episodes: 220,
-                    duration: 23,
-                    status: 'Terminé',
-                    genres: ['Action', 'Aventure', 'Comédie', 'Fantasy'],
-                    rating: 8.3,
-                    year: 2002,
-                    season: 'Automne 2002',
-                    studio: 'Pierrot',
-                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 930,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll', 'Netflix']
-                },
-                {
-                    id: 'bleach',
-                    title: 'Bleach',
-                    originalTitle: 'ブリーチ',
-                    description: "Ichigo Kurosaki obtient les pouvoirs d'un Shinigami (dieu de la mort) et doit protéger les humains des esprits maléfiques tout en guidant les âmes vers l'au-delà.",
-                    type: 'anime',
-                    episodes: 366,
-                    duration: 24,
-                    status: 'Terminé',
-                    genres: ['Action', 'Aventure', 'Fantasy'],
-                    rating: 8.1,
-                    year: 2004,
-                    season: 'Automne 2004',
-                    studio: 'Pierrot',
-                    cover: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 860,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll', 'Disney+']
-                },
-                {
-                    id: 'hunter_x_hunter',
-                    title: 'Hunter x Hunter (2011)',
-                    originalTitle: 'ハンター×ハンター',
-                    description: "Gon Freecss découvre que son père, qu'il croyait mort, est en fait un Hunter légendaire. Il décide de passer l'examen de Hunter pour le retrouver.",
-                    type: 'anime',
-                    episodes: 148,
-                    duration: 23,
-                    status: 'Terminé',
-                    genres: ['Action', 'Aventure', 'Fantasy'],
-                    rating: 9.0,
-                    year: 2011,
-                    season: 'Automne 2011',
-                    studio: 'Madhouse',
-                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 960,
-                    isFilm: false,
-                    streamingPlatforms: ['Crunchyroll', 'Netflix']
-                },
-                {
-                    id: 'your_name',
-                    title: 'Your Name',
-                    originalTitle: '君の名は。',
-                    description: "Deux adolescents, un garçon vivant à Tokyo et une fille vivant dans la campagne japonaise, commencent mystérieusement à échanger leurs corps. Ils cherchent à se rencontrer et à comprendre ce phénomène.",
-                    type: 'film',
-                    episodes: 1,
-                    duration: 107,
-                    status: 'Terminé',
-                    genres: ['Drame', 'Romance', 'Surnaturel'],
-                    rating: 8.9,
-                    year: 2016,
-                    studio: 'CoMix Wave Films',
-                    cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 920,
-                    isFilm: true,
-                    streamingPlatforms: ['Netflix', 'Crunchyroll']
-                },
-                {
-                    id: 'spirited_away',
-                    title: 'Spirited Away',
-                    originalTitle: '千と千尋の神隠し',
-                    description: "Une jeune fille nommée Chihiro se retrouve piégée dans un monde peuplé de dieux, de sorcières et d'esprits, et doit travailler dans un bain public pour retrouver ses parents et retourner dans le monde humain.",
-                    type: 'film',
-                    episodes: 1,
-                    duration: 125,
-                    status: 'Terminé',
-                    genres: ['Aventure', 'Fantasy', 'Mystère'],
-                    rating: 8.6,
-                    year: 2001,
-                    studio: 'Studio Ghibli',
-                    cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 880,
-                    isFilm: true,
-                    streamingPlatforms: ['Netflix']
+                    badge: 'Épic'
                 }
             ];
 
-            static REAL_MANGA_DATA = [
-                {
-                    id: 'one_piece_manga',
-                    title: 'One Piece',
-                    originalTitle: 'ワンピース',
-                    description: "Manga de pirate le plus vendu au monde. Suivez les aventures de Luffy et son équipage à la recherche du trésor ultime.",
-                    type: 'manga',
-                    chapters: 1090,
-                    status: 'En cours',
-                    genres: ['Action', 'Aventure', 'Comédie', 'Fantasy'],
-                    rating: 8.8,
-                    year: 1997,
-                    author: 'Eiichiro Oda',
-                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 990
-                },
+            static mangaData = [
                 {
                     id: 'berserk',
-                    title: 'Berserk',
-                    originalTitle: 'ベルセルク',
-                    description: "L'histoire sombre de Guts, un mercenaire maudit luttant contre son destin dans un monde médiéval fantastique.",
+                    title: 'Berserk Deluxe Edition',
+                    description: "L'édition prestige du chef-d'œuvre dark fantasy de Kentaro Miura.",
                     type: 'manga',
                     chapters: 383,
-                    status: 'En cours',
-                    genres: ['Action', 'Aventure', 'Drame', 'Fantasy', 'Horreur'],
-                    rating: 9.2,
-                    year: 1989,
-                    author: 'Kentaro Miura',
+                    rating: 9.5,
+                    year: 2023,
                     cover: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 920
-                },
-                {
-                    id: 'attack_on_titan_manga',
-                    title: 'Attack on Titan',
-                    originalTitle: '進撃の巨人',
-                    description: "Le manga qui a révolutionné le genre. Une histoire complexe sur la liberté, la survie et les secrets d'un monde clos.",
-                    type: 'manga',
-                    chapters: 139,
-                    status: 'Terminé',
-                    genres: ['Action', 'Drame', 'Fantasy', 'Mystère'],
-                    rating: 8.9,
-                    year: 2009,
-                    author: 'Hajime Isayama',
-                    cover: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 950
-                },
-                {
-                    id: 'death_note_manga',
-                    title: 'Death Note',
-                    originalTitle: 'デスノート',
-                    description: "Un jeu du chat et de la souris psychologique entre Light Yagami, possesseur du Death Note, et le détective L.",
-                    type: 'manga',
-                    chapters: 108,
-                    status: 'Terminé',
-                    genres: ['Mystère', 'Psychologique', 'Surnaturel', 'Thriller'],
-                    rating: 8.6,
-                    year: 2003,
-                    author: 'Tsugumi Ohba, Takeshi Obata',
-                    cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 870
+                    badge: 'Masterpiece'
                 },
                 {
                     id: 'vagabond',
-                    title: 'Vagabond',
-                    originalTitle: 'バガボンド',
-                    description: "Adaptation du roman 'Musashi', racontant la vie du légendaire samouraï Miyamoto Musashi.",
+                    title: 'Vagabond Vizbig',
+                    description: "L'adaptation manga du roman Musashi, considéré comme une œuvre d'art.",
                     type: 'manga',
                     chapters: 327,
-                    status: 'En pause',
-                    genres: ['Action', 'Aventure', 'Historique'],
-                    rating: 9.1,
-                    year: 1998,
-                    author: 'Takehiko Inoue',
+                    rating: 9.4,
+                    year: 2023,
                     cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                    popularity: 890
+                    badge: 'Artbook'
                 }
             ];
 
-            static LEGAL_PLATFORMS = [
-                {
-                    name: 'Crunchyroll',
-                    url: 'https://www.crunchyroll.com',
-                    description: 'Le plus grand catalogue d\'anime avec simulcast',
-                    logo: '🎬'
-                },
-                {
-                    name: 'Wakanim',
-                    url: 'https://www.wakanim.tv',
-                    description: 'Simulcast VF et VOSTFR',
-                    logo: '🇫🇷'
-                },
-                {
-                    name: 'ADN',
-                    url: 'https://animationdigitalnetwork.fr',
-                    description: 'Anime Digital Network par Médiamétrie',
-                    logo: '📺'
-                },
-                {
-                    name: 'Netflix',
-                    url: 'https://www.netflix.com',
-                    description: 'Sélection d\'anime et films d\'animation',
-                    logo: '🎥'
-                },
-                {
-                    name: 'Prime Video',
-                    url: 'https://www.primevideo.com',
-                    description: 'Anime inclus avec l\'abonnement',
-                    logo: '📦'
-                }
+            static royalQuotes = [
+                "💖 Bienvenue, cher otaku ! Clique sur moi 💖",
+                "✨ Mon pouvoir anime guide tes découvertes ! ✨",
+                "👑 Je suis la reine de ce royaume d'anime ! 👑",
+                "🌟 Laisse-moi t'illuminer vers les meilleurs titres ! 🌟",
+                "⚡ Ton enthousiasme me donne de l'énergie ! ⚡",
+                "🌙 La nuit est parfaite pour regarder des anime ! 🌙"
             ];
 
-            static async init() {
-                this.loadData();
-                this.verifySession();
+            static init() {
+                this.initializeBackground();
+                this.renderAnimeGrids();
                 this.setupEventListeners();
+                this.initializeAnimeSama();
                 
-                // Initialize with real data
-                this.state.animeData = this.REAL_ANIME_DATA;
-                this.state.mangaData = this.REAL_MANGA_DATA;
+                console.log('AnimeSama RASS Tube initialisé !');
+            }
+
+            static initializeBackground() {
+                const bg = document.getElementById('background-elements');
                 
-                if (this.state.currentUser) {
-                    this.launchApp();
-                } else {
-                    this.showAuthScreen();
+                // Stars
+                for (let i = 0; i < 30; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('floating-star');
+                    star.style.width = `${Math.random() * 3 + 1}px`;
+                    star.style.height = star.style.width;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.animationDelay = `${Math.random() * 3}s`;
+                    bg.appendChild(star);
                 }
-                
-                console.log(`AnimeHub Pro v${this.VERSION} initialisé avec ${this.state.animeData.length} anime réels`);
-            }
 
-            static loadData() {
-                Object.keys(this.STORAGE_KEYS).forEach(key => {
-                    const storageKey = this.STORAGE_KEYS[key];
-                    try {
-                        const data = localStorage.getItem(storageKey);
-                        this.state[key.toLowerCase()] = data ? JSON.parse(data) : (key === 'USERS' ? [] : null);
-                    } catch (e) {
-                        console.error(`Erreur lors du chargement de ${storageKey}:`, e);
-                        this.state[key.toLowerCase()] = key === 'USERS' ? [] : null;
-                    }
-                });
-            }
-
-            static saveData() {
-                Object.keys(this.STORAGE_KEYS).forEach(key => {
-                    const storageKey = this.STORAGE_KEYS[key];
-                    try {
-                        localStorage.setItem(storageKey, JSON.stringify(this.state[key.toLowerCase()]));
-                    } catch (e) {
-                        console.error(`Erreur lors de la sauvegarde de ${storageKey}:`, e);
-                    }
-                });
-            }
-
-            static verifySession() {
-                if (this.state.session) {
-                    const userExists = this.state.users.find(u => u.id === this.state.session.id);
-                    if (!userExists) {
-                        this.state.session = null;
-                        this.saveData();
-                    } else {
-                        this.state.currentUser = this.state.session;
-                    }
+                // Cherry blossoms
+                for (let i = 0; i < 10; i++) {
+                    const blossom = document.createElement('div');
+                    blossom.classList.add('cherry-blossom');
+                    blossom.innerHTML = '❀';
+                    blossom.style.left = `${Math.random() * 100}%`;
+                    blossom.style.animationDelay = `${Math.random() * 5}s`;
+                    bg.appendChild(blossom);
                 }
             }
 
-            static showAuthScreen() {
-                document.getElementById('auth-screen').classList.remove('hidden');
-                document.getElementById('app').classList.add('hidden');
-                this.resetAuthForm();
-            }
-
-            static launchApp() {
-                document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('app').classList.remove('hidden');
-                
-                if (this.state.currentUser) {
-                    document.getElementById('user-avatar').src = this.state.currentUser.avatar;
-                    document.getElementById('profile-avatar').src = this.state.currentUser.avatar;
-                    document.getElementById('profile-name').textContent = this.state.currentUser.username;
-                    document.getElementById('profile-email').textContent = this.state.currentUser.email;
-                    
-                    const joinDate = new Date(this.state.currentUser.createdAt);
-                    document.getElementById('member-since').textContent = joinDate.toLocaleDateString('fr-FR');
-                }
-                
-                this.updateStats();
-                this.renderHomePage();
-                this.go('home');
-                
-                this.showToast(`Bienvenue sur AnimeHub Pro, ${this.state.currentUser.username}!`, 'success');
-            }
-
-            static toggleAuth(mode) {
-                const loginTab = document.getElementById('tab-login');
-                const signupTab = document.getElementById('tab-signup');
-                const usernameGroup = document.getElementById('username-group');
-                const submitText = document.getElementById('auth-submit-text');
-                
-                loginTab.classList.toggle('active', mode === 'login');
-                signupTab.classList.toggle('active', mode === 'signup');
-                usernameGroup.classList.toggle('hidden', mode !== 'signup');
-                submitText.textContent = mode === 'signup' ? 'Créer un compte' : 'Se connecter';
-            }
-
-            static async handleAuth() {
-                const email = document.getElementById('auth-email').value.trim();
-                const password = document.getElementById('auth-password').value.trim();
-                const isSignup = document.getElementById('tab-signup').classList.contains('active');
-                
-                if (!email || !password) {
-                    this.showToast('Veuillez remplir tous les champs', 'error');
-                    return;
-                }
-                
-                if (password.length < 6) {
-                    this.showToast('Le mot de passe doit contenir au moins 6 caractères', 'error');
-                    return;
-                }
-                
-                if (isSignup) {
-                    const username = document.getElementById('auth-username').value.trim() || 
-                                   `Otaku_${Math.floor(Math.random() * 1000)}`;
-                    
-                    if (this.state.users.find(u => u.email === email)) {
-                        this.showToast('Cette adresse email est déjà utilisée', 'error');
-                        return;
-                    }
-                    
-                    const newUser = {
-                        id: Date.now().toString(),
-                        username: username,
-                        email: email,
-                        password: this.hashPassword(password),
-                        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`,
-                        createdAt: new Date().toISOString(),
-                        preferences: {
-                            theme: 'dark',
-                            language: 'fr',
-                            notifications: true
-                        }
-                    };
-                    
-                    this.state.users.push(newUser);
-                    this.state.currentUser = newUser;
-                    this.state.session = newUser;
-                    this.saveData();
-                    
-                    this.showToast('Compte créé avec succès !', 'success');
-                    setTimeout(() => this.launchApp(), 1000);
-                    
-                } else {
-                    const user = this.state.users.find(u => 
-                        u.email === email && u.password === this.hashPassword(password)
-                    );
-                    
-                    if (!user) {
-                        this.showToast('Email ou mot de passe incorrect', 'error');
-                        return;
-                    }
-                    
-                    this.state.currentUser = user;
-                    this.state.session = user;
-                    this.saveData();
-                    
-                    this.showToast('Connexion réussie !', 'success');
-                    setTimeout(() => this.launchApp(), 1000);
-                }
-            }
-
-            static hashPassword(password) {
-                // Simple hash for demo - in production use proper hashing
-                let hash = 0;
-                for (let i = 0; i < password.length; i++) {
-                    hash = ((hash << 5) - hash) + password.charCodeAt(i);
-                    hash |= 0;
-                }
-                return hash.toString();
-            }
-
-            static go(page) {
-                document.querySelectorAll('[id^="page-"]').forEach(el => {
-                    el.classList.add('hidden');
-                });
-                
-                document.getElementById(`page-${page}`)?.classList.remove('hidden');
-                
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    if (item.textContent.toLowerCase().includes(page.toLowerCase())) {
-                        item.classList.add('active');
-                    }
-                });
-                
-                this.state.currentPage = page;
-                
-                switch (page) {
-                    case 'home':
-                        this.renderHomePage();
-                        break;
-                    case 'library':
-                        this.renderLibrary();
-                        break;
-                    case 'profile':
-                        this.updateStats();
-                        break;
-                }
-            }
-
-            static renderHomePage() {
-                // Trending anime
-                const trending = [...this.state.animeData]
+            static renderAnimeGrids() {
+                // Trending anime (most popular)
+                const trending = [...this.animeData]
                     .sort((a, b) => b.popularity - a.popularity)
                     .slice(0, 8);
                 
-                // New releases (2022-2023)
-                const newReleases = [...this.state.animeData]
-                    .filter(a => a.year >= 2022)
+                // New releases (2023)
+                const newReleases = [...this.animeData]
+                    .filter(a => a.year === 2023)
                     .slice(0, 8);
                 
-                // Classic anime (pre-2010)
-                const classics = [...this.state.animeData]
-                    .filter(a => a.year < 2010)
-                    .slice(0, 8);
-                
-                // Continue watching (from history)
-                const history = this.state.history || [];
-                const continueWatching = history
-                    .map(h => this.state.animeData.find(a => a.id === h.animeId))
-                    .filter(Boolean)
+                // Popular (highest rated)
+                const popular = [...this.animeData]
+                    .sort((a, b) => b.rating - a.rating)
                     .slice(0, 8);
                 
                 // Manga
-                const manga = [...this.state.mangaData].slice(0, 8);
+                const manga = [...this.mangaData].slice(0, 4);
                 
-                this.renderAnimeGrid('trending-grid', trending);
-                this.renderAnimeGrid('new-grid', newReleases);
-                this.renderAnimeGrid('classic-grid', classics);
-                this.renderAnimeGrid('continue-grid', continueWatching.length ? continueWatching : trending.slice(0, 4));
-                this.renderMangaGrid('manga-grid', manga);
+                this.renderGrid('trending-grid', trending);
+                this.renderGrid('new-grid', newReleases);
+                this.renderGrid('popular-grid', popular);
+                this.renderGrid('manga-grid', manga);
             }
 
-            static renderAnimeGrid(containerId, animeList) {
+            static renderGrid(containerId, items) {
                 const container = document.getElementById(containerId);
                 if (!container) return;
                 
-                if (animeList.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">🎌</div>
-                            <div class="empty-title">Aucun anime trouvé</div>
+                container.innerHTML = items.map(item => `
+                    <div class="anime-card" onclick="AnimeSamaRASSTube.showAnimeDetails('${item.id}')">
+                        ${item.badge ? `<div class="anime-badge">${item.badge}</div>` : ''}
+                        <img src="${item.cover}" alt="${item.title}" class="anime-poster" loading="lazy">
+                        <div class="anime-info">
+                            <div class="anime-title">${item.title}</div>
+                            <div class="anime-meta">
+                                <span>${item.year} • ${item.season || item.type}</span>
+                                <span class="anime-rating">⭐ ${item.rating}</span>
+                            </div>
                         </div>
-                    `;
-                    return;
+                    </div>
+                `).join('');
+            }
+
+            static initializeAnimeSama() {
+                const container = document.getElementById('animesama-container');
+                const glow = document.getElementById('animesama-glow');
+                const speechBubble = document.getElementById('speech-bubble');
+                
+                // Hover effect
+                container.addEventListener('mouseenter', () => {
+                    glow.style.animation = 'pulse 1s infinite ease-in-out';
+                    this.showSpeechBubble("✨ Survole-moi pour ressentir mon pouvoir ! ✨");
+                });
+                
+                container.addEventListener('mouseleave', () => {
+                    glow.style.animation = 'pulse 4s infinite ease-in-out';
+                });
+                
+                // Click effect
+                container.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.triggerAnimeSamaEffect();
+                });
+                
+                // Random speech every 30 seconds
+                setInterval(() => {
+                    if (!speechBubble.classList.contains('show')) {
+                        const randomQuote = this.royalQuotes[Math.floor(Math.random() * this.royalQuotes.length)];
+                        this.showSpeechBubble(randomQuote, 3000);
+                    }
+                }, 30000);
+            }
+
+            static triggerAnimeSamaEffect() {
+                const glow = document.getElementById('animesama-glow');
+                const container = document.getElementById('animesama-container');
+                
+                // Intensify glow
+                glow.style.animation = 'none';
+                glow.style.transform = 'scale(1.5)';
+                glow.style.opacity = '0.9';
+                
+                // Play sound effect (simulated)
+                this.playSoundEffect();
+                
+                // Show random quote
+                const randomQuote = this.royalQuotes[Math.floor(Math.random() * this.royalQuotes.length)];
+                this.showSpeechBubble(randomQuote);
+                
+                // Create sparkles
+                this.createSparkles(container);
+                
+                // Reset after animation
+                setTimeout(() => {
+                    glow.style.animation = 'pulse 4s infinite ease-in-out';
+                    glow.style.transform = 'scale(1)';
+                    glow.style.opacity = '0.4';
+                }, 1000);
+            }
+
+            static createSparkles(container) {
+                for (let i = 0; i < 10; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.style.position = 'absolute';
+                    sparkle.style.width = '10px';
+                    sparkle.style.height = '10px';
+                    sparkle.style.background = 'gold';
+                    sparkle.style.borderRadius = '50%';
+                    sparkle.style.filter = 'blur(2px)';
+                    sparkle.style.left = `${Math.random() * 100}%`;
+                    sparkle.style.top = `${Math.random() * 100}%`;
+                    sparkle.style.animation = 'sparkle 1s ease-out forwards';
+                    
+                    // Add custom animation
+                    sparkle.style.setProperty('--sparkle-animation', `
+                        @keyframes sparkle {
+                            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+                            50% { opacity: 1; }
+                            100% { transform: scale(1) rotate(180deg); opacity: 0; }
+                        }
+                    `);
+                    
+                    container.appendChild(sparkle);
+                    
+                    // Remove after animation
+                    setTimeout(() => sparkle.remove(), 1000);
                 }
-                
-                container.innerHTML = animeList.map(anime => `
-                    <div class="anime-card" onclick="AnimeHub.showAnimeDetails('${anime.id}')">
-                        ${anime.isFilm ? '<div class="anime-badge">FILM</div>' : ''}
-                        <img src="${anime.cover}" alt="${anime.title}" class="anime-poster" loading="lazy">
-                        <div class="anime-info">
-                            <div class="anime-title">${anime.title}</div>
-                            <div class="anime-meta">
-                                <span>${anime.year}</span>
-                                <span class="anime-rating">⭐ ${anime.rating}</span>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
             }
 
-            static renderMangaGrid(containerId, mangaList) {
-                const container = document.getElementById(containerId);
-                if (!container) return;
+            static showSpeechBubble(message, duration = 4000) {
+                const speechBubble = document.getElementById('speech-bubble');
+                speechBubble.textContent = message;
+                speechBubble.classList.add('show');
                 
-                if (mangaList.length === 0) return;
-                
-                container.innerHTML = mangaList.map(manga => `
-                    <div class="anime-card" onclick="AnimeHub.showMangaDetails('${manga.id}')">
-                        <div class="anime-badge" style="background: var(--secondary);">MANGA</div>
-                        <img src="${manga.cover}" alt="${manga.title}" class="anime-poster" loading="lazy">
-                        <div class="anime-info">
-                            <div class="anime-title">${manga.title}</div>
-                            <div class="anime-meta">
-                                <span>${manga.year}</span>
-                                <span class="anime-rating">⭐ ${manga.rating}</span>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
+                setTimeout(() => {
+                    speechBubble.classList.remove('show');
+                }, duration);
+            }
+
+            static playSoundEffect() {
+                // Create audio context for sound
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 1);
+                } catch (e) {
+                    console.log('Sound effect simulated');
+                }
             }
 
             static showAnimeDetails(animeId) {
-                const anime = this.state.animeData.find(a => a.id === animeId);
+                const anime = this.animeData.find(a => a.id === animeId) || 
+                              this.mangaData.find(m => m.id === animeId);
+                
                 if (!anime) return;
                 
-                this.state.currentAnime = anime;
+                this.showSpeechBubble(`💫 Excellente sélection ! "${anime.title}" est magnifique ! 💫`);
                 
-                const detailsPage = document.getElementById('page-details');
-                detailsPage.innerHTML = `
-                    <div class="anime-details">
-                        <div>
-                            <img src="${anime.cover}" alt="${anime.title}" class="details-poster">
-                            <div class="details-actions mt-3">
-                                <button class="btn btn-primary" onclick="AnimeHub.showLegalStreamingInfo('${anime.id}')">
-                                    <i class="fas fa-play"></i>
-                                    Regarder légalement
-                                </button>
-                                <button class="btn btn-secondary" onclick="AnimeHub.toggleFavorite('${anime.id}')">
-                                    <i class="fas fa-heart"></i>
-                                    Ajouter aux favoris
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="details-content">
-                            <h1>${anime.title}</h1>
-                            <div class="details-meta">
-                                <div class="details-meta-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>${anime.year} • ${anime.season || anime.studio}</span>
-                                </div>
-                                <div class="details-meta-item">
-                                    <i class="fas fa-star"></i>
-                                    <span>${anime.rating}/10</span>
-                                </div>
-                                <div class="details-meta-item">
-                                    <i class="fas fa-film"></i>
-                                    <span>${anime.isFilm ? 'Film' : `${anime.episodes} épisodes`}</span>
-                                </div>
-                                <div class="details-meta-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>${anime.duration} min</span>
-                                </div>
-                            </div>
-                            
-                            <div class="details-genres">
-                                ${anime.genres.map(genre => `
-                                    <span class="genre-tag">${genre}</span>
-                                `).join('')}
-                            </div>
-                            
-                            <p class="details-description">${anime.description}</p>
-                            
-                            <div class="details-actions">
-                                <button class="btn btn-secondary" onclick="AnimeHub.showLegalPlatforms()">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    Plateformes légales
-                                </button>
-                            </div>
-                            
-                            ${anime.isFilm ? '' : `
-                                <div class="episodes-section">
-                                    <div class="episodes-header">
-                                        <h3>Épisodes (Exemple)</h3>
-                                        <span>Streaming légal requis</span>
-                                    </div>
-                                    <div class="episodes-grid" id="episodes-grid">
-                                        ${this.generateEpisodesList(anime)}
-                                    </div>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                `;
-                
-                this.go('details');
+                // Show player with legal streaming message
+                setTimeout(() => {
+                    this.showPlayer(anime);
+                }, 500);
             }
 
-            static showMangaDetails(mangaId) {
-                const manga = this.state.mangaData.find(m => m.id === mangaId);
-                if (!manga) return;
+            static showPlayer(item) {
+                const player = document.getElementById('player-overlay');
+                const title = document.getElementById('player-title');
                 
-                this.showModal(
-                    manga.title,
-                    `
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <img src="${manga.cover}" alt="${manga.title}" style="width: 200px; border-radius: var(--radius-md); margin-bottom: 16px;">
-                            <h3 style="margin-bottom: 8px;">${manga.title}</h3>
-                            <p style="color: var(--gray); margin-bottom: 16px;">${manga.originalTitle}</p>
-                        </div>
-                        
-                        <div style="margin-bottom: 20px;">
-                            <p><strong>Auteur:</strong> ${manga.author}</p>
-                            <p><strong>Année:</strong> ${manga.year}</p>
-                            <p><strong>Chapitres:</strong> ${manga.chapters}</p>
-                            <p><strong>Statut:</strong> ${manga.status}</p>
-                            <p><strong>Note:</strong> ⭐ ${manga.rating}/10</p>
-                        </div>
-                        
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="margin-bottom: 8px;">Genres</h4>
-                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-                                ${manga.genres.map(genre => `
-                                    <span class="genre-tag">${genre}</span>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <p style="margin-bottom: 24px;">${manga.description}</p>
-                        
-                        <div class="details-actions">
-                            <button class="btn btn-primary" onclick="window.open('https://www.mangaplus.shueisha.co.jp', '_blank'); AnimeHub.closeModal()">
-                                <i class="fas fa-external-link-alt"></i>
-                                Lire sur Manga Plus
-                            </button>
-                            <button class="btn btn-secondary" onclick="AnimeHub.closeModal()">
-                                Fermer
-                            </button>
-                        </div>
-                    `
-                );
-            }
-
-            static generateEpisodesList(anime) {
-                const totalEpisodes = Math.min(anime.episodes, 10);
-                let episodesHTML = '';
+                title.textContent = `AnimeSama Recommande : ${item.title}`;
+                player.style.display = 'flex';
                 
-                for (let i = 1; i <= totalEpisodes; i++) {
-                    episodesHTML += `
-                        <div class="episode-card" onclick="AnimeHub.showLegalStreamingInfo('${anime.id}')">
-                            <div class="episode-number">Épisode ${i}</div>
-                            <div class="episode-title">${this.getEpisodeTitle(i)}</div>
-                            <div class="episode-duration">${anime.duration} min</div>
-                        </div>
-                    `;
-                }
-                
-                return episodesHTML;
-            }
-
-            static getEpisodeTitle(episodeNumber) {
-                const titles = [
-                    "Le commencement", "La rencontre", "Le défi", "La révélation",
-                    "L'affrontement", "La séparation", "La décision", "Le sacrifice",
-                    "L'espoir", "La vérité"
-                ];
-                return titles[(episodeNumber - 1) % titles.length];
-            }
-
-            static showLegalStreamingInfo(animeId) {
-                const anime = this.state.animeData.find(a => a.id === animeId);
-                if (!anime) return;
-                
-                const platforms = anime.streamingPlatforms || ['Crunchyroll', 'Netflix'];
-                
-                this.showModal(
-                    `Regarder ${anime.title} légalement`,
-                    `
-                        <div style="text-align: center; margin-bottom: 24px;">
-                            <img src="${anime.cover}" alt="${anime.title}" style="width: 150px; border-radius: var(--radius-md); margin-bottom: 16px;">
-                            <h3 style="margin-bottom: 8px;">${anime.title}</h3>
-                            <p style="color: var(--gray);">Soutenez les créateurs en regardant légalement</p>
-                        </div>
-                        
-                        <div style="margin-bottom: 24px;">
-                            <h4 style="margin-bottom: 12px;">📺 Plateformes disponibles :</h4>
-                            ${platforms.map(platform => `
-                                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 8px;">
-                                    <div style="font-size: 24px;">${this.getPlatformLogo(platform)}</div>
-                                    <div>
-                                        <div style="font-weight: 600;">${platform}</div>
-                                        <div style="font-size: 12px; color: var(--gray);">Streaming HD légal</div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        
-                        <div style="background: rgba(46, 213, 115, 0.1); padding: 16px; border-radius: var(--radius-md); margin-bottom: 24px;">
-                            <h4 style="margin-bottom: 8px; color: var(--success);">
-                                <i class="fas fa-check-circle"></i> Pourquoi regarder légalement ?
-                            </h4>
-                            <ul style="color: var(--gray); padding-left: 20px; font-size: 14px;">
-                                <li>Soutien direct aux créateurs et studios</li>
-                                <li>Qualité vidéo garantie (HD, 4K)</li>
-                                <li>Traductions officielles</li>
-                                <li>Simulcast (épisodes dès le Japon)</li>
-                                <li>Pas de publicités intrusives</li>
-                                <li>Sécurité (pas de malware)</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="details-actions">
-                            <button class="btn btn-primary" onclick="window.open('https://www.crunchyroll.com', '_blank'); AnimeHub.closeModal()">
-                                <i class="fas fa-external-link-alt"></i>
-                                Visiter Crunchyroll
-                            </button>
-                            <button class="btn btn-secondary" onclick="AnimeHub.closeModal()">
-                                Fermer
-                            </button>
-                        </div>
-                    `
-                );
-            }
-
-            static getPlatformLogo(platform) {
-                const logos = {
-                    'Crunchyroll': '🎬',
-                    'Wakanim': '🇫🇷',
-                    'ADN': '📺',
-                    'Netflix': '🎥',
-                    'Prime Video': '📦',
-                    'Disney+': '🏰'
-                };
-                return logos[platform] || '📱';
-            }
-
-            static showLegalPlatforms() {
-                this.showModal(
-                    'Plateformes de Streaming Légal',
-                    `
-                        <div style="margin-bottom: 24px;">
-                            <p style="color: var(--gray); margin-bottom: 16px;">
-                                Ces plateformes offrent un streaming légal d'anime et soutiennent l'industrie :
-                            </p>
-                            
-                            ${this.LEGAL_PLATFORMS.map(platform => `
-                                <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 12px; cursor: pointer;" 
-                                     onclick="window.open('${platform.url}', '_blank');">
-                                    <div style="font-size: 32px;">${platform.logo}</div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 600; font-size: 16px;">${platform.name}</div>
-                                        <div style="font-size: 12px; color: var(--gray);">${platform.description}</div>
-                                    </div>
-                                    <i class="fas fa-external-link-alt" style="color: var(--gray);"></i>
-                                </div>
-                            `).join('')}
-                        </div>
-                        
-                        <div style="background: rgba(255, 71, 87, 0.1); padding: 16px; border-radius: var(--radius-md);">
-                            <h4 style="margin-bottom: 8px; color: var(--primary);">
-                                <i class="fas fa-shield-alt"></i> Streaming Légal vs Piratage
-                            </h4>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
-                                <div style="text-align: center; padding: 12px; background: rgba(46, 213, 115, 0.1); border-radius: var(--radius-sm);">
-                                    <div style="color: var(--success); font-weight: 600;">✅ Légal</div>
-                                    <div style="font-size: 12px; color: var(--gray);">Soutient l'industrie</div>
-                                </div>
-                                <div style="text-align: center; padding: 12px; background: rgba(255, 56, 56, 0.1); border-radius: var(--radius-sm);">
-                                    <div style="color: var(--error); font-weight: 600;">❌ Piratage</div>
-                                    <div style="font-size: 12px; color: var(--gray);">Risque légal & malware</div>
-                                </div>
-                            </div>
-                        </div>
-                    `
-                );
-            }
-
-            static openLegalStreaming() {
-                window.open('https://www.crunchyroll.com', '_blank');
-                this.closePlayer();
+                // Add special message from AnimeSama
+                setTimeout(() => {
+                    this.showSpeechBubble("🎬 Je t'ai dirigé vers les plateformes légales pour soutenir les créateurs ! 🎬", 5000);
+                }, 1000);
             }
 
             static closePlayer() {
                 document.getElementById('player-overlay').style.display = 'none';
             }
 
-            static renderLibrary() {
-                let filteredAnime = [...this.state.animeData];
+            static goToSection(section) {
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
                 
-                switch (this.state.filters.library) {
-                    case 'watching':
-                        const watchedIds = new Set((this.state.history || []).map(h => h.animeId));
-                        filteredAnime = filteredAnime.filter(a => watchedIds.has(a.id));
-                        break;
-                    case 'favorites':
-                        const favorites = this.state.favorites || [];
-                        filteredAnime = filteredAnime.filter(a => favorites.includes(a.id));
-                        break;
-                    case 'completed':
-                        filteredAnime = filteredAnime.filter(a => a.status === 'Terminé');
-                        break;
-                }
-                
-                this.renderAnimeGrid('library-grid', filteredAnime);
-            }
-
-            static filterLibrary(filter) {
-                this.state.filters.library = filter;
-                this.renderLibrary();
-                this.showToast(`Filtre appliqué: ${filter}`, 'info');
-            }
-
-            static searchAnime(query) {
-                this.state.searchQuery = query.toLowerCase();
-                
-                if (query.length < 2) {
-                    this.renderHomePage();
-                    return;
-                }
-                
-                const results = this.state.animeData.filter(anime =>
-                    anime.title.toLowerCase().includes(query) ||
-                    anime.originalTitle.toLowerCase().includes(query) ||
-                    anime.genres.some(genre => genre.toLowerCase().includes(query))
-                ).slice(0, 16);
-                
-                this.renderAnimeGrid('trending-grid', results);
-            }
-
-            static toggleFavorite(animeId) {
-                if (!this.state.favorites) this.state.favorites = [];
-                
-                const index = this.state.favorites.indexOf(animeId);
-                if (index === -1) {
-                    this.state.favorites.push(animeId);
-                    this.showToast('Ajouté aux favoris ❤️', 'success');
-                } else {
-                    this.state.favorites.splice(index, 1);
-                    this.showToast('Retiré des favoris', 'info');
-                }
-                
-                this.saveData();
-                this.updateStats();
-            }
-
-            static updateStats() {
-                const stats = this.state.stats || {};
-                const history = this.state.history || [];
-                const favorites = this.state.favorites || [];
-                
-                const uniqueAnime = new Set(history.map(h => h.animeId));
-                stats.animeWatched = uniqueAnime.size;
-                stats.episodesWatched = history.length;
-                
-                const totalMinutes = history.reduce((total, item) => {
-                    const anime = this.state.animeData.find(a => a.id === item.animeId);
-                    return total + (anime?.duration || 24);
-                }, 0);
-                stats.hoursWatched = (totalMinutes / 60).toFixed(1);
-                
-                const today = new Date().toDateString();
-                const yesterday = new Date(Date.now() - 86400000).toDateString();
-                
-                if (stats.lastWatchDate === today) {
-                } else if (stats.lastWatchDate === yesterday) {
-                    stats.currentStreak = (stats.currentStreak || 0) + 1;
-                } else {
-                    stats.currentStreak = 1;
-                }
-                
-                stats.lastWatchDate = today;
-                
-                stats.goals = stats.goals || {};
-                stats.goals.anime = Math.min(stats.animeWatched, 10);
-                stats.goals.hours = Math.min(parseFloat(stats.hoursWatched), 50);
-                stats.goals.streak = Math.min(stats.currentStreak || 0, 7);
-                stats.goals.favorites = Math.min(favorites.length, 10);
-                
-                this.state.stats = stats;
-                this.updateStatsUI();
-                this.saveData();
-            }
-
-            static updateStatsUI() {
-                const stats = this.state.stats || {};
-                const goals = stats.goals || {};
-                
-                document.getElementById('stat-anime').textContent = stats.animeWatched || 0;
-                document.getElementById('stat-episodes').textContent = stats.episodesWatched || 0;
-                document.getElementById('stat-hours').textContent = stats.hoursWatched || '0';
-                document.getElementById('stat-streak').textContent = stats.currentStreak || 0;
-                
-                document.getElementById('goal-anime').textContent = `${goals.anime || 0}/10`;
-                document.getElementById('goal-hours').textContent = `${goals.hours || 0}/50`;
-                document.getElementById('goal-streak').textContent = `${goals.streak || 0}/7`;
-                document.getElementById('goal-favorites').textContent = `${goals.favorites || 0}/10`;
-            }
-
-            static showToast(message, type = 'info') {
-                const container = document.querySelector('.toast-container');
-                const toast = document.createElement('div');
-                toast.className = `toast toast-${type}`;
-                toast.innerHTML = `
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} toast-icon"></i>
-                    <div class="toast-content">${message}</div>
-                    <button class="toast-close" onclick="this.parentElement.remove()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                
-                container.appendChild(toast);
-                
-                setTimeout(() => {
-                    if (toast.parentElement) {
-                        toast.style.opacity = '0';
-                        toast.style.transform = 'translateX(100%)';
-                        setTimeout(() => toast.remove(), 300);
+                // Scroll to section
+                const sectionElement = document.getElementById(`${section}-section`);
+                if (sectionElement) {
+                    window.scrollTo({
+                        top: sectionElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Show AnimeSama reaction
+                    const reactions = {
+                        'home': "🏠 Bienvenue dans mon royaume ! 🏠",
+                        'anime': "🎬 Laisse-moi te guider vers les meilleurs anime ! 🎬",
+                        'manga': "📖 La lecture est une passion noble ! 📖",
+                        'trending': "🔥 Découvre ce qui brûle d'actualité ! 🔥"
+                    };
+                    
+                    if (reactions[section]) {
+                        this.showSpeechBubble(reactions[section]);
                     }
-                }, 5000);
-            }
-
-            static showNotifications() {
-                this.showToast('🔔 3 nouveaux épisodes disponibles sur Crunchyroll !', 'info');
+                }
             }
 
             static viewAll(category) {
-                this.go('library');
-                this.filterLibrary(category);
+                this.showSpeechBubble(`🔍 Explorons ensemble tout ${category} ! 🔍`);
+                this.goToSection(category);
             }
 
-            static exploreAnime() {
-                this.go('library');
-                this.showToast('🎌 Découvrez notre sélection d\'anime officiels !', 'success');
-            }
-
-            static showManga() {
-                this.showModal(
-                    'Manga Officiels',
-                    `
-                        <div style="margin-bottom: 24px;">
-                            <p style="color: var(--gray); margin-bottom: 16px;">
-                                Pour lire des manga légalement et soutenir les auteurs :
-                            </p>
-                            
-                            <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 12px; cursor: pointer;" 
-                                 onclick="window.open('https://www.mangaplus.shueisha.co.jp', '_blank');">
-                                <div style="font-size: 32px;">📖</div>
-                                <div style="flex: 1;">
-                                    <div style="font-weight: 600; font-size: 16px;">Manga Plus</div>
-                                    <div style="font-size: 12px; color: var(--gray);">Shueisha - Lecture gratuite légale</div>
-                                </div>
-                                <i class="fas fa-external-link-alt" style="color: var(--gray);"></i>
-                            </div>
-                            
-                            <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 12px; cursor: pointer;" 
-                                 onclick="window.open('https://www.viz.com', '_blank');">
-                                <div style="font-size: 32px;">🇺🇸</div>
-                                <div style="flex: 1;">
-                                    <div style="font-weight: 600; font-size: 16px;">VIZ Media</div>
-                                    <div style="font-size: 12px; color: var(--gray);">Éditeur officiel de manga en anglais</div>
-                                </div>
-                                <i class="fas fa-external-link-alt" style="color: var(--gray);"></i>
-                            </div>
-                        </div>
-                        
-                        <div style="background: rgba(30, 144, 255, 0.1); padding: 16px; border-radius: var(--radius-md);">
-                            <h4 style="margin-bottom: 8px; color: var(--secondary);">
-                                <i class="fas fa-book"></i> Manga vs Scan
-                            </h4>
-                            <p style="color: var(--gray); font-size: 14px;">
-                                Les éditions officielles offrent une meilleure qualité de traduction, 
-                                soutiennent les auteurs, et permettent à l'industrie de continuer à créer.
-                            </p>
-                        </div>
-                    `
-                );
+            static showLogin() {
+                this.showSpeechBubble("👑 Seuls les vrais fans peuvent entrer dans mon royaume ! 👑");
+                
+                // Simulate login modal
+                setTimeout(() => {
+                    alert("AnimeSama RASS Tube - Connexion\n\nPour accéder à toutes les fonctionnalités, veuillez vous connecter.\n\n(Interface de connexion simulée)");
+                }, 500);
             }
 
             static showLegalInfo() {
-                this.showModal(
-                    'Streaming Légal - Pourquoi ?',
-                    `
-                        <div style="margin-bottom: 24px;">
-                            <h3 style="margin-bottom: 16px; color: var(--primary);">
-                                <i class="fas fa-shield-alt"></i> Soutenez l'industrie de l'anime
-                            </h3>
-                            
-                            <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px;">
-                                <div style="padding: 16px; background: rgba(46, 213, 115, 0.1); border-radius: var(--radius-md);">
-                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                        <div style="color: var(--success); font-size: 24px;">💰</div>
-                                        <div style="font-weight: 600;">Soutien financier</div>
-                                    </div>
-                                    <p style="color: var(--gray); font-size: 14px;">
-                                        Votre abonnement permet aux studios de produire plus d'anime de qualité.
-                                    </p>
-                                </div>
-                                
-                                <div style="padding: 16px; background: rgba(30, 144, 255, 0.1); border-radius: var(--radius-md);">
-                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                        <div style="color: var(--secondary); font-size: 24px;">🎬</div>
-                                        <div style="font-weight: 600;">Qualité garantie</div>
-                                    </div>
-                                    <p style="color: var(--gray); font-size: 14px;">
-                                        Streaming HD, traductions officielles, et pas de coupures publicitaires abusives.
-                                    </p>
-                                </div>
-                                
-                                <div style="padding: 16px; background: rgba(255, 165, 2, 0.1); border-radius: var(--radius-md);">
-                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                        <div style="color: var(--warning); font-size: 24px;">⚡</div>
-                                        <div style="font-weight: 600;">Simulcast</div>
-                                    </div>
-                                    <p style="color: var(--gray); font-size: 14px;">
-                                        Regardez les nouveaux épisodes dès leur diffusion au Japon.
-                                    </p>
-                                </div>
-                            </div>
-                            
-                            <div style="background: rgba(255, 71, 87, 0.1); padding: 16px; border-radius: var(--radius-md);">
-                                <h4 style="margin-bottom: 8px; color: var(--primary);">
-                                    <i class="fas fa-exclamation-triangle"></i> Risques du piratage
-                                </h4>
-                                <ul style="color: var(--gray); padding-left: 20px; font-size: 14px;">
-                                    <li>Exposition à des malwares et virus</li>
-                                    <li>Qualité vidéo médiocre</li>
-                                    <li>Traductions de mauvaise qualité</li>
-                                    <li>Publicités intrusives et pop-ups</li>
-                                    <li>Risques légaux (DMCA, amendes)</li>
-                                    <li>Ne soutient pas les créateurs</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="details-actions">
-                            <button class="btn btn-primary" onclick="AnimeHub.showLegalPlatforms(); AnimeHub.closeModal()">
-                                <i class="fas fa-external-link-alt"></i>
-                                Voir les plateformes légales
-                            </button>
-                        </div>
-                    `
-                );
+                this.showSpeechBubble("⚖️ Je veille au respect des créateurs et de leurs œuvres ! ⚖️");
+                
+                setTimeout(() => {
+                    this.showModal(
+                        'Information Légal',
+                        `AnimeSama RASS Tube promeut le streaming légal d'anime et manga.<br><br>
+                        Nous encourageons l'utilisation des plateformes officielles comme Crunchyroll, 
+                        Wakanim, ADN et Netflix pour soutenir l'industrie de l'anime.<br><br>
+                        <strong>Pourquoi regarder légalement ?</strong><br>
+                        • Soutien direct aux créateurs<br>
+                        • Qualité vidéo garantie<br>
+                        • Traductions officielles<br>
+                        • Simulcast simultané<br><br>
+                        Merci de soutenir l'anime que vous aimez !`
+                    );
+                }, 500);
+            }
+
+            static showLegalStreaming() {
+                this.showPlayer({ title: 'Streaming Légal' });
             }
 
             static showModal(title, content) {
-                document.getElementById('modal-body').innerHTML = content;
-                document.querySelector('.modal-title').textContent = title;
-                document.getElementById('modal-overlay').style.display = 'flex';
-            }
-
-            static closeModal() {
-                document.getElementById('modal-overlay').style.display = 'none';
-            }
-
-            static logout() {
-                if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-                    this.state.session = null;
-                    this.state.currentUser = null;
-                    this.saveData();
-                    
-                    this.showToast('Déconnexion réussie', 'info');
-                    setTimeout(() => {
-                        this.showAuthScreen();
-                    }, 1000);
-                }
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.background = 'rgba(0,0,0,0.8)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '10000';
+                
+                modal.innerHTML = `
+                    <div style="background: var(--dark-light); padding: 30px; border-radius: var(--radius-lg); max-width: 500px; width: 90%; border: 3px solid var(--primary);">
+                        <h2 style="margin-bottom: 20px; color: var(--primary);">${title}</h2>
+                        <div style="color: var(--gray); line-height: 1.6; margin-bottom: 30px;">${content}</div>
+                        <button onclick="this.parentElement.parentElement.remove()" 
+                                style="background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600;">
+                            Compris, merci AnimeSama !
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
             }
 
             static setupEventListeners() {
-                document.getElementById('modal-close').addEventListener('click', () => this.closeModal());
-                document.getElementById('modal-overlay').addEventListener('click', (e) => {
-                    if (e.target === document.getElementById('modal-overlay')) {
-                        this.closeModal();
-                    }
-                });
-                
+                // Close player on escape key
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
-                        this.closeModal();
                         this.closePlayer();
                     }
                 });
                 
-                document.getElementById('auth-form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.handleAuth();
+                // Close player when clicking outside
+                document.getElementById('player-overlay').addEventListener('click', (e) => {
+                    if (e.target === document.getElementById('player-overlay')) {
+                        this.closePlayer();
+                    }
                 });
             }
         }
 
-        // Initialize when page loads
-        window.addEventListener('DOMContentLoaded', () => AnimeHub.init());
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => AnimeSamaRASSTube.init());
         
-        // Make AnimeHub available globally
-        window.AnimeHub = AnimeHub;
+        // Make available globally
+        window.AnimeSamaRASSTube = AnimeSamaRASSTube;
+        
+        // Global functions for inline event handlers
+        function goToSection(section) {
+            AnimeSamaRASSTube.goToSection(section);
+        }
+        
+        function viewAll(category) {
+            AnimeSamaRASSTube.viewAll(category);
+        }
+        
+        function showLogin() {
+            AnimeSamaRASSTube.showLogin();
+        }
+        
+        function showLegalInfo() {
+            AnimeSamaRASSTube.showLegalInfo();
+        }
+        
+        function showLegalStreaming() {
+            AnimeSamaRASSTube.showLegalStreaming();
+        }
+        
+        function showPlayer(animeId, episode) {
+            AnimeSamaRASSTube.showPlayer({ title: 'Anime Sélectionné' });
+        }
+        
+        function closePlayer() {
+            AnimeSamaRASSTube.closePlayer();
+        }
     </script>
 </body>
 </html>
