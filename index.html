@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE ZEN v6 | Airsoft & Shorts Edition</title>
+    <title>RASSTUBE ZEN v7 | Omni-Search</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -17,12 +17,11 @@
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
             padding-bottom: 80px;
         }
 
-        /* HEADER */
         header {
             background: rgba(0,0,0,0.95);
             padding: 15px;
@@ -32,20 +31,50 @@
         }
         .brand { font-size: 26px; font-weight: 900; color: var(--accent); letter-spacing: 1px; }
 
-        /* RECHERCHE */
-        .search-section { padding: 20px; display: flex; justify-content: center; }
+        /* BARRE DE RECHERCHE CORRIGÉE */
+        .search-section { 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px;
+        }
+        .search-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+        }
         .search-bar {
-            width: 90%; max-width: 600px;
+            width: 100%;
             background: #181818;
             border: 1px solid #333;
             border-radius: 30px;
-            padding: 12px 25px;
+            padding: 12px 50px 12px 25px;
             color: white;
             font-size: 16px;
             outline: none;
+            transition: 0.3s;
         }
+        .search-bar:focus { border-color: var(--accent); background: #222; }
+        
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            background: var(--accent);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .search-btn:active { transform: scale(0.9); }
 
-        /* GRILLE DE VIDÉOS */
         .content-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -55,7 +84,6 @@
             gap: 20px;
         }
 
-        /* SHORTS GRID (Vertical) */
         .shorts-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -63,114 +91,107 @@
             padding: 10px;
         }
 
-        .video-card {
-            background: var(--card);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: 0.3s;
-        }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-        }
-
-        .short-wrapper {
-            padding-bottom: 177.77%; /* 9:16 pour Shorts */
-        }
-
-        .video-wrapper iframe {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            border: none;
-        }
-
+        .video-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
+        .short-wrapper { padding-bottom: 177.77%; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .video-info { padding: 12px; }
-        .video-title { font-size: 14px; font-weight: 600; line-height: 1.4; margin-bottom: 5px; }
-        .video-meta { font-size: 12px; color: var(--dim); }
+        .video-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
 
-        /* NAVIGATION BASSE */
+        h2 { padding: 0 20px; font-size: 18px; color: var(--accent); margin-top: 30px; }
+
         .nav-bar {
             position: fixed; bottom: 0; width: 100%;
-            background: #0f0f0f;
-            display: flex; justify-content: space-around;
-            padding: 15px 0;
+            background: #0f0f0f; display: flex; padding: 15px 0;
             border-top: 1px solid #222;
         }
-        .nav-item { color: var(--dim); text-align: center; cursor: pointer; flex: 1; }
+        .nav-item { color: var(--dim); text-align: center; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--accent); }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 5px; }
-        .nav-item span { font-size: 10px; font-weight: bold; }
-
-        h2 { padding: 0 20px; font-size: 18px; color: var(--accent); text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="brand">RASSTUBE ZEN v6</div>
+    <div class="brand">RASSTUBE ZEN v7</div>
 </header>
 
 <div class="search-section">
-    <input type="text" class="search-bar" placeholder="Chercher n'importe quelle vidéo YouTube..." onkeyup="if(event.key === 'Enter') alert('Recherche lancée !')">
+    <div class="search-wrapper">
+        <input type="text" id="mainSearch" class="search-bar" placeholder="Rechercher sur YouTube...">
+        <button class="search-btn" onclick="executeSearch()">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
 </div>
 
-<h2><i class="fas fa-crosshairs"></i> Elite Airsoft Feed</h2>
-<div class="content-container" id="airsoftFeed"></div>
+<div id="resultsArea" style="display:none;">
+    <h2><i class="fas fa-search"></i> Résultats de recherche</h2>
+    <div class="content-container" id="searchResults"></div>
+    <hr style="border: 0; border-top: 1px solid #222; margin: 40px 20px;">
+</div>
 
-<h2><i class="fas fa-bolt"></i> Trending Shorts</h2>
+<h2><i class="fas fa-bolt"></i> AIR SHORT</h2>
 <div class="shorts-container" id="shortsFeed"></div>
 
+<h2><i class="fas fa-globe"></i> Découvrir</h2>
+<div class="content-container" id="airsoftFeed"></div>
+
 <nav class="nav-bar">
-    <div class="nav-item active"><i class="fas fa-home"></i><span>ACCUEIL</span></div>
-    <div class="nav-item"><i class="fas fa-fire"></i><span>AIRSOFT</span></div>
-    <div class="nav-item"><i class="fas fa-play-circle"></i><span>SHORTS</span></div>
-    <div class="nav-item"><i class="fas fa-history"></i><span>REPLAY</span></div>
+    <div class="nav-item active"><i class="fas fa-home"></i><br><small>ACCUEIL</small></div>
+    <div class="nav-item"><i class="fas fa-compass"></i><br><small>EXPLORER</small></div>
+    <div class="nav-item"><i class="fas fa-play-circle"></i><br><small>SHORTS</small></div>
 </nav>
 
 <script>
-    const airsoftVideos = [
-        { id: '1LmtZ3SJS0M', title: 'Qui a le meilleur équipement Airsoft à 650$ ?', channel: 'Airsoft Twins' },
-        { id: 'y0aYSECDyaE', title: 'Test du nouveau chargeur tambour AAP01', channel: 'William Castillo' }
+    // Liste de base pour remplir le site au démarrage
+    const initialVideos = [
+        { id: 'HCsp_dthaqY', title: 'Tendances Web 2026' },
+        { id: 'M4MsFXE00js', title: 'Histoire de YouTube' }
     ];
 
-    const airsoftShorts = [
-        { id: 'X7YxF9FpmKQ', title: 'Airsoft Trick (Expérience)', channel: 'Experiment Channel' },
-        { id: 'pJrjoizQ1R0', title: 'Test M416 Airsoft', channel: 'GizaToys' },
-        { id: 'LfVnPo0uDmw', title: 'Est-ce considéré comme de la triche ?', channel: 'USAirsoft' },
-        { id: '42jNrBlz6tU', title: 'Meilleure solution de protection', channel: 'BYN-airsoft' }
+    const airShorts = [
+        { id: 'X7YxF9FpmKQ', title: 'Airsoft Trick' },
+        { id: '42jNrBlz6tU', title: 'Protection Elite' },
+        { id: 'LfVnPo0uDmw', title: 'Cheat or Skill?' }
     ];
 
-    function loadContent() {
-        // Charger vidéos standards
-        document.getElementById('airsoftFeed').innerHTML = airsoftVideos.map(v => `
+    function executeSearch() {
+        const query = document.getElementById('mainSearch').value;
+        if(!query) return;
+
+        // On redirige vers YouTube pour les résultats réels ou on simule l'affichage
+        // Note: Pour une recherche 100% intégrée sans API Google, on utilise un lien de redirection
+        const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+        
+        // Option A: Ouvrir dans YouTube (Le plus fiable pour TOUTES les vidéos)
+        window.open(searchUrl, '_blank');
+        
+        // Option B: Si tu veux rester sur le site, on informe l'utilisateur (nécessite une clé API pour les vrais résultats)
+        console.log("Recherche lancée pour : " + query);
+    }
+
+    // Permet d'appuyer sur Entrée pour chercher
+    document.getElementById('mainSearch').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') { executeSearch(); }
+    });
+
+    function loadInitial() {
+        document.getElementById('airsoftFeed').innerHTML = initialVideos.map(v => `
             <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/${v.id}"></iframe>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">${v.title}</div>
-                    <div class="video-meta">${v.channel}</div>
-                </div>
+                <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${v.id}"></iframe></div>
+                <div class="video-info"><div class="video-title">${v.title}</div></div>
             </div>
         `).join('');
 
-        // Charger les Shorts
-        document.getElementById('shortsFeed').innerHTML = airsoftShorts.map(s => `
+        document.getElementById('shortsFeed').innerHTML = airShorts.map(s => `
             <div class="video-card">
-                <div class="video-wrapper short-wrapper">
-                    <iframe src="https://www.youtube.com/embed/${s.id}"></iframe>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">${s.title}</div>
-                    <div class="video-meta">${s.channel}</div>
-                </div>
+                <div class="video-wrapper short-wrapper"><iframe src="https://www.youtube.com/embed/${s.id}"></iframe></div>
+                <div class="video-info"><div class="video-title">${s.title}</div></div>
             </div>
         `).join('');
     }
 
-    window.onload = loadContent;
+    window.onload = loadInitial;
 </script>
 
 </body>
