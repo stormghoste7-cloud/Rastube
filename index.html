@@ -3,430 +3,476 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RASSTUBE PREMIUM</title>
+    <title>RASSTUBE ELITE V11</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
         :root {
-            --red: #FF0000;
-            --red-glow: rgba(255, 0, 0, 0.5);
-            --bg: #050505;
-            --card: #151515;
-            --glass: rgba(255, 255, 255, 0.05);
+            --primary: #FF0000;
+            --primary-variant: #cc0000;
+            --bg: #0a0a0a;
+            --card: #161616;
             --text: #ffffff;
-            --ai: #4285f4;
+            --text-dim: #b3b3b3;
+            --ai-color: #4285f4;
+            --glass: rgba(255, 255, 255, 0.03);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
         
         body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            padding-bottom: 90px; 
-            overflow-x: hidden;
+            background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; 
+            margin: 0; padding-bottom: 90px; overflow-x: hidden;
         }
-
-        /* --- DESIGN DES SCROLLBARS --- */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; }
 
         /* --- ANIMATIONS --- */
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--red-glow); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
 
-        /* --- ECRAN D'AUTHENTIFICATION --- */
+        /* --- AUTH SCREEN --- */
         #auth-screen { 
-            position: fixed; inset: 0; background: linear-gradient(135deg, #000 0%, #1a0000 100%); 
+            position: fixed; inset: 0; background: radial-gradient(circle at top, #220000 0%, #000 100%);
             z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;
         }
-        .auth-box { 
-            background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px); padding: 30px; 
-            border-radius: 30px; width: 100%; max-width: 420px; border: 1px solid rgba(255,255,255,0.1); text-align: center;
+        .auth-container { 
+            background: var(--card); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 35px 25px; border-radius: 35px; width: 100%; max-width: 400px; 
+            text-align: center; box-shadow: var(--shadow);
         }
-        .auth-tabs { display: flex; background: #000; padding: 5px; border-radius: 15px; margin-bottom: 20px; }
-        .auth-tabs button { flex: 1; padding: 10px; border: none; background: none; color: #555; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .auth-tabs button.active { background: var(--red); color: white; border-radius: 10px; }
+        .auth-tabs { display: flex; background: #000; padding: 6px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #222; }
+        .auth-tabs button { 
+            flex: 1; padding: 12px; border: none; background: none; color: var(--text-dim); 
+            font-weight: 600; cursor: pointer; border-radius: 15px; transition: 0.3s; 
+        }
+        .auth-tabs button.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255,0,0,0.3); }
 
-        .auth-input { 
-            width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-            color: white; border-radius: 12px; margin-top: 12px; font-size: 15px; transition: 0.3s;
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .input-box { 
+            width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid #333; 
+            color: white; border-radius: 15px; font-size: 14px; transition: 0.3s;
         }
-        .auth-input:focus { border-color: var(--red); background: rgba(255,255,255,0.1); }
+        .input-box:focus { border-color: var(--primary); background: rgba(255,255,255,0.08); }
 
-        .player-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
-        .player-card { 
-            border: 2px solid transparent; border-radius: 15px; padding: 5px; cursor: pointer; 
-            background: var(--glass); transition: 0.3s; overflow: hidden;
+        .avatar-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 15px 0; }
+        .av-item { 
+            border: 3px solid transparent; border-radius: 20px; padding: 5px; cursor: pointer; 
+            transition: 0.3s; background: #222;
         }
-        .player-card.selected { border-color: var(--red); transform: scale(1.05); background: rgba(255,0,0,0.1); }
-        .player-card img { width: 100%; border-radius: 10px; }
+        .av-item.selected { border-color: var(--primary); transform: scale(1.05); background: #331111; }
+        .av-item img { width: 100%; border-radius: 15px; }
 
         /* --- HEADER --- */
         header { 
-            position: sticky; top: 0; background: rgba(5,5,5,0.8); backdrop-filter: blur(15px); 
+            position: sticky; top: 0; background: rgba(10,10,10,0.85); backdrop-filter: blur(20px); 
             padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 1000;
         }
-        .logo { color: var(--red); font-weight: 900; font-size: 26px; letter-spacing: -1px; }
-        .search-bar { 
-            display: flex; background: rgba(255,255,255,0.05); border-radius: 15px; 
-            padding: 10px 15px; margin-top: 15px; align-items: center; border: 1px solid transparent;
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .brand { color: var(--primary); font-weight: 800; font-size: 24px; letter-spacing: -1px; }
+        .search-container { 
+            display: flex; background: rgba(255,255,255,0.07); border-radius: 18px; 
+            padding: 12px 18px; margin-top: 15px; align-items: center;
         }
-        .search-bar:focus-within { border-color: var(--red); }
-        .search-bar input { background: transparent; border: none; color: white; flex: 1; margin-left: 10px; font-size: 14px; }
+        .search-container input { background: transparent; border: none; color: white; flex: 1; margin-left: 10px; font-size: 14px; }
 
-        /* --- CARTES DE CONTENU --- */
-        .page { display: none; padding: 15px; animation: slideUp 0.4s ease-out; }
-        .active-page { display: block; }
+        /* --- PAGES & FEED --- */
+        .page { display: none; padding: 20px 15px; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
         
-        .v-card { 
-            background: var(--card); border-radius: 20px; overflow: hidden; margin-bottom: 25px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.03);
+        .card { 
+            background: var(--card); border-radius: 28px; overflow: hidden; margin-bottom: 30px; 
+            border: 1px solid rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-        .v-card video, .v-card img.content-main { width: 100%; display: block; object-fit: cover; max-height: 450px; background: #000; }
-        .v-body { padding: 15px; }
-        .v-user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .v-user-info img { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--red); }
-        .v-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; display: block; }
-        
-        .v-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
-        .btn-action { background: none; border: none; color: #888; font-size: 20px; cursor: pointer; transition: 0.2s; }
-        .btn-action.active { color: var(--red); }
-        .sub-btn { background: var(--red); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 12px; cursor: pointer; }
-        .sub-btn.is-sub { background: #333; }
+        .card-video, .card-img { width: 100%; display: block; object-fit: cover; max-height: 500px; background: #000; }
+        .card-info { padding: 18px; }
+        .card-user { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .card-user img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); }
+        .card-title { font-weight: 600; font-size: 17px; display: block; margin-bottom: 15px; }
+
+        .card-actions { 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;
+        }
+        .action-btn { background: none; border: none; color: #777; font-size: 22px; cursor: pointer; transition: 0.2s; }
+        .action-btn.active { color: var(--primary); }
+        .badge-sub { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+
+        /* --- COMMENTS SYSTEM --- */
+        .comment-section { padding: 0 18px 18px; border-top: 1px solid rgba(255,255,255,0.03); max-height: 200px; overflow-y: auto; display: none; }
+        .comment-item { font-size: 13px; margin-bottom: 8px; color: var(--text-dim); }
+        .comment-item b { color: white; margin-right: 5px; }
+        .comment-input-wrap { display: flex; gap: 10px; margin-top: 10px; }
 
         /* --- NAVIGATION --- */
-        .bottom-nav { 
-            position: fixed; bottom: 0; width: 100%; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around; align-items: center; padding: 12px 0; 
-            border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000;
+        nav { 
+            position: fixed; bottom: 0; width: 100%; background: rgba(10,10,10,0.95); backdrop-filter: blur(25px);
+            display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000;
         }
-        .nav-item { color: #666; text-align: center; font-size: 11px; flex: 1; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: var(--red); transform: translateY(-3px); }
-        .nav-item i { font-size: 22px; margin-bottom: 4px; }
-        .btn-plus { 
-            background: var(--red); color: white !important; width: 50px; height: 50px; 
-            border-radius: 18px; display: flex; align-items: center; justify-content: center; 
-            font-size: 24px !important; margin-top: -10px; animation: pulse 2s infinite;
+        .nav-item { color: #555; text-align: center; font-size: 10px; flex: 1; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+        .nav-item i { font-size: 24px; margin-bottom: 5px; display: block; }
+        .add-btn { 
+            background: var(--primary); color: white !important; width: 55px; height: 55px; 
+            border-radius: 20px; display: flex; align-items: center; justify-content: center; 
+            font-size: 26px !important; margin-top: -35px; border: 5px solid var(--bg);
+            animation: pulseRed 2s infinite;
         }
 
-        /* --- CHAT --- */
-        #chat-container { height: calc(100vh - 380px); overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .bubble { padding: 12px 16px; border-radius: 18px; max-width: 85%; font-size: 14px; line-height: 1.4; position: relative; }
-        .msg-me { background: var(--red); align-self: flex-end; border-bottom-right-radius: 4px; }
-        .msg-other { background: #222; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg-ai { background: #1a1a1a; border-left: 4px solid var(--ai); align-self: flex-start; }
-        .chat-input-area { position: fixed; bottom: 85px; left: 0; width: 100%; padding: 10px 15px; display: flex; gap: 10px; background: var(--bg); }
+        /* --- CHAT IA --- */
+        #chat-window { height: calc(100vh - 400px); overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
+        .msg { padding: 12px 18px; border-radius: 22px; max-width: 80%; font-size: 14px; position: relative; line-height: 1.5; }
+        .msg.me { background: var(--primary); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .msg.bot { background: var(--card); border-left: 4px solid var(--ai-color); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .chat-bar { position: fixed; bottom: 95px; width: 100%; padding: 10px 20px; display: flex; gap: 12px; background: var(--bg); }
     </style>
 </head>
 <body>
 
 <div id="auth-screen">
-    <div class="auth-box">
-        <div class="logo" style="margin-bottom:10px;">RASSTUBE</div>
+    <div class="auth-container">
+        <div class="brand" style="font-size:32px; margin-bottom:15px;">RASSTUBE</div>
         <div class="auth-tabs">
-            <button id="tab-login" class="active" onclick="switchAuth('login')">Connexion</button>
-            <button id="tab-reg" onclick="switchAuth('reg')">Inscription</button>
+            <button id="btn-login" class="active" onclick="toggleAuth('login')">Connexion</button>
+            <button id="btn-signup" onclick="toggleAuth('signup')">S'inscrire</button>
         </div>
         
-        <input type="email" id="auth-email" class="auth-input" placeholder="Email (ex: rass@tube.com)">
-        <input type="password" id="auth-pass" class="auth-input" placeholder="Mot de passe">
+        <div class="form-group">
+            <input type="email" id="email" class="input-box" placeholder="Adresse e-mail">
+        </div>
+        <div class="form-group">
+            <input type="password" id="pass" class="input-box" placeholder="Mot de passe">
+        </div>
         
-        <div id="reg-fields" style="display:none;">
-            <input type="text" id="auth-name" class="auth-input" placeholder="Pseudo">
-            <p style="font-size:12px; color:#666; margin:15px 0 5px;">Ton Avatar :</p>
-            <div class="player-grid" id="player-grid"></div>
-            <button onclick="document.getElementById('pfp-file').click()" style="color:var(--ai); background:none; border:none; font-size:11px; cursor:pointer;">Ou importer une photo</button>
-            <input type="file" id="pfp-file" hidden accept="image/*" onchange="handlePFP(this)">
+        <div id="signup-extra" style="display:none;">
+            <div class="form-group">
+                <input type="text" id="pseudo" class="input-box" placeholder="Ton pseudo">
+            </div>
+            <p style="font-size:12px; color:gray; margin:10px 0;">Choisis ton avatar :</p>
+            <div class="avatar-selector" id="av-grid"></div>
         </div>
 
-        <button class="btn-main" onclick="handleAuth()" style="width:100%; padding:15px; background:var(--red); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:20px; cursor:pointer;">VALIDER</button>
-        <button onclick="resetSystem()" style="background:none; border:none; color:#333; font-size:10px; margin-top:15px; cursor:pointer;">Nettoyer la mémoire du site</button>
+        <button onclick="processAuth()" style="width:100%; padding:16px; background:var(--primary); color:white; border:none; border-radius:18px; font-weight:800; cursor:pointer; margin-top:15px;">ENTRER</button>
+        <p onclick="clearAllData()" style="font-size:10px; color:#333; margin-top:20px; cursor:pointer;">Réinitialiser complètement l'application</p>
     </div>
 </div>
 
-<header id="app-header" style="display:none;">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="logo">RASSTUBE</div>
-        <div id="top-profile"></div>
+<header id="main-header" style="display:none;">
+    <div class="header-top">
+        <div class="brand">RASSTUBE</div>
+        <div id="user-pill" style="display:flex; align-items:center; gap:10px; background:var(--glass); padding:5px 12px; border-radius:30px; border:1px solid #333;"></div>
     </div>
-    <div class="search-bar">
-        <i class="fas fa-search" style="color:#444"></i>
-        <input type="text" id="search-in" placeholder="Rechercher sur Rasstube..." onkeyup="search()">
+    <div class="search-container">
+        <i class="fas fa-search" style="color:#555"></i>
+        <input type="text" id="search-q" placeholder="Rechercher une vidéo ou un créateur..." onkeyup="doSearch()">
     </div>
 </header>
 
-<main id="app-main" style="display:none;">
-    <div id="p-home" class="page active-page">
-        <div id="feed-home"></div>
+<main id="main-app" style="display:none;">
+    <div id="page-home" class="page active">
+        <div id="feed"></div>
     </div>
 
-    <div id="p-upload" class="page">
-        <h2 style="margin-top:0;">Publier</h2>
-        <div style="background:var(--card); padding:20px; border-radius:20px;">
-            <label style="font-size:12px; color:#888;">Fichier (Vidéo ou Photo) :</label>
-            <input type="file" id="post-file" class="auth-input" accept="video/*,image/*">
-            
-            <div id="thumb-wrap" style="margin-top:15px;">
-                <label style="font-size:12px; color:#888;">Miniature (Optionnel) :</label>
-                <input type="file" id="post-thumb" class="auth-input" accept="image/*">
+    <div id="page-upload" class="page">
+        <h2 style="margin-top:0;">Créer un post</h2>
+        <div style="background:var(--card); padding:25px; border-radius:30px;">
+            <div class="form-group">
+                <label style="font-size:12px; color:gray;">Fichier (Vidéo ou Photo)</label>
+                <input type="file" id="up-file" class="input-box" accept="video/*,image/*">
             </div>
-
-            <input type="text" id="post-title" class="auth-input" placeholder="Titre de la publication...">
-            
-            <select id="post-type" class="auth-input" onchange="toggleThumbView()">
-                <option value="video">Vidéo Classique</option>
-                <option value="photo">Photo / Image</option>
-                <option value="rshot">⚡ RShot (Vertical)</option>
-            </select>
-            <button class="btn-main" onclick="publish()" style="width:100%; padding:15px; background:var(--red); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:20px; cursor:pointer;">PUBLIER</button>
+            <div class="form-group" id="thumb-group">
+                <label style="font-size:12px; color:gray;">Miniature (Recommandé pour vidéo)</label>
+                <input type="file" id="up-thumb" class="input-box" accept="image/*">
+            </div>
+            <div class="form-group">
+                <input type="text" id="up-title" class="input-box" placeholder="Titre captivant...">
+            </div>
+            <div class="form-group">
+                <select id="up-type" class="input-box" onchange="checkThumb()">
+                    <option value="video">Vidéo Classique</option>
+                    <option value="photo">Photo / Image</option>
+                    <option value="rshot">⚡ RShot (Format court)</option>
+                </select>
+            </div>
+            <button onclick="handlePublish()" style="width:100%; padding:16px; background:var(--primary); color:white; border:none; border-radius:18px; font-weight:700;">METTRE EN LIGNE</button>
         </div>
     </div>
 
-    <div id="p-chat" class="page">
-        <div style="display:flex; background:#111; padding:5px; border-radius:12px; margin-bottom:15px;">
-            <button id="c-glob" onclick="switchChat('global')" style="flex:1; padding:8px; border:none; background:var(--red); color:white; border-radius:8px;">Global</button>
-            <button id="c-ai" onclick="switchChat('ai')" style="flex:1; padding:8px; border:none; background:none; color:#555;">Gemini IA</button>
+    <div id="page-chat" class="page">
+        <div style="display:flex; gap:10px; margin-bottom:20px; background:#111; padding:5px; border-radius:15px;">
+            <button id="chat-tab-glob" onclick="setChatMode('global')" style="flex:1; padding:10px; border:none; background:var(--primary); color:white; border-radius:10px; font-weight:600;">Global</button>
+            <button id="chat-tab-ai" onclick="setChatMode('ai')" style="flex:1; padding:10px; border:none; background:none; color:gray; font-weight:600;">Gemini AI</button>
         </div>
-        <div id="chat-container"></div>
-        <div class="chat-input-area">
-            <input type="text" id="chat-in" class="auth-input" style="margin:0;" placeholder="Écris quelque chose...">
-            <button onclick="sendMsg()" style="background:var(--red); color:white; border:none; width:50px; border-radius:12px;"><i class="fas fa-paper-plane"></i></button>
+        <div id="chat-window"></div>
+        <div class="chat-bar">
+            <input type="text" id="chat-msg" class="input-box" style="margin:0;" placeholder="Écris ici...">
+            <button onclick="doSendMsg()" style="background:var(--primary); color:white; border:none; width:55px; border-radius:15px;"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
-    <div id="p-fav" class="page">
-        <h3>Mes Favoris</h3>
+    <div id="page-fav" class="page">
+        <h2 style="margin-top:0;">Mes Favoris</h2>
         <div id="feed-fav"></div>
     </div>
 </main>
 
-<nav class="bottom-nav" id="app-nav" style="display:none;">
-    <div class="nav-item active" onclick="nav('p-home', this)"><i class="fas fa-home"></i><br>Accueil</div>
-    <div class="nav-item" onclick="nav('p-upload', this)"><i class="fas fa-plus btn-plus"></i></div>
-    <div class="nav-item" onclick="nav('p-chat', this)"><i class="fas fa-comment-dots"></i><br>Chat</div>
-    <div class="nav-item" onclick="nav('p-fav', this)"><i class="fas fa-heart"></i><br>Favoris</div>
-    <div class="nav-item" onclick="logout()"><i class="fas fa-user-circle"></i><br>Sortir</div>
+<nav id="main-nav" style="display:none;">
+    <div class="nav-item active" onclick="changePage('page-home', this)"><i class="fas fa-home"></i>Accueil</div>
+    <div class="nav-item" onclick="changePage('page-upload', this)"><i class="fas fa-plus add-btn"></i></div>
+    <div class="nav-item" onclick="changePage('page-chat', this)"><i class="fas fa-comment-alt"></i>Chat</div>
+    <div class="nav-item" onclick="changePage('page-fav', this)"><i class="fas fa-heart"></i>Favoris</div>
+    <div class="nav-item" onclick="logout()"><i class="fas fa-door-open"></i>Sortir</div>
 </nav>
 
 <script>
-    // --- DATABASE LOCALE ---
-    let db_accounts = JSON.parse(localStorage.getItem('rt_accounts')) || [];
-    let db_posts = JSON.parse(localStorage.getItem('rt_posts')) || [];
-    let db_session = JSON.parse(localStorage.getItem('rt_session')) || null;
-    let db_messages = JSON.parse(localStorage.getItem('rt_msgs')) || [];
-    let db_favs = JSON.parse(localStorage.getItem('rt_favs')) || [];
+    // --- DATABASE ---
+    let accounts = JSON.parse(localStorage.getItem('rt_acc_v11')) || [];
+    let posts = JSON.parse(localStorage.getItem('rt_posts_v11')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('rt_session_v11')) || null;
+    let messages = JSON.parse(localStorage.getItem('rt_msgs_v11')) || [];
+    let favorites = JSON.parse(localStorage.getItem('rt_favs_v11')) || [];
 
-    let currentAuthMode = 'login';
-    let selectedPfp = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+    let authMode = 'login';
+    let selectedAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
     let activeChat = 'global';
 
-    // --- AUTHENTIFICATION ---
-    function switchAuth(mode) {
-        currentAuthMode = mode;
-        document.getElementById('tab-login').classList.toggle('active', mode === 'login');
-        document.getElementById('tab-reg').classList.toggle('active', mode === 'reg');
-        document.getElementById('reg-fields').style.display = mode === 'reg' ? 'block' : 'none';
+    // --- AUTH LOGIQUE ---
+    function toggleAuth(mode) {
+        authMode = mode;
+        document.getElementById('btn-login').className = mode === 'login' ? 'active' : '';
+        document.getElementById('btn-signup').className = mode === 'signup' ? 'active' : '';
+        document.getElementById('signup-extra').style.display = mode === 'signup' ? 'block' : 'none';
     }
 
-    function handleAuth() {
-        const email = document.getElementById('auth-email').value.toLowerCase().trim();
-        const pass = document.getElementById('auth-pass').value;
+    function processAuth() {
+        const email = document.getElementById('email').value.toLowerCase().trim();
+        const pass = document.getElementById('pass').value;
 
-        if(!email || !pass) return alert("Veuillez remplir les champs.");
+        if(!email || !pass) return alert("Champs vides !");
 
-        if(currentAuthMode === 'reg') {
-            const name = document.getElementById('auth-name').value;
-            if(!name) return alert("Choisissez un pseudo.");
-            if(db_accounts.find(a => a.email === email)) return alert("Cet e-mail est déjà utilisé !");
+        if(authMode === 'signup') {
+            const pseudo = document.getElementById('pseudo').value;
+            if(!pseudo) return alert("Pseudo manquant.");
             
-            const newUser = { email, pass, name, avatar: selectedPfp };
-            db_accounts.push(newUser);
-            localStorage.setItem('rt_accounts', JSON.stringify(db_accounts));
-            loginUser(newUser);
+            // Verif existence
+            if(accounts.find(a => a.email === email)) {
+                alert("Cet e-mail est déjà utilisé ! On vous bascule sur connexion.");
+                toggleAuth('login');
+                return;
+            }
+
+            const newUser = { email, pass, pseudo, avatar: selectedAvatar };
+            accounts.push(newUser);
+            localStorage.setItem('rt_acc_v11', JSON.stringify(accounts));
+            startSession(newUser);
         } else {
-            const user = db_accounts.find(a => a.email === email && a.pass === pass);
-            if(!user) return alert("Compte introuvable ou mauvais mot de passe.");
-            loginUser(user);
+            const user = accounts.find(a => a.email === email && a.pass === pass);
+            if(!user) return alert("Identifiants incorrects.");
+            startSession(user);
         }
     }
 
-    function loginUser(user) {
-        db_session = user;
-        localStorage.setItem('rt_session', JSON.stringify(user));
-        location.reload();
+    function startSession(user) {
+        currentUser = user;
+        localStorage.setItem('rt_session_v11', JSON.stringify(user));
+        initApp();
     }
 
-    function logout() { localStorage.removeItem('rt_session'); location.reload(); }
-    function resetSystem() { if(confirm("Supprimer tous les comptes ?")) { localStorage.clear(); location.reload(); } }
-
-    function handlePFP(input) {
-        if(input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => { selectedPfp = e.target.result; alert("Photo prête !"); };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+    function logout() { localStorage.removeItem('rt_session_v11'); location.reload(); }
+    function clearAllData() { if(confirm("Tout supprimer ?")) { localStorage.clear(); location.reload(); } }
 
     // --- PUBLICATION ---
-    async function publish() {
-        const title = document.getElementById('post-title').value;
-        const type = document.getElementById('post-type').value;
-        const file = document.getElementById('post-file').files[0];
-        const thumb = document.getElementById('post-thumb').files[0];
+    async function handlePublish() {
+        const title = document.getElementById('up-title').value;
+        const type = document.getElementById('up-type').value;
+        const file = document.getElementById('up-file').files[0];
+        const thumb = document.getElementById('up-thumb').files[0];
 
-        if(!title || !file) return alert("Titre et fichier requis.");
+        if(!title || !file) return alert("Titre et fichier obligatoires !");
 
-        const toBase64 = f => new Promise(res => {
+        const reader = f => new Promise(res => {
             const r = new FileReader();
             r.onload = e => res(e.target.result);
             r.readAsDataURL(f);
         });
 
-        const file64 = await toBase64(file);
-        let thumb64 = thumb ? await toBase64(thumb) : "";
+        const fileData = await reader(file);
+        const thumbData = thumb ? await reader(thumb) : "";
 
-        db_posts.push({
+        posts.push({
             id: Date.now(),
             title, type,
-            url: file64, thumb: thumb64,
-            author: db_session.name,
-            authorPfp: db_session.avatar,
-            likes: 0
+            content: fileData,
+            thumbnail: thumbData,
+            author: currentUser.pseudo,
+            authorAvatar: currentUser.avatar,
+            comments: []
         });
 
-        localStorage.setItem('rt_posts', JSON.stringify(db_posts));
-        alert("Publié avec succès !");
-        nav('p-home');
-        renderHome();
+        localStorage.setItem('rt_posts_v11', JSON.stringify(posts));
+        alert("Publication réussie !");
+        changePage('page-home');
+        renderFeed();
     }
 
-    // --- RENDU CONTENU ---
-    function renderHome(filter = "") {
-        const feed = document.getElementById('feed-home');
-        const rshots = db_posts.filter(p => p.type === 'rshot');
-        const standard = db_posts.filter(p => p.type !== 'rshot' && p.title.toLowerCase().includes(filter.toLowerCase()));
+    // --- RENDU ---
+    function renderFeed(query = "") {
+        const feed = document.getElementById('feed');
+        const list = posts.filter(p => p.title.toLowerCase().includes(query.toLowerCase())).slice().reverse();
 
-        feed.innerHTML = standard.reverse().map(p => `
-            <div class="v-card">
-                <div class="v-body">
-                    <div class="v-user-info">
-                        <img src="${p.authorPfp}">
+        feed.innerHTML = list.map(p => `
+            <div class="card">
+                <div class="card-info">
+                    <div class="card-user">
+                        <img src="${p.authorAvatar}">
                         <div>
-                            <b style="font-size:14px;">${p.author}</b><br>
-                            <span style="font-size:10px; color:#555;">Publié maintenant</span>
+                            <span style="font-weight:700;">${p.author}</span><br>
+                            <span style="font-size:10px; color:gray;">Sponsorisé par Rasstube</span>
                         </div>
-                        <button class="sub-btn" style="margin-left:auto;" onclick="this.classList.toggle('is-sub'); this.innerText=this.classList.contains('is-sub')?'Abonné':'S\'abonner'">S'abonner</button>
+                        <button class="badge-sub" style="margin-left:auto;" onclick="this.innerText='Abonné'; this.style.opacity='0.5'">S'abonner</button>
                     </div>
-                    <span class="v-title">${p.title}</span>
+                    <span class="card-title">${p.title}</span>
                 </div>
-                ${p.type === 'video' ? `<video src="${p.url}" controls poster="${p.thumb}"></video>` : `<img src="${p.url}" class="content-main">`}
-                <div class="v-body">
-                    <div class="v-actions">
+                ${p.type === 'video' || p.type === 'rshot' 
+                    ? `<video class="card-video" src="${p.content}" controls poster="${p.thumbnail}"></video>` 
+                    : `<img class="card-img" src="${p.content}">`}
+                
+                <div class="card-info">
+                    <div class="card-actions">
                         <div style="display:flex; gap:20px;">
-                            <button class="btn-action" onclick="this.classList.toggle('active')"><i class="fas fa-heart"></i></button>
-                            <button class="btn-action"><i class="fas fa-comment"></i></button>
-                            <button class="btn-action"><i class="fas fa-share"></i></button>
+                            <button class="action-btn" onclick="this.classList.toggle('active')"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn" onclick="toggleComments(${p.id})"><i class="fas fa-comment"></i></button>
+                            <button class="action-btn"><i class="fas fa-share"></i></button>
                         </div>
-                        <button class="btn-action ${db_favs.includes(p.id)?'active':''}" onclick="toggleFav(${p.id})"><i class="fas fa-star"></i></button>
+                        <button class="action-btn ${favorites.includes(p.id) ? 'active' : ''}" onclick="saveFav(${p.id})">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+
+                    <div id="comments-${p.id}" class="comment-section">
+                        <div id="list-${p.id}">
+                            ${p.comments.map(c => `<div class="comment-item"><b>${c.user}</b> ${c.text}</div>`).join('')}
+                        </div>
+                        <div class="comment-input-wrap">
+                            <input type="text" id="in-${p.id}" class="input-box" style="padding:8px;" placeholder="Ajouter un commentaire...">
+                            <button onclick="addComment(${p.id})" style="background:none; border:none; color:var(--primary); font-weight:bold;">Publier</button>
+                        </div>
                     </div>
                 </div>
             </div>
         `).join('');
     }
 
-    function toggleFav(id) {
-        if(db_favs.includes(id)) db_favs = db_favs.filter(i => i !== id);
-        else db_favs.push(id);
-        localStorage.setItem('rt_favs', JSON.stringify(db_favs));
-        renderHome();
+    function addComment(pid) {
+        const inp = document.getElementById('in-' + pid);
+        if(!inp.value) return;
+        const post = posts.find(p => p.id === pid);
+        post.comments.push({ user: currentUser.pseudo, text: inp.value });
+        localStorage.setItem('rt_posts_v11', JSON.stringify(posts));
+        inp.value = "";
+        renderFeed();
+        document.getElementById('comments-' + pid).style.display = 'block';
+    }
+
+    function toggleComments(pid) {
+        const el = document.getElementById('comments-' + pid);
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function saveFav(pid) {
+        if(favorites.includes(pid)) favorites = favorites.filter(id => id !== pid);
+        else favorites.push(pid);
+        localStorage.setItem('rt_favs_v11', JSON.stringify(favorites));
+        renderFeed();
         renderFavs();
     }
 
     function renderFavs() {
-        const ffeed = document.getElementById('feed-fav');
-        const favPosts = db_posts.filter(p => db_favs.includes(p.id));
-        ffeed.innerHTML = favPosts.map(p => `<div class="v-card" style="height:100px; display:flex; align-items:center; gap:15px; padding:10px;">
-            <img src="${p.thumb || p.url}" style="width:80px; height:60px; object-fit:cover; border-radius:10px;">
+        const feed = document.getElementById('feed-fav');
+        const favList = posts.filter(p => favorites.includes(p.id));
+        feed.innerHTML = favList.map(p => `<div class="card" style="margin-bottom:10px; padding:10px; display:flex; gap:15px; align-items:center;">
+            <img src="${p.thumbnail || p.content}" style="width:60px; height:60px; object-fit:cover; border-radius:10px;">
             <b>${p.title}</b>
         </div>`).join('');
     }
 
-    // --- CHAT ---
-    function switchChat(mode) {
-        activeChat = mode;
-        document.getElementById('c-glob').style.background = mode === 'global' ? 'var(--red)' : 'none';
-        document.getElementById('c-ai').style.background = mode === 'ai' ? 'var(--ai)' : 'none';
+    // --- CHAT IA ---
+    function setChatMode(m) {
+        activeChat = m;
+        document.getElementById('chat-tab-glob').style.background = m === 'global' ? 'var(--primary)' : 'none';
+        document.getElementById('chat-tab-glob').style.color = m === 'global' ? 'white' : 'gray';
+        document.getElementById('chat-tab-ai').style.background = m === 'ai' ? 'var(--ai-color)' : 'none';
+        document.getElementById('chat-tab-ai').style.color = m === 'ai' ? 'white' : 'gray';
         renderChat();
     }
 
-    function sendMsg() {
-        const inp = document.getElementById('chat-in');
+    function doSendMsg() {
+        const inp = document.getElementById('chat-msg');
         if(!inp.value) return;
         
-        db_messages.push({ text: inp.value, user: db_session.name, mode: activeChat, me: true });
+        messages.push({ text: inp.value, user: currentUser.pseudo, mode: activeChat, me: true });
         
         if(activeChat === 'ai') {
             setTimeout(() => {
-                db_messages.push({ text: "Bonjour " + db_session.name + ", je suis Gemini IA. Ton compte " + db_session.email + " fonctionne parfaitement !", user: "Gemini", mode: "ai", me: false });
+                messages.push({ text: "Hello " + currentUser.pseudo + " ! Je suis Gemini. Je peux t'aider à utiliser Rasstube ou juste discuter.", user: "Gemini", mode: "ai", me: false });
                 renderChat();
             }, 800);
         }
         
         inp.value = "";
-        localStorage.setItem('rt_msgs', JSON.stringify(db_messages));
+        localStorage.setItem('rt_msgs_v11', JSON.stringify(messages));
         renderChat();
     }
 
     function renderChat() {
-        const box = document.getElementById('chat-container');
-        box.innerHTML = db_messages.filter(m => m.mode === activeChat).map(m => `
-            <div class="bubble ${m.me ? 'msg-me' : (m.user === 'Gemini' ? 'msg-ai' : 'msg-other')}">
-                <small style="font-size:10px; opacity:0.6; display:block;">${m.user}</small>
+        const win = document.getElementById('chat-window');
+        win.innerHTML = messages.filter(m => m.mode === activeChat).map(m => `
+            <div class="msg ${m.me ? 'me' : 'bot'}">
+                <small style="font-size:9px; opacity:0.5; display:block;">${m.user}</small>
                 ${m.text}
             </div>
         `).join('');
-        box.scrollTop = box.scrollHeight;
+        win.scrollTop = win.scrollHeight;
     }
 
-    // --- NAVIGATION ET CORE ---
-    function nav(id, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(id).classList.add('active-page');
+    // --- CORE ---
+    function changePage(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         if(el) el.classList.add('active');
-        if(id === 'p-chat') renderChat();
     }
 
-    function search() { renderHome(document.getElementById('search-in').value); }
-    function toggleThumbView() { document.getElementById('thumb-wrap').style.display = document.getElementById('post-type').value === 'video' ? 'block' : 'none'; }
+    function doSearch() { renderFeed(document.getElementById('search-q').value); }
+    function checkThumb() { document.getElementById('thumb-group').style.display = document.getElementById('up-type').value === 'video' ? 'block' : 'none'; }
+
+    function initApp() {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-header').style.display = 'block';
+        document.getElementById('main-app').style.display = 'block';
+        document.getElementById('main-nav').style.display = 'flex';
+        document.getElementById('user-pill').innerHTML = `<img src="${currentUser.avatar}" style="width:25px; height:25px; border-radius:50%;"> <span style="font-size:12px; font-weight:bold;">${currentUser.pseudo}</span>`;
+        renderFeed();
+        renderFavs();
+    }
 
     window.onload = () => {
-        if(db_session) {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('app-header').style.display = 'block';
-            document.getElementById('app-main').style.display = 'block';
-            document.getElementById('app-nav').style.display = 'flex';
-            document.getElementById('top-profile').innerHTML = `<img src="${db_session.avatar}" style="width:35px; height:35px; border-radius:50%; border:2px solid var(--red);">`;
-            renderHome();
-            renderFavs();
-        }
+        if(currentUser) initApp();
         
-        // Init Avatars
-        const avs = ["Felix", "Aria", "Jack", "Milo", "Luna", "Zoe"];
-        avs.forEach((a, i) => {
-            const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${a}`;
-            const d = document.createElement('div');
-            d.className = 'player-card' + (i===0?' selected':'');
-            d.innerHTML = `<img src="${url}">`;
-            d.onclick = () => {
-                document.querySelectorAll('.player-card').forEach(c => c.classList.remove('selected'));
-                d.classList.add('selected');
-                selectedPfp = url;
+        // Setup avatars
+        const names = ["Felix", "Aria", "Jack", "Milo", "Luna", "Zoe"];
+        const grid = document.getElementById('av-grid');
+        names.forEach((n, i) => {
+            const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${n}`;
+            const div = document.createElement('div');
+            div.className = 'av-item' + (i === 0 ? ' selected' : '');
+            div.innerHTML = `<img src="${url}">`;
+            div.onclick = () => {
+                document.querySelectorAll('.av-item').forEach(x => x.classList.remove('selected'));
+                div.classList.add('selected');
+                selectedAvatar = url;
             };
-            document.getElementById('player-grid').appendChild(d);
+            grid.appendChild(div);
         });
     };
 </script>
