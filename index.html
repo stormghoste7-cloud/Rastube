@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimeHub | Votre bibliothèque d'anime</title>
+    <title>AnimeHub Pro | Anime & Manga Officiels</title>
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎌</text></svg>">
     
     <!-- Fonts & Icons -->
@@ -55,11 +55,6 @@
         }
 
         /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
         .text-gradient {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -168,21 +163,6 @@
             box-shadow: 0 0 0 3px rgba(255,71,87,0.1);
         }
 
-        .form-control.error {
-            border-color: var(--error);
-        }
-
-        .form-error {
-            color: var(--error);
-            font-size: 13px;
-            margin-top: 6px;
-            display: none;
-        }
-
-        .form-error.show {
-            display: block;
-        }
-
         .btn {
             padding: 16px 32px;
             border: none;
@@ -209,10 +189,6 @@
             box-shadow: var(--shadow-md);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
         .btn-secondary {
             background: rgba(255,255,255,0.1);
             color: white;
@@ -221,16 +197,6 @@
 
         .btn-secondary:hover {
             background: rgba(255,255,255,0.15);
-        }
-
-        .btn-link {
-            background: transparent;
-            color: var(--primary);
-            padding: 8px 16px;
-        }
-
-        .btn-link:hover {
-            color: var(--primary-light);
         }
 
         /* Tabs */
@@ -804,26 +770,6 @@
             font-weight: 500;
         }
 
-        /* Loading */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-            color: var(--gray);
-        }
-
-        .loader {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 16px;
-        }
-
         /* Toast */
         .toast-container {
             position: fixed;
@@ -1124,8 +1070,8 @@
     <div class="auth-screen" id="auth-screen">
         <div class="auth-container">
             <div class="brand-header">
-                <div class="logo text-gradient">AnimeHub</div>
-                <div class="tagline">Votre bibliothèque d'anime personnelle</div>
+                <div class="logo text-gradient">AnimeHub Pro</div>
+                <div class="tagline">Anime & Manga Officiels - Streaming Légal</div>
             </div>
 
             <div class="auth-tabs">
@@ -1137,29 +1083,27 @@
                 <div class="form-group">
                     <label class="form-label" for="auth-email">Adresse email</label>
                     <input type="email" class="form-control" id="auth-email" placeholder="votre@email.com" required>
-                    <div class="form-error" id="email-error"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="auth-password">Mot de passe</label>
                     <input type="password" class="form-control" id="auth-password" placeholder="••••••••" minlength="6" required>
-                    <div class="form-error" id="password-error"></div>
                 </div>
 
                 <div class="form-group hidden" id="username-group">
                     <label class="form-label" for="auth-username">Nom d'utilisateur</label>
                     <input type="text" class="form-control" id="auth-username" placeholder="Votre pseudo">
-                    <div class="form-error" id="username-error"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary" id="auth-submit">
                     <span id="auth-submit-text">Se connecter</span>
-                    <div class="loader hidden" id="auth-loader"></div>
                 </button>
             </form>
 
             <div class="text-center mt-3">
-                <button class="btn btn-link" onclick="AnimeHub.showDemoAccount()">Voir compte démo</button>
+                <p style="color: var(--gray); font-size: 14px;">
+                    <i class="fas fa-shield-alt"></i> Plateforme 100% légale - Supportez les créateurs
+                </p>
             </div>
         </div>
     </div>
@@ -1169,7 +1113,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <a href="#" class="logo-small text-gradient" onclick="AnimeHub.go('home'); return false;">AnimeHub</a>
+                <a href="#" class="logo-small text-gradient" onclick="AnimeHub.go('home'); return false;">AnimeHub Pro</a>
                 
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
@@ -1192,41 +1136,55 @@
             <section id="page-home">
                 <div class="hero">
                     <div class="hero-content">
-                        <h1 class="hero-title">Découvrez des milliers d'animés</h1>
-                        <p class="hero-description">Streaming HD, nouveautés quotidiennes, et une expérience personnalisée.</p>
+                        <h1 class="hero-title">Anime & Manga Officiels</h1>
+                        <p class="hero-description">Streaming légal HD, traductions officielles, nouveautés en simulcast. Soutenez l'industrie de l'anime !</p>
                         <div class="details-actions">
                             <button class="btn btn-primary" onclick="AnimeHub.exploreAnime()">
                                 <i class="fas fa-play"></i>
-                                Commencer à regarder
+                                Découvrir les nouveautés
                             </button>
-                            <button class="btn btn-secondary" onclick="AnimeHub.go('library')">
-                                <i class="fas fa-compass"></i>
-                                Explorer la bibliothèque
+                            <button class="btn btn-secondary" onclick="AnimeHub.showLegalInfo()">
+                                <i class="fas fa-gavel"></i>
+                                Streaming Légal
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Trending -->
+                <!-- Trending Anime -->
                 <div class="section-header">
-                    <h2 class="section-title">🔥 Tendances</h2>
+                    <h2 class="section-title">🔥 Tendances actuelles</h2>
                     <div class="view-all" onclick="AnimeHub.viewAll('trending')">Tout voir</div>
                 </div>
                 <div class="anime-grid" id="trending-grid"></div>
 
                 <!-- Continue Watching -->
                 <div class="section-header">
-                    <h2 class="section-title">▶️ Continuer</h2>
+                    <h2 class="section-title">▶️ Continuer à regarder</h2>
                     <div class="view-all" onclick="AnimeHub.go('profile')">Historique</div>
                 </div>
                 <div class="anime-grid" id="continue-grid"></div>
 
                 <!-- New Releases -->
                 <div class="section-header">
-                    <h2 class="section-title">🎬 Nouveautés</h2>
+                    <h2 class="section-title">🎬 Simulcast Automne 2023</h2>
                     <div class="view-all" onclick="AnimeHub.viewAll('new')">Tout voir</div>
                 </div>
                 <div class="anime-grid" id="new-grid"></div>
+
+                <!-- Classic Anime -->
+                <div class="section-header">
+                    <h2 class="section-title">⭐ Classiques incontournables</h2>
+                    <div class="view-all" onclick="AnimeHub.viewAll('classic')">Tout voir</div>
+                </div>
+                <div class="anime-grid" id="classic-grid"></div>
+
+                <!-- Manga Section -->
+                <div class="section-header">
+                    <h2 class="section-title">📚 Manga du moment</h2>
+                    <div class="view-all" onclick="AnimeHub.showManga()">Bibliothèque manga</div>
+                </div>
+                <div class="anime-grid" id="manga-grid"></div>
             </section>
 
             <!-- Library Page -->
@@ -1234,10 +1192,6 @@
                 <div class="section-header">
                     <h2 class="section-title">📚 Ma Bibliothèque</h2>
                     <div class="details-actions">
-                        <button class="btn btn-secondary" onclick="AnimeHub.refreshLibrary()">
-                            <i class="fas fa-sync-alt"></i>
-                            Actualiser
-                        </button>
                         <button class="btn btn-secondary" onclick="AnimeHub.filterLibrary('all')">
                             Tous
                         </button>
@@ -1246,6 +1200,9 @@
                         </button>
                         <button class="btn btn-secondary" onclick="AnimeHub.filterLibrary('favorites')">
                             Favoris
+                        </button>
+                        <button class="btn btn-secondary" onclick="AnimeHub.filterLibrary('completed')">
+                            Terminés
                         </button>
                     </div>
                 </div>
@@ -1262,12 +1219,13 @@
                         <div class="profile-meta">
                             <span><i class="fas fa-calendar"></i> Membre depuis <span id="member-since"></span></span>
                             <span><i class="fas fa-crown"></i> <span id="account-type">Compte Gratuit</span></span>
+                            <span><i class="fas fa-shield-alt"></i> Streaming légal</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="section-header">
-                    <h2 class="section-title">📊 Statistiques</h2>
+                    <h2 class="section-title">📊 Mes Statistiques</h2>
                 </div>
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -1289,7 +1247,7 @@
                 </div>
 
                 <div class="section-header">
-                    <h2 class="section-title">🎯 Objectifs</h2>
+                    <h2 class="section-title">🎯 Mes Objectifs</h2>
                 </div>
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -1311,9 +1269,9 @@
                 </div>
 
                 <div class="details-actions mt-4">
-                    <button class="btn btn-secondary" onclick="AnimeHub.showSettings()">
-                        <i class="fas fa-cog"></i>
-                        Paramètres
+                    <button class="btn btn-secondary" onclick="AnimeHub.showLegalInfo()">
+                        <i class="fas fa-gavel"></i>
+                        Info streaming légal
                     </button>
                     <button class="btn btn-primary" onclick="AnimeHub.logout()">
                         <i class="fas fa-sign-out-alt"></i>
@@ -1358,30 +1316,44 @@
             </button>
         </div>
         <div class="player-container">
-            <video class="player-video" id="player-video" controls playsinline>
-                Votre navigateur ne supporte pas la lecture vidéo.
-            </video>
+            <div style="text-align: center; padding: 40px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--warning); margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 16px;">Streaming Légal Recommandé</h2>
+                <p style="color: var(--gray); margin-bottom: 24px; max-width: 600px;">
+                    Pour regarder cet anime légalement et soutenir les créateurs, veuillez utiliser les services officiels de streaming.
+                </p>
+                <div class="details-actions">
+                    <button class="btn btn-primary" onclick="AnimeHub.openLegalStreaming()">
+                        <i class="fas fa-external-link-alt"></i>
+                        Voir les plateformes légales
+                    </button>
+                    <button class="btn btn-secondary" onclick="AnimeHub.closePlayer()">
+                        <i class="fas fa-times"></i>
+                        Fermer
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         class AnimeHub {
-            static VERSION = '2.0.0';
+            static VERSION = '3.0.0';
             static STORAGE_KEYS = {
-                USERS: 'animehub_users_v2',
-                SESSION: 'animehub_session_v2',
-                LIBRARY: 'animehub_library_v2',
-                HISTORY: 'animehub_history_v2',
-                FAVORITES: 'animehub_favorites_v2',
-                WATCHLIST: 'animehub_watchlist_v2',
-                STATS: 'animehub_stats_v2',
-                SETTINGS: 'animehub_settings_v2'
+                USERS: 'animehub_users_v3',
+                SESSION: 'animehub_session_v3',
+                LIBRARY: 'animehub_library_v3',
+                HISTORY: 'animehub_history_v3',
+                FAVORITES: 'animehub_favorites_v3',
+                WATCHLIST: 'animehub_watchlist_v3',
+                STATS: 'animehub_stats_v3'
             };
 
             static state = {
                 currentUser: null,
                 users: [],
                 animeData: [],
+                mangaData: [],
                 currentAnime: null,
                 currentPage: 'home',
                 searchQuery: '',
@@ -1393,10 +1365,393 @@
                 }
             };
 
+            // RÉELS ANIME ET MANGA DATA
+            static REAL_ANIME_DATA = [
+                {
+                    id: 'attack_on_titan',
+                    title: 'Attack on Titan',
+                    originalTitle: '進撃の巨人',
+                    description: "Dans un monde où l'humanité vit retranchée à l'intérieur d'énormes murs pour se protéger des Titans, des créatures géantes qui dévorent les humains, Eren Yeager rêve de découvrir le monde extérieur. Lorsque les murs sont détruits et que sa mère est tuée, il jure de venger l'humanité en éliminant tous les Titans.",
+                    type: 'anime',
+                    episodes: 75,
+                    duration: 24,
+                    status: 'Terminé',
+                    genres: ['Action', 'Drame', 'Fantasy', 'Mystère'],
+                    rating: 9.0,
+                    year: 2013,
+                    season: 'Printemps 2013',
+                    studio: 'Wit Studio, MAPPA',
+                    cover: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 1000,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll', 'Wakanim', 'Netflix']
+                },
+                {
+                    id: 'demon_slayer',
+                    title: 'Demon Slayer',
+                    originalTitle: '鬼滅の刃',
+                    description: "Tanjiro Kamado est un jeune garçon qui devient un pourfendeur de démons après que sa famille a été massacrée et sa petite sœur transformée en démon. Il se lance dans un voyage dangereux pour trouver un remède et venger sa famille.",
+                    type: 'anime',
+                    episodes: 55,
+                    duration: 24,
+                    status: 'En cours',
+                    genres: ['Action', 'Aventure', 'Fantasy'],
+                    rating: 8.7,
+                    year: 2019,
+                    season: 'Printemps 2019',
+                    studio: 'ufotable',
+                    cover: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 950,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll', 'Netflix']
+                },
+                {
+                    id: 'jujutsu_kaisen',
+                    title: 'Jujutsu Kaisen',
+                    originalTitle: '呪術廻戦',
+                    description: "Yuji Itadori mange un doigt maudit pour sauver ses amis et devient l'hôte d'une puissante malédiction. Il intègre l'école de jujutsu de Tokyo pour apprendre à contrôler ses pouvoirs et trouver tous les doigts maudits.",
+                    type: 'anime',
+                    episodes: 47,
+                    duration: 24,
+                    status: 'En cours',
+                    genres: ['Action', 'Fantasy', 'Surnaturel'],
+                    rating: 8.6,
+                    year: 2020,
+                    season: 'Automne 2020',
+                    studio: 'MAPPA',
+                    cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 920,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll']
+                },
+                {
+                    id: 'one_piece',
+                    title: 'One Piece',
+                    originalTitle: 'ワンピース',
+                    description: "Monkey D. Luffy et son équipage de pirates recherchent le légendaire trésor 'One Piece' pour devenir le Roi des Pirates. Leur voyage les mène à travers des îles étranges et les confronte à de puissants ennemis.",
+                    type: 'anime',
+                    episodes: 1070,
+                    duration: 24,
+                    status: 'En cours',
+                    genres: ['Action', 'Aventure', 'Comédie', 'Fantasy'],
+                    rating: 8.7,
+                    year: 1999,
+                    season: 'Automne 1999',
+                    studio: 'Toei Animation',
+                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 980,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll']
+                },
+                {
+                    id: 'my_hero_academia',
+                    title: 'My Hero Academia',
+                    originalTitle: '僕のヒーローアカデミア',
+                    description: "Dans un monde où 80% de la population possède des super-pouvoirs appelés 'Alters', Izuku Midoriya rêve de devenir un héros malgré son absence de pouvoir. Il hérite finalement du pouvoir du plus grand héros, All Might.",
+                    type: 'anime',
+                    episodes: 138,
+                    duration: 24,
+                    status: 'En cours',
+                    genres: ['Action', 'Comédie', 'Surnaturel'],
+                    rating: 8.4,
+                    year: 2016,
+                    season: 'Printemps 2016',
+                    studio: 'Bones',
+                    cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 890,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll']
+                },
+                {
+                    id: 'spy_x_family',
+                    title: 'Spy x Family',
+                    originalTitle: 'スパイファミリー',
+                    description: "Un esprit de classe mondiale doit créer une famille de façade pour accomplir sa mission. Il adopte une fille télépathe et épouse une tueuse à gages, sans savoir leurs véritables identités.",
+                    type: 'anime',
+                    episodes: 25,
+                    duration: 24,
+                    status: 'En cours',
+                    genres: ['Action', 'Comédie', 'Surnaturel'],
+                    rating: 8.8,
+                    year: 2022,
+                    season: 'Printemps 2022',
+                    studio: 'Wit Studio, CloverWorks',
+                    cover: 'https://images.unsplash.com/photo-1639322537502-9e1a6bfdc403?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 940,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll']
+                },
+                {
+                    id: 'chainsaw_man',
+                    title: 'Chainsaw Man',
+                    originalTitle: 'チェンソーマン',
+                    description: "Denji est un jeune homme endetté qui fusionne avec son chien-démon Chainsaw pour devenir Chainsaw Man, un chasseur de démons travaillant pour le gouvernement.",
+                    type: 'anime',
+                    episodes: 12,
+                    duration: 24,
+                    status: 'En cours',
+                    genres: ['Action', 'Aventure', 'Horreur'],
+                    rating: 8.5,
+                    year: 2022,
+                    season: 'Automne 2022',
+                    studio: 'MAPPA',
+                    cover: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 910,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll']
+                },
+                {
+                    id: 'death_note',
+                    title: 'Death Note',
+                    originalTitle: 'デスノート',
+                    description: "Light Yagami trouve un carnet surnaturel qui permet de tuer quiconque dont le nom y est écrit. Il décide d'utiliser ce pouvoir pour créer un monde parfait, mais est traqué par le détective L.",
+                    type: 'anime',
+                    episodes: 37,
+                    duration: 23,
+                    status: 'Terminé',
+                    genres: ['Mystère', 'Psychologique', 'Surnaturel', 'Thriller'],
+                    rating: 8.6,
+                    year: 2006,
+                    season: 'Automne 2006',
+                    studio: 'Madhouse',
+                    cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 850,
+                    isFilm: false,
+                    streamingPlatforms: ['Netflix']
+                },
+                {
+                    id: 'fullmetal_alchemist',
+                    title: 'Fullmetal Alchemist: Brotherhood',
+                    originalTitle: '鋼の錬金術師',
+                    description: "Les frères Edward et Alphonse Elric utilisent l'alchimie pour tenter de ressusciter leur mère décédée, ce qui leur coûte cher. Ils partent à la recherche de la Pierre Philosophale pour récupérer leurs corps.",
+                    type: 'anime',
+                    episodes: 64,
+                    duration: 24,
+                    status: 'Terminé',
+                    genres: ['Action', 'Aventure', 'Drame', 'Fantasy'],
+                    rating: 9.1,
+                    year: 2009,
+                    season: 'Printemps 2009',
+                    studio: 'Bones',
+                    cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 970,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll', 'Netflix']
+                },
+                {
+                    id: 'naruto',
+                    title: 'Naruto',
+                    originalTitle: 'ナルト',
+                    description: "Naruto Uzumaki, un ninja adolescent, rêve de devenir Hokage, le chef de son village. Il doit faire face à des défis, des combats et découvrir les secrets de son passé.",
+                    type: 'anime',
+                    episodes: 220,
+                    duration: 23,
+                    status: 'Terminé',
+                    genres: ['Action', 'Aventure', 'Comédie', 'Fantasy'],
+                    rating: 8.3,
+                    year: 2002,
+                    season: 'Automne 2002',
+                    studio: 'Pierrot',
+                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 930,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll', 'Netflix']
+                },
+                {
+                    id: 'bleach',
+                    title: 'Bleach',
+                    originalTitle: 'ブリーチ',
+                    description: "Ichigo Kurosaki obtient les pouvoirs d'un Shinigami (dieu de la mort) et doit protéger les humains des esprits maléfiques tout en guidant les âmes vers l'au-delà.",
+                    type: 'anime',
+                    episodes: 366,
+                    duration: 24,
+                    status: 'Terminé',
+                    genres: ['Action', 'Aventure', 'Fantasy'],
+                    rating: 8.1,
+                    year: 2004,
+                    season: 'Automne 2004',
+                    studio: 'Pierrot',
+                    cover: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 860,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll', 'Disney+']
+                },
+                {
+                    id: 'hunter_x_hunter',
+                    title: 'Hunter x Hunter (2011)',
+                    originalTitle: 'ハンター×ハンター',
+                    description: "Gon Freecss découvre que son père, qu'il croyait mort, est en fait un Hunter légendaire. Il décide de passer l'examen de Hunter pour le retrouver.",
+                    type: 'anime',
+                    episodes: 148,
+                    duration: 23,
+                    status: 'Terminé',
+                    genres: ['Action', 'Aventure', 'Fantasy'],
+                    rating: 9.0,
+                    year: 2011,
+                    season: 'Automne 2011',
+                    studio: 'Madhouse',
+                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 960,
+                    isFilm: false,
+                    streamingPlatforms: ['Crunchyroll', 'Netflix']
+                },
+                {
+                    id: 'your_name',
+                    title: 'Your Name',
+                    originalTitle: '君の名は。',
+                    description: "Deux adolescents, un garçon vivant à Tokyo et une fille vivant dans la campagne japonaise, commencent mystérieusement à échanger leurs corps. Ils cherchent à se rencontrer et à comprendre ce phénomène.",
+                    type: 'film',
+                    episodes: 1,
+                    duration: 107,
+                    status: 'Terminé',
+                    genres: ['Drame', 'Romance', 'Surnaturel'],
+                    rating: 8.9,
+                    year: 2016,
+                    studio: 'CoMix Wave Films',
+                    cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 920,
+                    isFilm: true,
+                    streamingPlatforms: ['Netflix', 'Crunchyroll']
+                },
+                {
+                    id: 'spirited_away',
+                    title: 'Spirited Away',
+                    originalTitle: '千と千尋の神隠し',
+                    description: "Une jeune fille nommée Chihiro se retrouve piégée dans un monde peuplé de dieux, de sorcières et d'esprits, et doit travailler dans un bain public pour retrouver ses parents et retourner dans le monde humain.",
+                    type: 'film',
+                    episodes: 1,
+                    duration: 125,
+                    status: 'Terminé',
+                    genres: ['Aventure', 'Fantasy', 'Mystère'],
+                    rating: 8.6,
+                    year: 2001,
+                    studio: 'Studio Ghibli',
+                    cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 880,
+                    isFilm: true,
+                    streamingPlatforms: ['Netflix']
+                }
+            ];
+
+            static REAL_MANGA_DATA = [
+                {
+                    id: 'one_piece_manga',
+                    title: 'One Piece',
+                    originalTitle: 'ワンピース',
+                    description: "Manga de pirate le plus vendu au monde. Suivez les aventures de Luffy et son équipage à la recherche du trésor ultime.",
+                    type: 'manga',
+                    chapters: 1090,
+                    status: 'En cours',
+                    genres: ['Action', 'Aventure', 'Comédie', 'Fantasy'],
+                    rating: 8.8,
+                    year: 1997,
+                    author: 'Eiichiro Oda',
+                    cover: 'https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 990
+                },
+                {
+                    id: 'berserk',
+                    title: 'Berserk',
+                    originalTitle: 'ベルセルク',
+                    description: "L'histoire sombre de Guts, un mercenaire maudit luttant contre son destin dans un monde médiéval fantastique.",
+                    type: 'manga',
+                    chapters: 383,
+                    status: 'En cours',
+                    genres: ['Action', 'Aventure', 'Drame', 'Fantasy', 'Horreur'],
+                    rating: 9.2,
+                    year: 1989,
+                    author: 'Kentaro Miura',
+                    cover: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 920
+                },
+                {
+                    id: 'attack_on_titan_manga',
+                    title: 'Attack on Titan',
+                    originalTitle: '進撃の巨人',
+                    description: "Le manga qui a révolutionné le genre. Une histoire complexe sur la liberté, la survie et les secrets d'un monde clos.",
+                    type: 'manga',
+                    chapters: 139,
+                    status: 'Terminé',
+                    genres: ['Action', 'Drame', 'Fantasy', 'Mystère'],
+                    rating: 8.9,
+                    year: 2009,
+                    author: 'Hajime Isayama',
+                    cover: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 950
+                },
+                {
+                    id: 'death_note_manga',
+                    title: 'Death Note',
+                    originalTitle: 'デスノート',
+                    description: "Un jeu du chat et de la souris psychologique entre Light Yagami, possesseur du Death Note, et le détective L.",
+                    type: 'manga',
+                    chapters: 108,
+                    status: 'Terminé',
+                    genres: ['Mystère', 'Psychologique', 'Surnaturel', 'Thriller'],
+                    rating: 8.6,
+                    year: 2003,
+                    author: 'Tsugumi Ohba, Takeshi Obata',
+                    cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 870
+                },
+                {
+                    id: 'vagabond',
+                    title: 'Vagabond',
+                    originalTitle: 'バガボンド',
+                    description: "Adaptation du roman 'Musashi', racontant la vie du légendaire samouraï Miyamoto Musashi.",
+                    type: 'manga',
+                    chapters: 327,
+                    status: 'En pause',
+                    genres: ['Action', 'Aventure', 'Historique'],
+                    rating: 9.1,
+                    year: 1998,
+                    author: 'Takehiko Inoue',
+                    cover: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                    popularity: 890
+                }
+            ];
+
+            static LEGAL_PLATFORMS = [
+                {
+                    name: 'Crunchyroll',
+                    url: 'https://www.crunchyroll.com',
+                    description: 'Le plus grand catalogue d\'anime avec simulcast',
+                    logo: '🎬'
+                },
+                {
+                    name: 'Wakanim',
+                    url: 'https://www.wakanim.tv',
+                    description: 'Simulcast VF et VOSTFR',
+                    logo: '🇫🇷'
+                },
+                {
+                    name: 'ADN',
+                    url: 'https://animationdigitalnetwork.fr',
+                    description: 'Anime Digital Network par Médiamétrie',
+                    logo: '📺'
+                },
+                {
+                    name: 'Netflix',
+                    url: 'https://www.netflix.com',
+                    description: 'Sélection d\'anime et films d\'animation',
+                    logo: '🎥'
+                },
+                {
+                    name: 'Prime Video',
+                    url: 'https://www.primevideo.com',
+                    description: 'Anime inclus avec l\'abonnement',
+                    logo: '📦'
+                }
+            ];
+
             static async init() {
                 this.loadData();
                 this.verifySession();
                 this.setupEventListeners();
+                
+                // Initialize with real data
+                this.state.animeData = this.REAL_ANIME_DATA;
+                this.state.mangaData = this.REAL_MANGA_DATA;
                 
                 if (this.state.currentUser) {
                     this.launchApp();
@@ -1404,16 +1759,10 @@
                     this.showAuthScreen();
                 }
                 
-                // Generate initial data if needed
-                if (this.state.animeData.length === 0) {
-                    await this.generateAnimeData();
-                }
-                
-                console.log(`AnimeHub v${this.VERSION} initialisé`);
+                console.log(`AnimeHub Pro v${this.VERSION} initialisé avec ${this.state.animeData.length} anime réels`);
             }
 
             static loadData() {
-                // Load all data from localStorage
                 Object.keys(this.STORAGE_KEYS).forEach(key => {
                     const storageKey = this.STORAGE_KEYS[key];
                     try {
@@ -1459,7 +1808,6 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app').classList.remove('hidden');
                 
-                // Update UI with user data
                 if (this.state.currentUser) {
                     document.getElementById('user-avatar').src = this.state.currentUser.avatar;
                     document.getElementById('profile-avatar').src = this.state.currentUser.avatar;
@@ -1474,7 +1822,7 @@
                 this.renderHomePage();
                 this.go('home');
                 
-                this.showToast(`Bienvenue sur AnimeHub, ${this.state.currentUser.username}!`, 'success');
+                this.showToast(`Bienvenue sur AnimeHub Pro, ${this.state.currentUser.username}!`, 'success');
             }
 
             static toggleAuth(mode) {
@@ -1487,8 +1835,6 @@
                 signupTab.classList.toggle('active', mode === 'signup');
                 usernameGroup.classList.toggle('hidden', mode !== 'signup');
                 submitText.textContent = mode === 'signup' ? 'Créer un compte' : 'Se connecter';
-                
-                this.clearAuthErrors();
             }
 
             static async handleAuth() {
@@ -1496,19 +1842,13 @@
                 const password = document.getElementById('auth-password').value.trim();
                 const isSignup = document.getElementById('tab-signup').classList.contains('active');
                 
-                this.clearAuthErrors();
-                this.showLoader(true);
-                
-                // Validation
-                if (!this.validateEmail(email)) {
-                    this.showAuthError('email', 'Adresse email invalide');
-                    this.showLoader(false);
+                if (!email || !password) {
+                    this.showToast('Veuillez remplir tous les champs', 'error');
                     return;
                 }
                 
                 if (password.length < 6) {
-                    this.showAuthError('password', 'Le mot de passe doit contenir au moins 6 caractères');
-                    this.showLoader(false);
+                    this.showToast('Le mot de passe doit contenir au moins 6 caractères', 'error');
                     return;
                 }
                 
@@ -1516,22 +1856,18 @@
                     const username = document.getElementById('auth-username').value.trim() || 
                                    `Otaku_${Math.floor(Math.random() * 1000)}`;
                     
-                    // Check if email already exists
                     if (this.state.users.find(u => u.email === email)) {
-                        this.showAuthError('email', 'Cette adresse email est déjà utilisée');
-                        this.showLoader(false);
+                        this.showToast('Cette adresse email est déjà utilisée', 'error');
                         return;
                     }
                     
-                    // Create new user
                     const newUser = {
                         id: Date.now().toString(),
                         username: username,
                         email: email,
-                        password: this.hashPassword(password), // In production, use proper hashing
+                        password: this.hashPassword(password),
                         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`,
                         createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString(),
                         preferences: {
                             theme: 'dark',
                             language: 'fr',
@@ -1548,14 +1884,12 @@
                     setTimeout(() => this.launchApp(), 1000);
                     
                 } else {
-                    // Login
                     const user = this.state.users.find(u => 
                         u.email === email && u.password === this.hashPassword(password)
                     );
                     
                     if (!user) {
-                        this.showAuthError('password', 'Email ou mot de passe incorrect');
-                        this.showLoader(false);
+                        this.showToast('Email ou mot de passe incorrect', 'error');
                         return;
                     }
                     
@@ -1569,8 +1903,7 @@
             }
 
             static hashPassword(password) {
-                // Simple hash for demo purposes
-                // In production, use bcrypt or similar
+                // Simple hash for demo - in production use proper hashing
                 let hash = 0;
                 for (let i = 0; i < password.length; i++) {
                     hash = ((hash << 5) - hash) + password.charCodeAt(i);
@@ -1579,104 +1912,13 @@
                 return hash.toString();
             }
 
-            static validateEmail(email) {
-                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return re.test(email);
-            }
-
-            static showAuthError(field, message) {
-                const errorElement = document.getElementById(`${field}-error`);
-                if (errorElement) {
-                    errorElement.textContent = message;
-                    errorElement.classList.add('show');
-                    document.getElementById(`auth-${field}`).classList.add('error');
-                }
-            }
-
-            static clearAuthErrors() {
-                ['email', 'password', 'username'].forEach(field => {
-                    const errorElement = document.getElementById(`${field}-error`);
-                    if (errorElement) {
-                        errorElement.classList.remove('show');
-                        document.getElementById(`auth-${field}`)?.classList.remove('error');
-                    }
-                });
-            }
-
-            static showLoader(show) {
-                document.getElementById('auth-loader').classList.toggle('hidden', !show);
-                document.getElementById('auth-submit').disabled = show;
-            }
-
-            static resetAuthForm() {
-                document.getElementById('auth-form').reset();
-                this.clearAuthErrors();
-                this.toggleAuth('login');
-            }
-
-            static async generateAnimeData() {
-                // Sample anime data (in real app, this would come from an API)
-                const genres = ['Action', 'Aventure', 'Comédie', 'Drame', 'Fantasy', 'Horreur', 'Romance', 'Sci-Fi'];
-                const adjectives = ['Épique', 'Légendaire', 'Mystérieux', 'Prisonnier', 'Futuriste', 'Alternatif', 'Caché', 'Perdu'];
-                const nouns = ['Titan', 'Sabre', 'Jujutsu', 'Héros', 'Pirate', 'Ninja', 'Chasseur', 'Note'];
-                
-                const animeList = [];
-                
-                for (let i = 1; i <= 50; i++) {
-                    const genre1 = genres[Math.floor(Math.random() * genres.length)];
-                    const genre2 = genres[Math.floor(Math.random() * genres.length)];
-                    const title = `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${nouns[Math.floor(Math.random() * nouns.length)]}`;
-                    
-                    animeList.push({
-                        id: `anime_${i}`,
-                        title: title,
-                        description: `Une histoire captivante dans l'univers de ${genre1.toLowerCase()} et ${genre2.toLowerCase()}.`,
-                        type: 'anime',
-                        episodes: Math.floor(Math.random() * 24) + 12,
-                        duration: 24,
-                        status: Math.random() > 0.5 ? 'En cours' : 'Terminé',
-                        genres: [genre1, genre2],
-                        rating: (Math.random() * 2 + 6).toFixed(1),
-                        year: 2010 + Math.floor(Math.random() * 14),
-                        cover: `https://picsum.photos/seed/anime${i}/400/600`,
-                        popularity: Math.floor(Math.random() * 1000),
-                        isFilm: false
-                    });
-                }
-                
-                // Add some films
-                for (let i = 51; i <= 60; i++) {
-                    animeList.push({
-                        id: `film_${i}`,
-                        title: `Film ${adjectives[Math.floor(Math.random() * adjectives.length)]}`,
-                        description: 'Un chef-d\'œuvre du cinéma d\'animation.',
-                        type: 'film',
-                        episodes: 1,
-                        duration: 90,
-                        status: 'Terminé',
-                        genres: ['Drame', 'Fantasy'],
-                        rating: (Math.random() * 1.5 + 7).toFixed(1),
-                        year: 2000 + Math.floor(Math.random() * 24),
-                        cover: `https://picsum.photos/seed/film${i}/400/600`,
-                        popularity: Math.floor(Math.random() * 1000),
-                        isFilm: true
-                    });
-                }
-                
-                this.state.animeData = animeList;
-                this.saveData();
-            }
-
             static go(page) {
-                // Hide all pages
                 document.querySelectorAll('[id^="page-"]').forEach(el => {
                     el.classList.add('hidden');
                 });
                 
-                // Show target page
                 document.getElementById(`page-${page}`)?.classList.remove('hidden');
                 
-                // Update navigation
                 document.querySelectorAll('.nav-item').forEach(item => {
                     item.classList.remove('active');
                 });
@@ -1689,7 +1931,6 @@
                 
                 this.state.currentPage = page;
                 
-                // Load page content
                 switch (page) {
                     case 'home':
                         this.renderHomePage();
@@ -1704,16 +1945,19 @@
             }
 
             static renderHomePage() {
-                if (!this.state.animeData.length) return;
-                
-                // Trending (most popular)
+                // Trending anime
                 const trending = [...this.state.animeData]
                     .sort((a, b) => b.popularity - a.popularity)
                     .slice(0, 8);
                 
-                // New releases (latest year)
+                // New releases (2022-2023)
                 const newReleases = [...this.state.animeData]
-                    .sort((a, b) => b.year - a.year)
+                    .filter(a => a.year >= 2022)
+                    .slice(0, 8);
+                
+                // Classic anime (pre-2010)
+                const classics = [...this.state.animeData]
+                    .filter(a => a.year < 2010)
                     .slice(0, 8);
                 
                 // Continue watching (from history)
@@ -1723,9 +1967,14 @@
                     .filter(Boolean)
                     .slice(0, 8);
                 
+                // Manga
+                const manga = [...this.state.mangaData].slice(0, 8);
+                
                 this.renderAnimeGrid('trending-grid', trending);
                 this.renderAnimeGrid('new-grid', newReleases);
+                this.renderAnimeGrid('classic-grid', classics);
                 this.renderAnimeGrid('continue-grid', continueWatching.length ? continueWatching : trending.slice(0, 4));
+                this.renderMangaGrid('manga-grid', manga);
             }
 
             static renderAnimeGrid(containerId, animeList) {
@@ -1737,7 +1986,6 @@
                         <div class="empty-state">
                             <div class="empty-icon">🎌</div>
                             <div class="empty-title">Aucun anime trouvé</div>
-                            <div class="empty-description">Essayez de modifier vos filtres de recherche.</div>
                         </div>
                     `;
                     return;
@@ -1758,6 +2006,27 @@
                 `).join('');
             }
 
+            static renderMangaGrid(containerId, mangaList) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                if (mangaList.length === 0) return;
+                
+                container.innerHTML = mangaList.map(manga => `
+                    <div class="anime-card" onclick="AnimeHub.showMangaDetails('${manga.id}')">
+                        <div class="anime-badge" style="background: var(--secondary);">MANGA</div>
+                        <img src="${manga.cover}" alt="${manga.title}" class="anime-poster" loading="lazy">
+                        <div class="anime-info">
+                            <div class="anime-title">${manga.title}</div>
+                            <div class="anime-meta">
+                                <span>${manga.year}</span>
+                                <span class="anime-rating">⭐ ${manga.rating}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
             static showAnimeDetails(animeId) {
                 const anime = this.state.animeData.find(a => a.id === animeId);
                 if (!anime) return;
@@ -1770,13 +2039,13 @@
                         <div>
                             <img src="${anime.cover}" alt="${anime.title}" class="details-poster">
                             <div class="details-actions mt-3">
-                                <button class="btn btn-primary" onclick="AnimeHub.playAnime('${anime.id}', 1)">
+                                <button class="btn btn-primary" onclick="AnimeHub.showLegalStreamingInfo('${anime.id}')">
                                     <i class="fas fa-play"></i>
-                                    ${anime.isFilm ? 'Regarder le film' : 'Regarder l\'épisode 1'}
+                                    Regarder légalement
                                 </button>
                                 <button class="btn btn-secondary" onclick="AnimeHub.toggleFavorite('${anime.id}')">
                                     <i class="fas fa-heart"></i>
-                                    Favori
+                                    Ajouter aux favoris
                                 </button>
                             </div>
                         </div>
@@ -1786,7 +2055,7 @@
                             <div class="details-meta">
                                 <div class="details-meta-item">
                                     <i class="fas fa-calendar"></i>
-                                    <span>${anime.year}</span>
+                                    <span>${anime.year} • ${anime.season || anime.studio}</span>
                                 </div>
                                 <div class="details-meta-item">
                                     <i class="fas fa-star"></i>
@@ -1795,6 +2064,10 @@
                                 <div class="details-meta-item">
                                     <i class="fas fa-film"></i>
                                     <span>${anime.isFilm ? 'Film' : `${anime.episodes} épisodes`}</span>
+                                </div>
+                                <div class="details-meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${anime.duration} min</span>
                                 </div>
                             </div>
                             
@@ -1806,11 +2079,18 @@
                             
                             <p class="details-description">${anime.description}</p>
                             
+                            <div class="details-actions">
+                                <button class="btn btn-secondary" onclick="AnimeHub.showLegalPlatforms()">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Plateformes légales
+                                </button>
+                            </div>
+                            
                             ${anime.isFilm ? '' : `
                                 <div class="episodes-section">
                                     <div class="episodes-header">
-                                        <h3>Épisodes</h3>
-                                        <span>Progression: <span id="progress-text">0/${anime.episodes}</span></span>
+                                        <h3>Épisodes (Exemple)</h3>
+                                        <span>Streaming légal requis</span>
                                     </div>
                                     <div class="episodes-grid" id="episodes-grid">
                                         ${this.generateEpisodesList(anime)}
@@ -1822,16 +2102,60 @@
                 `;
                 
                 this.go('details');
-                this.updateProgressText(anime);
+            }
+
+            static showMangaDetails(mangaId) {
+                const manga = this.state.mangaData.find(m => m.id === mangaId);
+                if (!manga) return;
+                
+                this.showModal(
+                    manga.title,
+                    `
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <img src="${manga.cover}" alt="${manga.title}" style="width: 200px; border-radius: var(--radius-md); margin-bottom: 16px;">
+                            <h3 style="margin-bottom: 8px;">${manga.title}</h3>
+                            <p style="color: var(--gray); margin-bottom: 16px;">${manga.originalTitle}</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <p><strong>Auteur:</strong> ${manga.author}</p>
+                            <p><strong>Année:</strong> ${manga.year}</p>
+                            <p><strong>Chapitres:</strong> ${manga.chapters}</p>
+                            <p><strong>Statut:</strong> ${manga.status}</p>
+                            <p><strong>Note:</strong> ⭐ ${manga.rating}/10</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 8px;">Genres</h4>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                                ${manga.genres.map(genre => `
+                                    <span class="genre-tag">${genre}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <p style="margin-bottom: 24px;">${manga.description}</p>
+                        
+                        <div class="details-actions">
+                            <button class="btn btn-primary" onclick="window.open('https://www.mangaplus.shueisha.co.jp', '_blank'); AnimeHub.closeModal()">
+                                <i class="fas fa-external-link-alt"></i>
+                                Lire sur Manga Plus
+                            </button>
+                            <button class="btn btn-secondary" onclick="AnimeHub.closeModal()">
+                                Fermer
+                            </button>
+                        </div>
+                    `
+                );
             }
 
             static generateEpisodesList(anime) {
-                const totalEpisodes = Math.min(anime.episodes, 20);
+                const totalEpisodes = Math.min(anime.episodes, 10);
                 let episodesHTML = '';
                 
                 for (let i = 1; i <= totalEpisodes; i++) {
                     episodesHTML += `
-                        <div class="episode-card" onclick="AnimeHub.playAnime('${anime.id}', ${i})">
+                        <div class="episode-card" onclick="AnimeHub.showLegalStreamingInfo('${anime.id}')">
                             <div class="episode-number">Épisode ${i}</div>
                             <div class="episode-title">${this.getEpisodeTitle(i)}</div>
                             <div class="episode-duration">${anime.duration} min</div>
@@ -1845,75 +2169,127 @@
             static getEpisodeTitle(episodeNumber) {
                 const titles = [
                     "Le commencement", "La rencontre", "Le défi", "La révélation",
-                    "L'affrontement", "La séparation", "La décision", "Le sacrifice"
+                    "L'affrontement", "La séparation", "La décision", "Le sacrifice",
+                    "L'espoir", "La vérité"
                 ];
                 return titles[(episodeNumber - 1) % titles.length];
             }
 
-            static async playAnime(animeId, episode = 1) {
+            static showLegalStreamingInfo(animeId) {
                 const anime = this.state.animeData.find(a => a.id === animeId);
                 if (!anime) return;
                 
-                // Update history
-                const historyItem = {
-                    animeId: anime.id,
-                    animeTitle: anime.title,
-                    episode: episode,
-                    watchedAt: new Date().toISOString(),
-                    duration: anime.duration
-                };
+                const platforms = anime.streamingPlatforms || ['Crunchyroll', 'Netflix'];
                 
-                if (!this.state.history) this.state.history = [];
-                this.state.history.unshift(historyItem);
-                
-                // Keep only last 100 items
-                if (this.state.history.length > 100) {
-                    this.state.history = this.state.history.slice(0, 100);
-                }
-                
-                // Update stats
-                this.updateStats();
-                this.saveData();
-                
-                // Show player
-                this.showPlayer(anime, episode);
+                this.showModal(
+                    `Regarder ${anime.title} légalement`,
+                    `
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <img src="${anime.cover}" alt="${anime.title}" style="width: 150px; border-radius: var(--radius-md); margin-bottom: 16px;">
+                            <h3 style="margin-bottom: 8px;">${anime.title}</h3>
+                            <p style="color: var(--gray);">Soutenez les créateurs en regardant légalement</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 24px;">
+                            <h4 style="margin-bottom: 12px;">📺 Plateformes disponibles :</h4>
+                            ${platforms.map(platform => `
+                                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 8px;">
+                                    <div style="font-size: 24px;">${this.getPlatformLogo(platform)}</div>
+                                    <div>
+                                        <div style="font-weight: 600;">${platform}</div>
+                                        <div style="font-size: 12px; color: var(--gray);">Streaming HD légal</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="background: rgba(46, 213, 115, 0.1); padding: 16px; border-radius: var(--radius-md); margin-bottom: 24px;">
+                            <h4 style="margin-bottom: 8px; color: var(--success);">
+                                <i class="fas fa-check-circle"></i> Pourquoi regarder légalement ?
+                            </h4>
+                            <ul style="color: var(--gray); padding-left: 20px; font-size: 14px;">
+                                <li>Soutien direct aux créateurs et studios</li>
+                                <li>Qualité vidéo garantie (HD, 4K)</li>
+                                <li>Traductions officielles</li>
+                                <li>Simulcast (épisodes dès le Japon)</li>
+                                <li>Pas de publicités intrusives</li>
+                                <li>Sécurité (pas de malware)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="details-actions">
+                            <button class="btn btn-primary" onclick="window.open('https://www.crunchyroll.com', '_blank'); AnimeHub.closeModal()">
+                                <i class="fas fa-external-link-alt"></i>
+                                Visiter Crunchyroll
+                            </button>
+                            <button class="btn btn-secondary" onclick="AnimeHub.closeModal()">
+                                Fermer
+                            </button>
+                        </div>
+                    `
+                );
             }
 
-            static showPlayer(anime, episode) {
-                const player = document.getElementById('player-overlay');
-                const video = document.getElementById('player-video');
-                const title = document.getElementById('player-title');
-                
-                title.textContent = `${anime.title}${anime.isFilm ? '' : ` - Épisode ${episode}`}`;
-                
-                // Use a sample video (in real app, this would be the actual video source)
-                video.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-                
-                player.classList.add('flex');
-                player.style.display = 'flex';
-                
-                video.play().catch(e => console.log('Auto-play prevented:', e));
+            static getPlatformLogo(platform) {
+                const logos = {
+                    'Crunchyroll': '🎬',
+                    'Wakanim': '🇫🇷',
+                    'ADN': '📺',
+                    'Netflix': '🎥',
+                    'Prime Video': '📦',
+                    'Disney+': '🏰'
+                };
+                return logos[platform] || '📱';
+            }
+
+            static showLegalPlatforms() {
+                this.showModal(
+                    'Plateformes de Streaming Légal',
+                    `
+                        <div style="margin-bottom: 24px;">
+                            <p style="color: var(--gray); margin-bottom: 16px;">
+                                Ces plateformes offrent un streaming légal d'anime et soutiennent l'industrie :
+                            </p>
+                            
+                            ${this.LEGAL_PLATFORMS.map(platform => `
+                                <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 12px; cursor: pointer;" 
+                                     onclick="window.open('${platform.url}', '_blank');">
+                                    <div style="font-size: 32px;">${platform.logo}</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; font-size: 16px;">${platform.name}</div>
+                                        <div style="font-size: 12px; color: var(--gray);">${platform.description}</div>
+                                    </div>
+                                    <i class="fas fa-external-link-alt" style="color: var(--gray);"></i>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="background: rgba(255, 71, 87, 0.1); padding: 16px; border-radius: var(--radius-md);">
+                            <h4 style="margin-bottom: 8px; color: var(--primary);">
+                                <i class="fas fa-shield-alt"></i> Streaming Légal vs Piratage
+                            </h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                                <div style="text-align: center; padding: 12px; background: rgba(46, 213, 115, 0.1); border-radius: var(--radius-sm);">
+                                    <div style="color: var(--success); font-weight: 600;">✅ Légal</div>
+                                    <div style="font-size: 12px; color: var(--gray);">Soutient l'industrie</div>
+                                </div>
+                                <div style="text-align: center; padding: 12px; background: rgba(255, 56, 56, 0.1); border-radius: var(--radius-sm);">
+                                    <div style="color: var(--error); font-weight: 600;">❌ Piratage</div>
+                                    <div style="font-size: 12px; color: var(--gray);">Risque légal & malware</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                );
+            }
+
+            static openLegalStreaming() {
+                window.open('https://www.crunchyroll.com', '_blank');
+                this.closePlayer();
             }
 
             static closePlayer() {
-                const player = document.getElementById('player-overlay');
-                const video = document.getElementById('player-video');
-                
-                video.pause();
-                player.style.display = 'none';
-                player.classList.remove('flex');
-            }
-
-            static updateProgressText(anime) {
-                const progressElement = document.getElementById('progress-text');
-                if (progressElement) {
-                    const watchedEpisodes = (this.state.history || [])
-                        .filter(h => h.animeId === anime.id)
-                        .map(h => h.episode)
-                        .reduce((max, ep) => Math.max(max, ep), 0);
-                    
-                    progressElement.textContent = `${watchedEpisodes}/${anime.episodes}`;
-                }
+                document.getElementById('player-overlay').style.display = 'none';
             }
 
             static renderLibrary() {
@@ -1921,13 +2297,15 @@
                 
                 switch (this.state.filters.library) {
                     case 'watching':
-                        // Anime with history but not completed
                         const watchedIds = new Set((this.state.history || []).map(h => h.animeId));
                         filteredAnime = filteredAnime.filter(a => watchedIds.has(a.id));
                         break;
                     case 'favorites':
                         const favorites = this.state.favorites || [];
                         filteredAnime = filteredAnime.filter(a => favorites.includes(a.id));
+                        break;
+                    case 'completed':
+                        filteredAnime = filteredAnime.filter(a => a.status === 'Terminé');
                         break;
                 }
                 
@@ -1937,11 +2315,7 @@
             static filterLibrary(filter) {
                 this.state.filters.library = filter;
                 this.renderLibrary();
-            }
-
-            static refreshLibrary() {
-                this.renderLibrary();
-                this.showToast('Bibliothèque actualisée !', 'success');
+                this.showToast(`Filtre appliqué: ${filter}`, 'info');
             }
 
             static searchAnime(query) {
@@ -1954,6 +2328,7 @@
                 
                 const results = this.state.animeData.filter(anime =>
                     anime.title.toLowerCase().includes(query) ||
+                    anime.originalTitle.toLowerCase().includes(query) ||
                     anime.genres.some(genre => genre.toLowerCase().includes(query))
                 ).slice(0, 16);
                 
@@ -1978,31 +2353,23 @@
 
             static updateStats() {
                 const stats = this.state.stats || {};
-                
-                // Calculate stats
                 const history = this.state.history || [];
                 const favorites = this.state.favorites || [];
                 
-                // Anime watched (unique)
                 const uniqueAnime = new Set(history.map(h => h.animeId));
                 stats.animeWatched = uniqueAnime.size;
-                
-                // Total episodes watched
                 stats.episodesWatched = history.length;
                 
-                // Hours watched (approximation)
                 const totalMinutes = history.reduce((total, item) => {
                     const anime = this.state.animeData.find(a => a.id === item.animeId);
                     return total + (anime?.duration || 24);
                 }, 0);
                 stats.hoursWatched = (totalMinutes / 60).toFixed(1);
                 
-                // Streak (consecutive days with watching activity)
                 const today = new Date().toDateString();
                 const yesterday = new Date(Date.now() - 86400000).toDateString();
                 
                 if (stats.lastWatchDate === today) {
-                    // Already updated today
                 } else if (stats.lastWatchDate === yesterday) {
                     stats.currentStreak = (stats.currentStreak || 0) + 1;
                 } else {
@@ -2011,7 +2378,6 @@
                 
                 stats.lastWatchDate = today;
                 
-                // Goals progress
                 stats.goals = stats.goals || {};
                 stats.goals.anime = Math.min(stats.animeWatched, 10);
                 stats.goals.hours = Math.min(parseFloat(stats.hoursWatched), 50);
@@ -2019,8 +2385,6 @@
                 stats.goals.favorites = Math.min(favorites.length, 10);
                 
                 this.state.stats = stats;
-                
-                // Update UI
                 this.updateStatsUI();
                 this.saveData();
             }
@@ -2064,7 +2428,7 @@
             }
 
             static showNotifications() {
-                this.showToast('🔔 3 nouveaux épisodes disponibles !', 'info');
+                this.showToast('🔔 3 nouveaux épisodes disponibles sur Crunchyroll !', 'info');
             }
 
             static viewAll(category) {
@@ -2074,22 +2438,114 @@
 
             static exploreAnime() {
                 this.go('library');
-                this.showToast('🎌 Explorez notre collection d\'animés !', 'success');
+                this.showToast('🎌 Découvrez notre sélection d\'anime officiels !', 'success');
             }
 
-            static showDemoAccount() {
+            static showManga() {
                 this.showModal(
-                    'Compte Démo',
+                    'Manga Officiels',
                     `
-                        <p>Pour tester l'application, vous pouvez utiliser :</p>
-                        <div class="mb-3">
-                            <strong>Email:</strong> demo@animehub.com<br>
-                            <strong>Mot de passe:</strong> demo123
+                        <div style="margin-bottom: 24px;">
+                            <p style="color: var(--gray); margin-bottom: 16px;">
+                                Pour lire des manga légalement et soutenir les auteurs :
+                            </p>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 12px; cursor: pointer;" 
+                                 onclick="window.open('https://www.mangaplus.shueisha.co.jp', '_blank');">
+                                <div style="font-size: 32px;">📖</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 16px;">Manga Plus</div>
+                                    <div style="font-size: 12px; color: var(--gray);">Shueisha - Lecture gratuite légale</div>
+                                </div>
+                                <i class="fas fa-external-link-alt" style="color: var(--gray);"></i>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 12px; cursor: pointer;" 
+                                 onclick="window.open('https://www.viz.com', '_blank');">
+                                <div style="font-size: 32px;">🇺🇸</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 16px;">VIZ Media</div>
+                                    <div style="font-size: 12px; color: var(--gray);">Éditeur officiel de manga en anglais</div>
+                                </div>
+                                <i class="fas fa-external-link-alt" style="color: var(--gray);"></i>
+                            </div>
                         </div>
-                        <p class="mb-3">Ou créez votre propre compte !</p>
-                        <button class="btn btn-primary" onclick="AnimeHub.closeModal()">
-                            Compris
-                        </button>
+                        
+                        <div style="background: rgba(30, 144, 255, 0.1); padding: 16px; border-radius: var(--radius-md);">
+                            <h4 style="margin-bottom: 8px; color: var(--secondary);">
+                                <i class="fas fa-book"></i> Manga vs Scan
+                            </h4>
+                            <p style="color: var(--gray); font-size: 14px;">
+                                Les éditions officielles offrent une meilleure qualité de traduction, 
+                                soutiennent les auteurs, et permettent à l'industrie de continuer à créer.
+                            </p>
+                        </div>
+                    `
+                );
+            }
+
+            static showLegalInfo() {
+                this.showModal(
+                    'Streaming Légal - Pourquoi ?',
+                    `
+                        <div style="margin-bottom: 24px;">
+                            <h3 style="margin-bottom: 16px; color: var(--primary);">
+                                <i class="fas fa-shield-alt"></i> Soutenez l'industrie de l'anime
+                            </h3>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px;">
+                                <div style="padding: 16px; background: rgba(46, 213, 115, 0.1); border-radius: var(--radius-md);">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <div style="color: var(--success); font-size: 24px;">💰</div>
+                                        <div style="font-weight: 600;">Soutien financier</div>
+                                    </div>
+                                    <p style="color: var(--gray); font-size: 14px;">
+                                        Votre abonnement permet aux studios de produire plus d'anime de qualité.
+                                    </p>
+                                </div>
+                                
+                                <div style="padding: 16px; background: rgba(30, 144, 255, 0.1); border-radius: var(--radius-md);">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <div style="color: var(--secondary); font-size: 24px;">🎬</div>
+                                        <div style="font-weight: 600;">Qualité garantie</div>
+                                    </div>
+                                    <p style="color: var(--gray); font-size: 14px;">
+                                        Streaming HD, traductions officielles, et pas de coupures publicitaires abusives.
+                                    </p>
+                                </div>
+                                
+                                <div style="padding: 16px; background: rgba(255, 165, 2, 0.1); border-radius: var(--radius-md);">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <div style="color: var(--warning); font-size: 24px;">⚡</div>
+                                        <div style="font-weight: 600;">Simulcast</div>
+                                    </div>
+                                    <p style="color: var(--gray); font-size: 14px;">
+                                        Regardez les nouveaux épisodes dès leur diffusion au Japon.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div style="background: rgba(255, 71, 87, 0.1); padding: 16px; border-radius: var(--radius-md);">
+                                <h4 style="margin-bottom: 8px; color: var(--primary);">
+                                    <i class="fas fa-exclamation-triangle"></i> Risques du piratage
+                                </h4>
+                                <ul style="color: var(--gray); padding-left: 20px; font-size: 14px;">
+                                    <li>Exposition à des malwares et virus</li>
+                                    <li>Qualité vidéo médiocre</li>
+                                    <li>Traductions de mauvaise qualité</li>
+                                    <li>Publicités intrusives et pop-ups</li>
+                                    <li>Risques légaux (DMCA, amendes)</li>
+                                    <li>Ne soutient pas les créateurs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="details-actions">
+                            <button class="btn btn-primary" onclick="AnimeHub.showLegalPlatforms(); AnimeHub.closeModal()">
+                                <i class="fas fa-external-link-alt"></i>
+                                Voir les plateformes légales
+                            </button>
+                        </div>
                     `
                 );
             }
@@ -2102,52 +2558,6 @@
 
             static closeModal() {
                 document.getElementById('modal-overlay').style.display = 'none';
-            }
-
-            static showSettings() {
-                this.showModal(
-                    'Paramètres',
-                    `
-                        <div class="form-group">
-                            <label class="form-label">Thème</label>
-                            <select class="form-control" id="theme-select">
-                                <option value="dark">Sombre</option>
-                                <option value="light">Clair</option>
-                                <option value="auto">Automatique</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Langue</label>
-                            <select class="form-control" id="language-select">
-                                <option value="fr">Français</option>
-                                <option value="en">English</option>
-                            </select>
-                        </div>
-                        <div class="details-actions">
-                            <button class="btn btn-primary" onclick="AnimeHub.saveSettings()">
-                                Enregistrer
-                            </button>
-                            <button class="btn btn-secondary" onclick="AnimeHub.closeModal()">
-                                Annuler
-                            </button>
-                        </div>
-                    `
-                );
-            }
-
-            static saveSettings() {
-                const theme = document.getElementById('theme-select').value;
-                const language = document.getElementById('language-select').value;
-                
-                if (this.state.currentUser) {
-                    this.state.currentUser.preferences.theme = theme;
-                    this.state.currentUser.preferences.language = language;
-                    this.state.currentUser.updatedAt = new Date().toISOString();
-                    this.saveData();
-                    
-                    this.showToast('Paramètres enregistrés !', 'success');
-                    this.closeModal();
-                }
             }
 
             static logout() {
@@ -2164,7 +2574,6 @@
             }
 
             static setupEventListeners() {
-                // Modal close button
                 document.getElementById('modal-close').addEventListener('click', () => this.closeModal());
                 document.getElementById('modal-overlay').addEventListener('click', (e) => {
                     if (e.target === document.getElementById('modal-overlay')) {
@@ -2172,7 +2581,6 @@
                     }
                 });
                 
-                // Escape key closes modal and player
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         this.closeModal();
@@ -2180,7 +2588,6 @@
                     }
                 });
                 
-                // Form submission
                 document.getElementById('auth-form').addEventListener('submit', (e) => {
                     e.preventDefault();
                     this.handleAuth();
