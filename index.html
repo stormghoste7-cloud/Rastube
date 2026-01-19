@@ -3,239 +3,600 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE ELITE | Plateforme Vidéo Premium</title>
+    <title>RASSTUBE ELITE ULTIMATE | La plateforme vidéo ultime</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://www.youtube.com/iframe_api"></script>
     <style>
+        /* ===== VARIABLES & RESET ===== */
         :root {
-            --primary: #FF0000;
-            --dark: #0f0f0f;
-            --darker: #000000;
-            --light-dark: #1e1e1e;
-            --light: #ffffff;
-            --gray: #aaaaaa;
-            --hover: #272727;
+            /* Palette Rasstube */
+            --primary-red: #FF2A2A;
+            --primary-purple: #8A2BE2;
+            --primary-white: #FFFFFF;
+            --accent-red: #FF0000;
+            --accent-purple: #9932CC;
+            --accent-blue: #4169E1;
+            --accent-pink: #FF1493;
+            
+            /* Thème sombre */
+            --bg-main: #0a0a0a;
+            --bg-card: #1a1a1a;
+            --bg-sidebar: #000000;
+            --bg-hover: #252525;
+            --bg-modal: rgba(0, 0, 0, 0.95);
+            
+            /* Textes */
+            --text-primary: #FFFFFF;
+            --text-secondary: #AAAAAA;
+            --text-muted: #666666;
+            
+            /* Chat */
+            --chat-user: #8A2BE2;
+            --chat-bot: #4169E1;
+            --chat-system: #FF1493;
+            --chat-community: #32CD32;
+            
+            /* Dimensions */
+            --sidebar-width: 280px;
+            --player-height: 70vh;
+            --header-height: 70px;
+            --chat-width: 400px;
+            
+            /* Effets */
+            --shadow: 0 8px 32px rgba(255, 42, 42, 0.1);
+            --shadow-heavy: 0 16px 48px rgba(138, 43, 226, 0.2);
+            --gradient-primary: linear-gradient(135deg, var(--primary-red), var(--primary-purple));
+            --gradient-accent: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background: var(--dark);
-            color: var(--light);
-            height: 100vh;
-            overflow: hidden;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
         }
 
-        /* --- CONTAINER PRINCIPAL --- */
-        .app-container {
-            display: flex;
-            height: 100vh;
-        }
-
-        /* --- SIDEBAR GAUCHE --- */
-        .sidebar {
-            width: 240px;
-            background: var(--darker);
-            padding: 20px 0;
-            border-right: 1px solid #222;
-            display: flex;
-            flex-direction: column;
+        body::before {
+            content: '';
             position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 42, 42, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
-        .logo {
-            padding: 0 20px 20px;
+        /* ===== SCROLLBAR PERSONNALISÉE ===== */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-card);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            border: 2px solid var(--bg-card);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gradient-accent);
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .app-wrapper {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr var(--chat-width);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ===== SIDEBAR GAUCHE ===== */
+        .sidebar-left {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-sidebar);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            overflow-y: auto;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .sidebar-left.collapsed {
+            width: 80px;
+        }
+
+        .sidebar-left.collapsed .logo-text,
+        .sidebar-left.collapsed .nav-text,
+        .sidebar-left.collapsed .section-title,
+        .sidebar-left.collapsed .subscription-name {
+            display: none;
+        }
+
+        .logo-container {
+            padding: 0 20px 30px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--primary);
-            border-bottom: 1px solid #222;
+            gap: 15px;
+            position: relative;
             margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .logo i {
-            color: var(--primary);
-            font-size: 28px;
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .nav-section {
-            padding: 0 15px;
+            padding: 10px 0;
             margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 20px 10px;
+            font-weight: 600;
+            opacity: 0.7;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 12px 15px;
-            border-radius: 10px;
+            gap: 20px;
+            padding: 14px 20px;
             cursor: pointer;
-            transition: 0.3s;
-            color: var(--light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            color: var(--text-secondary);
             text-decoration: none;
-            margin-bottom: 5px;
         }
 
-        .nav-item:hover, .nav-item.active {
-            background: var(--hover);
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+
+        .nav-item:hover::before {
+            transform: translateX(0);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            padding-left: 25px;
+        }
+
+        .nav-item.active {
+            background: rgba(138, 43, 226, 0.1);
+            color: var(--primary-purple);
+            font-weight: 500;
+        }
+
+        .nav-item.active::before {
+            transform: translateX(0);
         }
 
         .nav-item i {
+            font-size: 20px;
             width: 24px;
             text-align: center;
+            flex-shrink: 0;
         }
 
-        .nav-title {
-            color: var(--gray);
-            font-size: 12px;
-            text-transform: uppercase;
-            padding: 15px 15px 5px;
-            margin-top: 10px;
-        }
-
-        /* --- CONTENU PRINCIPAL --- */
-        .main-content {
-            flex: 1;
-            margin-left: 240px;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- HEADER --- */
-        .header {
+        .subscription-item {
             display: flex;
             align-items: center;
-            padding: 15px 25px;
-            background: var(--dark);
-            border-bottom: 1px solid #222;
-            gap: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 90;
+            gap: 15px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .search-bar {
-            flex: 1;
-            max-width: 600px;
+        .subscription-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            flex-shrink: 0;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .subscription-name {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-sidebar {
+            position: absolute;
+            right: -12px;
+            top: 20px;
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            border: 2px solid var(--bg-sidebar);
+            color: white;
+        }
+
+        /* ===== HEADER ===== */
+        .main-header {
+            grid-column: 2;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            height: var(--header-height);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .search-wrapper {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .search-input {
             flex: 1;
-            background: var(--darker);
-            border: 1px solid #333;
-            padding: 12px 20px;
-            border-radius: 25px 0 0 25px;
-            color: var(--light);
+            background: transparent;
+            border: none;
+            padding: 15px 25px;
+            color: var(--text-primary);
             font-size: 16px;
             outline: none;
         }
 
-        .search-btn {
-            background: #333;
-            border: 1px solid #333;
-            border-left: none;
-            color: var(--light);
-            padding: 0 25px;
-            border-radius: 0 25px 25px 0;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
+        .search-input::placeholder {
+            color: var(--text-muted);
         }
 
-        .search-btn:hover {
-            background: #444;
+        .search-button {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 0 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+
+        .search-button:hover {
+            background: var(--gradient-accent);
+            transform: translateY(-1px);
+        }
+
+        .voice-search {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 10px;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .voice-search:hover {
+            background: rgba(138, 43, 226, 0.2);
+            color: var(--primary-purple);
         }
 
         .user-actions {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            margin-left: auto;
         }
 
-        .user-btn {
-            background: var(--primary);
-            color: white;
+        .action-button {
+            background: transparent;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            color: var(--text-primary);
+            font-size: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .action-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            border: 2px solid var(--bg-main);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-profile:hover {
+            background: rgba(138, 43, 226, 0.2);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-name {
             font-weight: 500;
-            transition: 0.3s;
+            font-size: 14px;
         }
 
-        .user-btn:hover {
-            opacity: 0.9;
+        /* ===== CONTENU PRINCIPAL ===== */
+        .main-content {
+            grid-column: 2;
+            padding: 30px;
+            position: relative;
         }
 
-        /* --- VIDÉOS --- */
-        .videos-section {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
+        .category-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .category-filter {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: var(--text-primary);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .category-filter:hover {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: var(--primary-purple);
+            transform: translateY(-2px);
+        }
+
+        .category-filter.active {
+            background: var(--gradient-primary);
+            border-color: transparent;
+            color: white;
+            box-shadow: var(--shadow);
         }
 
         .videos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
         .video-card {
-            background: var(--light-dark);
-            border-radius: 12px;
+            background: var(--bg-card);
+            border-radius: 16px;
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
             cursor: pointer;
-            transition: transform 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .video-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-heavy);
+            border-color: rgba(138, 43, 226, 0.3);
         }
 
-        .thumbnail {
+        .video-thumbnail {
+            position: relative;
             width: 100%;
             aspect-ratio: 16/9;
-            position: relative;
             overflow: hidden;
         }
 
-        .thumbnail img {
+        .thumbnail-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .video-card:hover .thumbnail-image {
+            transform: scale(1.05);
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 30%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+
+        .video-card:hover .video-overlay {
+            opacity: 1;
         }
 
         .video-duration {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 15px;
+            right: 15px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 3px 6px;
-            border-radius: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
             font-size: 12px;
+            font-weight: 500;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .video-card:hover .quick-actions {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .quick-action {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quick-action:hover {
+            background: var(--primary-purple);
+            transform: scale(1.1);
         }
 
         .video-info {
-            padding: 15px;
+            padding: 20px;
         }
 
         .video-title {
             font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 10px;
+            font-weight: 600;
+            margin-bottom: 12px;
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -243,581 +604,1605 @@
             overflow: hidden;
         }
 
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 15px;
+        }
+
         .channel-info {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 5px;
+            gap: 12px;
         }
 
         .channel-avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: #555;
+            background: var(--gradient-accent);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
         }
 
         .channel-name {
-            color: var(--gray);
             font-size: 14px;
+            color: var(--text-secondary);
         }
 
-        .video-meta {
-            color: var(--gray);
-            font-size: 13px;
+        .video-description {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .loading-indicator {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 40px;
+            color: var(--text-secondary);
         }
 
-        /* --- MODAL VIDÉO --- */
-        .video-modal {
-            display: none;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(138, 43, 226, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-purple);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== PLAYER VIDEO ===== */
+        .video-player-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            background: var(--bg-modal);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .video-modal.active {
+        .video-player-container.active {
             display: flex;
+            opacity: 1;
         }
 
-        .video-player {
+        .player-wrapper {
             width: 90%;
-            max-width: 1200px;
-            background: var(--dark);
-            border-radius: 12px;
+            max-width: 1600px;
+            height: 90vh;
+            margin: auto;
+            background: var(--bg-card);
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
+            box-shadow: var(--shadow-heavy);
         }
 
-        .video-iframe {
+        #youtube-player {
             width: 100%;
-            aspect-ratio: 16/9;
-            border: none;
+            height: 70%;
+            background: #000;
         }
 
-        .close-video {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            z-index: 1001;
+        .player-controls {
+            padding: 30px;
+            height: 30%;
+            overflow-y: auto;
         }
 
-        /* --- SIDEBAR DROITE (CHAT/COMPTE) --- */
-        .right-sidebar {
-            width: 350px;
-            background: var(--darker);
-            border-left: 1px solid #222;
+        .player-header {
             display: flex;
-            flex-direction: column;
-            height: 100vh;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .video-title-large {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.3;
+            flex: 1;
+            margin-right: 30px;
+        }
+
+        .close-player {
+            background: var(--gradient-primary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-player:hover {
+            transform: rotate(90deg);
+            background: var(--gradient-accent);
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .player-action {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .player-action:hover {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: var(--primary-purple);
+        }
+
+        .player-action.like.active {
+            background: rgba(255, 42, 42, 0.2);
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+        }
+
+        .player-action.dislike.active {
+            background: rgba(65, 105, 225, 0.2);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .video-description-expanded {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .description-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .show-more {
+            color: var(--primary-purple);
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* ===== SIDEBAR DROITE (CHATS) ===== */
+        .sidebar-right {
             position: fixed;
             right: 0;
             top: 0;
-        }
-
-        .sidebar-tabs {
+            width: var(--chat-width);
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
-            border-bottom: 1px solid #222;
+            flex-direction: column;
+            z-index: 1000;
         }
 
-        .sidebar-tab {
+        .chat-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 20px;
+        }
+
+        .chat-tab {
             flex: 1;
-            padding: 15px;
+            padding: 20px 0;
             text-align: center;
             cursor: pointer;
-            font-size: 14px;
+            position: relative;
+            color: var(--text-secondary);
             font-weight: 500;
-            transition: 0.3s;
-            color: var(--gray);
+            transition: all 0.3s;
         }
 
-        .sidebar-tab.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
+        .chat-tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transition: width 0.3s;
         }
 
-        .sidebar-content {
+        .chat-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .chat-tab.active {
+            color: var(--primary-purple);
+        }
+
+        .chat-tab.active::after {
+            width: 100%;
+        }
+
+        .chat-container {
             flex: 1;
-            overflow-y: auto;
+            display: none;
+            flex-direction: column;
             padding: 20px;
         }
 
-        /* --- CHAT IA --- */
-        .chat-container {
+        .chat-container.active {
             display: flex;
-            flex-direction: column;
-            height: 100%;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .chat-icon.community {
+            background: var(--gradient-accent);
+        }
+
+        .chat-icon.ai {
+            background: var(--gradient-primary);
+        }
+
+        .chat-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chat-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 20px;
+            padding-right: 10px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .message {
-            padding: 12px 15px;
-            border-radius: 15px;
-            max-width: 85%;
-            font-size: 14px;
-            line-height: 1.4;
+            display: flex;
+            gap: 15px;
+            animation: messageAppear 0.3s ease-out;
         }
 
-        .message.bot {
-            background: var(--light-dark);
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.user {
-            background: var(--primary);
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
+            flex-direction: row-reverse;
         }
 
-        .chat-input-area {
-            padding-top: 15px;
-            border-top: 1px solid #222;
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--chat-user);
+        }
+
+        .message.community .message-avatar {
+            background: var(--chat-community);
+        }
+
+        .message.ai .message-avatar {
+            background: var(--chat-bot);
+        }
+
+        .message.system .message-avatar {
+            background: var(--chat-system);
+        }
+
+        .message-content {
+            max-width: 75%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: var(--chat-user);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.community .message-content {
+            background: var(--chat-community);
+            color: white;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.ai .message-content {
+            background: var(--chat-bot);
+            color: white;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.system .message-content {
+            background: var(--chat-system);
+            color: white;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .message-username {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .message-text {
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .chat-input {
             flex: 1;
-            background: var(--light-dark);
-            border: 1px solid #333;
-            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 25px;
-            color: var(--light);
+            padding: 15px 25px;
+            color: var(--text-primary);
+            font-size: 15px;
             outline: none;
+            transition: all 0.3s;
         }
 
-        .send-btn {
-            background: var(--primary);
+        .chat-input:focus {
+            border-color: var(--primary-purple);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .send-message {
+            background: var(--gradient-primary);
             border: none;
-            color: white;
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            color: white;
+            font-size: 18px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s;
         }
 
-        /* --- FORMULAIRE COMPTE --- */
-        .account-form {
+        .send-message:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .community-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .community-member {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .member-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #32CD32;
+        }
+
+        .member-status.offline {
+            background: var(--text-muted);
+        }
+
+        /* ===== MODAL COMPTE ===== */
+        .account-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-modal);
+            z-index: 3000;
             display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .account-form.active {
-            display: block;
+        .account-modal.active {
+            display: flex;
         }
 
-        .form-title {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--primary);
+        .account-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            box-shadow: var(--shadow-heavy);
+            position: relative;
+            animation: modalAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .account-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .account-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .account-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            position: relative;
         }
 
         .form-input {
             width: 100%;
-            background: var(--light-dark);
-            border: 1px solid #333;
-            padding: 12px 15px;
-            border-radius: 8px;
-            color: var(--light);
-            font-size: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 18px 20px;
+            color: var(--text-primary);
+            font-size: 16px;
             outline: none;
+            transition: all 0.3s;
         }
 
-        .form-btn {
-            width: 100%;
-            background: var(--primary);
-            color: white;
+        .form-input:focus {
+            border-color: var(--primary-purple);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
+
+        .form-label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: all 0.3s;
+            background: var(--bg-card);
+            padding: 0 10px;
+        }
+
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label {
+            top: 0;
+            font-size: 13px;
+            color: var(--primary-purple);
+        }
+
+        .form-button {
+            background: var(--gradient-primary);
             border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
             font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
             margin-top: 10px;
+        }
+
+        .form-button:hover {
+            background: var(--gradient-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
 
         .form-switch {
             text-align: center;
-            margin-top: 15px;
-            color: var(--gray);
+            color: var(--text-secondary);
+            margin-top: 20px;
         }
 
-        .form-switch a {
-            color: var(--primary);
+        .switch-link {
+            color: var(--primary-purple);
             cursor: pointer;
-            text-decoration: underline;
+            font-weight: 600;
         }
 
-        /* --- PROFIL UTILISATEUR --- */
-        .user-profile {
-            display: none;
-            text-align: center;
+        /* ===== NOTIFICATIONS ===== */
+        .notification-container {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            z-index: 4000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
         }
 
-        .user-profile.active {
-            display: block;
+        .notification {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-purple);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideInRight 0.3s ease-out;
+            transform: translateX(120%);
+            animation-fill-mode: forwards;
         }
 
-        .user-avatar-large {
-            width: 100px;
-            height: 100px;
+        @keyframes slideInRight {
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--primary);
-            margin: 0 auto 20px;
+            background: var(--gradient-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            color: white;
+            font-size: 18px;
         }
 
-        .user-name {
-            font-size: 22px;
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
             margin-bottom: 5px;
         }
 
-        .user-email {
-            color: var(--gray);
-            margin-bottom: 30px;
+        .notification-message {
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 1200px) {
-            .right-sidebar {
+        .close-notification {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1600px) {
+            .app-wrapper {
+                grid-template-columns: var(--sidebar-width) 1fr;
+            }
+            
+            .sidebar-right {
                 display: none;
             }
             
+            .sidebar-right.active {
+                display: flex;
+            }
+            
+            .toggle-chat {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .videos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
+            }
+            
+            .sidebar-left {
+                width: 80px;
+            }
+            
+            .sidebar-left .logo-text,
+            .sidebar-left .nav-text,
+            .sidebar-left .section-title,
+            .sidebar-left .subscription-name {
+                display: none;
+            }
+            
+            .app-wrapper {
+                grid-template-columns: 80px 1fr;
+            }
+            
+            .main-header {
+                padding: 15px 20px;
+            }
+            
             .main-content {
-                margin-right: 0;
+                padding: 20px;
             }
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                width: 70px;
+            .sidebar-left {
+                transform: translateX(-100%);
             }
             
-            .nav-item span, .logo span, .nav-title {
-                display: none;
+            .sidebar-left.active {
+                transform: translateX(0);
+            }
+            
+            .app-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-header {
+                grid-column: 1;
+                padding: 15px;
             }
             
             .main-content {
-                margin-left: 70px;
+                grid-column: 1;
+                padding: 15px;
+            }
+            
+            .search-button span {
+                display: none;
+            }
+            
+            .search-button {
+                min-width: 60px;
+                padding: 0 15px;
             }
             
             .videos-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
             
-            .header {
-                padding: 15px;
+            .category-filters {
+                gap: 8px;
+            }
+            
+            .category-filter {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            
+            .user-name {
+                display: none;
+            }
+            
+            .sidebar-right {
+                width: 100%;
+            }
+            
+            .player-wrapper {
+                width: 95%;
+                height: 95vh;
+            }
+            
+            #youtube-player {
+                height: 60%;
+            }
+            
+            .player-controls {
+                height: 40%;
+                padding: 20px;
             }
         }
 
-        .section-title {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: var(--light);
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--gray);
-            font-size: 16px;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        .error {
-            color: #ff4444;
-            font-size: 14px;
-            margin-top: 5px;
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* ===== UTILITAIRES ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .visible {
+            display: block !important;
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .badge {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .toggle-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: var(--shadow-heavy);
+            transition: all 0.3s;
+        }
+
+        .toggle-chat:hover {
+            transform: scale(1.1);
+        }
+
+        .toggle-menu {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            z-index: 2001;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-chat {
+                display: flex;
+            }
+            
+            .toggle-menu {
+                display: flex;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- SIDEBAR GAUCHE -->
-        <div class="sidebar">
-            <div class="logo">
-                <i class="fas fa-satellite-dish"></i>
-                <span>RASSTUBE</span>
-            </div>
-            
-            <div class="nav-section">
-                <a href="#" class="nav-item active" onclick="showHome()">
-                    <i class="fas fa-home"></i>
-                    <span>Accueil</span>
-                </a>
-                <a href="#" class="nav-item" onclick="showShorts()">
-                    <i class="fas fa-bolt"></i>
-                    <span>Shorts</span>
-                </a>
-                <a href="#" class="nav-item" onclick="showSubscriptions()">
-                    <i class="fas fa-users"></i>
-                    <span>Abonnements</span>
-                </a>
-                <a href="#" class="nav-item" onclick="showHistory()">
-                    <i class="fas fa-history"></i>
-                    <span>Historique</span>
-                </a>
-            </div>
-            
-            <div class="nav-title">Explore</div>
-            <div class="nav-section">
-                <a href="#" class="nav-item" onclick="searchCategory('musique')">
-                    <i class="fas fa-music"></i>
-                    <span>Musique</span>
-                </a>
-                <a href="#" class="nav-item" onclick="searchCategory('jeux vidéo')">
-                    <i class="fas fa-gamepad"></i>
-                    <span>Jeux vidéo</span>
-                </a>
-                <a href="#" class="nav-item" onclick="searchCategory('actualités')">
-                    <i class="fas fa-newspaper"></i>
-                    <span>Actualités</span>
-                </a>
-                <a href="#" class="nav-item" onclick="searchCategory('sport')">
-                    <i class="fas fa-futbol"></i>
-                    <span>Sport</span>
-                </a>
-                <a href="#" class="nav-item" onclick="searchCategory('apprendre')">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Apprendre</span>
-                </a>
-            </div>
-            
-            <div class="nav-title">Vous</div>
-            <div class="nav-section">
-                <a href="#" class="nav-item" onclick="showAccountTab()">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Votre chaîne</span>
-                </a>
-                <a href="#" class="nav-item" onclick="showSettings()">
-                    <i class="fas fa-cog"></i>
-                    <span>Paramètres</span>
-                </a>
-            </div>
-        </div>
+    <!-- NOTIFICATIONS -->
+    <div class="notification-container" id="notificationContainer"></div>
 
-        <!-- CONTENU PRINCIPAL -->
-        <div class="main-content">
-            <div class="header">
-                <div class="search-bar">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Rechercher des vidéos...">
-                    <button class="search-btn" onclick="performSearch()">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-                
-                <div class="user-actions">
-                    <button class="user-btn" onclick="showAccountTab()">
-                        <i class="fas fa-user"></i> Connexion
-                    </button>
-                </div>
-            </div>
-
-            <div class="videos-section">
-                <h2 class="section-title" id="sectionTitle">Vidéos tendances</h2>
-                <div class="videos-grid" id="videosGrid">
-                    <!-- Les vidéos seront chargées ici -->
-                </div>
-            </div>
-        </div>
-
-        <!-- SIDEBAR DROITE -->
-        <div class="right-sidebar">
-            <div class="sidebar-tabs">
-                <div class="sidebar-tab active" onclick="switchTab('chat')">
-                    Chat IA
-                </div>
-                <div class="sidebar-tab" onclick="switchTab('account')">
-                    Compte
-                </div>
-            </div>
-
-            <div class="sidebar-content" id="sidebarContent">
-                <!-- CONTENU DU CHAT -->
-                <div class="chat-container" id="chatTab">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message bot">
-                            🎬 Bienvenue sur RASSTUBE ! Je suis votre assistant IA.
-                        </div>
-                        <div class="message bot">
-                            Recherchez n'importe quelle vidéo YouTube directement ici !
-                        </div>
-                    </div>
-                    
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" class="chat-input" placeholder="Parlez à l'IA Rasstube...">
-                        <button class="send-btn" onclick="sendChatMessage()">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CONTENU COMPTE -->
-                <div class="account-form" id="accountTab">
-                    <h3 class="form-title">Connexion</h3>
-                    <div class="form-group">
-                        <input type="email" id="loginEmail" class="form-input" placeholder="Email">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" id="loginPassword" class="form-input" placeholder="Mot de passe">
-                    </div>
-                    <button class="form-btn" onclick="loginUser()">Se connecter</button>
-                    
-                    <div class="form-switch">
-                        Pas de compte ? <a onclick="showRegisterForm()">S'inscrire</a>
-                    </div>
-                </div>
-
-                <div class="user-profile" id="userProfile">
-                    <div class="user-avatar-large">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <h3 class="user-name" id="displayName"></h3>
-                    <p class="user-email" id="displayEmail"></p>
-                    <button class="form-btn" onclick="logoutUser()">Déconnexion</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- MODAL VIDEO -->
-        <div class="video-modal" id="videoModal">
-            <button class="close-video" onclick="closeVideo()">
+    <!-- MODAL COMPTE -->
+    <div class="account-modal" id="accountModal">
+        <div class="account-card">
+            <button class="close-modal" onclick="closeModal()">
                 <i class="fas fa-times"></i>
             </button>
-            <div class="video-player">
-                <iframe class="video-iframe" id="videoFrame" allowfullscreen></iframe>
+            <h2 class="account-title" id="modalTitle">Connexion</h2>
+            <p class="account-subtitle" id="modalSubtitle">Accédez à toutes les fonctionnalités</p>
+            
+            <form class="account-form" id="accountForm" onsubmit="return false">
+                <div class="form-group">
+                    <input type="email" class="form-input" id="emailInput" placeholder=" " required>
+                    <label class="form-label" for="emailInput">Email</label>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" class="form-input" id="passwordInput" placeholder=" " required>
+                    <label class="form-label" for="passwordInput">Mot de passe</label>
+                </div>
+                
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <input type="text" class="form-input" id="nameInput" placeholder=" ">
+                    <label class="form-label" for="nameInput">Nom d'utilisateur</label>
+                </div>
+                
+                <div class="form-group" id="confirmGroup" style="display: none;">
+                    <input type="password" class="form-input" id="confirmInput" placeholder=" ">
+                    <label class="form-label" for="confirmInput">Confirmer le mot de passe</label>
+                </div>
+                
+                <button type="submit" class="form-button" id="submitButton">Se connecter</button>
+            </form>
+            
+            <div class="form-switch">
+                <span id="switchText">Pas de compte ?</span>
+                <span class="switch-link" id="switchLink" onclick="switchForm()">S'inscrire</span>
             </div>
         </div>
     </div>
 
+    <!-- PLAYER VIDEO -->
+    <div class="video-player-container" id="videoPlayerContainer">
+        <div class="player-wrapper">
+            <div id="youtube-player"></div>
+            <div class="player-controls">
+                <div class="player-header">
+                    <h2 class="video-title-large" id="playerTitle"></h2>
+                    <button class="close-player" onclick="closeVideoPlayer()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="player-actions">
+                    <button class="player-action like" onclick="toggleLike()">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span id="likeCount">0</span>
+                    </button>
+                    <button class="player-action dislike" onclick="toggleDislike()">
+                        <i class="fas fa-thumbs-down"></i>
+                        <span id="dislikeCount">0</span>
+                    </button>
+                    <button class="player-action" onclick="shareVideo()">
+                        <i class="fas fa-share"></i>
+                        Partager
+                    </button>
+                    <button class="player-action" onclick="addToPlaylist()">
+                        <i class="fas fa-plus"></i>
+                        Ajouter
+                    </button>
+                </div>
+                
+                <div class="video-description-expanded">
+                    <div class="description-text" id="playerDescription"></div>
+                    <span class="show-more" onclick="toggleDescription()">Voir plus</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="app-wrapper">
+        <!-- SIDEBAR GAUCHE -->
+        <div class="sidebar-left" id="sidebarLeft">
+            <button class="toggle-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-satellite-dish"></i>
+                </div>
+                <div class="logo-text">RASSTUBE</div>
+            </div>
+            
+            <div class="nav-section">
+                <a href="#" class="nav-item active" onclick="loadHome()">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">Accueil</span>
+                </a>
+                <a href="#" class="nav-item" onclick="loadTrending()">
+                    <i class="fas fa-fire"></i>
+                    <span class="nav-text">Tendances</span>
+                </a>
+                <a href="#" class="nav-item" onclick="loadSubscriptions()">
+                    <i class="fas fa-users"></i>
+                    <span class="nav-text">Abonnements</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="section-title">Bibliothèque</div>
+                <a href="#" class="nav-item" onclick="loadHistory()">
+                    <i class="fas fa-history"></i>
+                    <span class="nav-text">Historique</span>
+                </a>
+                <a href="#" class="nav-item" onclick="loadWatchLater()">
+                    <i class="fas fa-clock"></i>
+                    <span class="nav-text">À regarder</span>
+                </a>
+                <a href="#" class="nav-item" onclick="loadLikedVideos()">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span class="nav-text">Vidéos aimées</span>
+                </a>
+                <a href="#" class="nav-item" onclick="loadPlaylists()">
+                    <i class="fas fa-list"></i>
+                    <span class="nav-text">Playlists</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="section-title">Abonnements</div>
+                <div id="subscriptionsList">
+                    <!-- Dynamiquement généré -->
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="section-title">Explorer</div>
+                <a href="#" class="nav-item" onclick="searchCategory('musique')">
+                    <i class="fas fa-music"></i>
+                    <span class="nav-text">Musique</span>
+                </a>
+                <a href="#" class="nav-item" onclick="searchCategory('jeux vidéo')">
+                    <i class="fas fa-gamepad"></i>
+                    <span class="nav-text">Jeux vidéo</span>
+                </a>
+                <a href="#" class="nav-item" onclick="searchCategory('sport')">
+                    <i class="fas fa-futbol"></i>
+                    <span class="nav-text">Sport</span>
+                </a>
+                <a href="#" class="nav-item" onclick="searchCategory('apprendre')">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="nav-text">Apprendre</span>
+                </a>
+                <a href="#" class="nav-item" onclick="searchCategory('actualités')">
+                    <i class="fas fa-newspaper"></i>
+                    <span class="nav-text">Actualités</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <a href="#" class="nav-item" onclick="showSettings()">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-text">Paramètres</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showHelp()">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="nav-text">Aide</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- BOUTON MENU MOBILE -->
+        <button class="toggle-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- HEADER -->
+        <header class="main-header">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Rechercher des vidéos, chaînes, playlists...">
+                    <button class="search-button" onclick="performSearch()">
+                        <i class="fas fa-search"></i>
+                        <span>Rechercher</span>
+                    </button>
+                </div>
+                <button class="voice-search" onclick="startVoiceSearch()" title="Recherche vocale">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+            
+            <div class="user-actions">
+                <button class="action-button" onclick="toggleChat()" title="Chat">
+                    <i class="fas fa-comments"></i>
+                </button>
+                <button class="action-button" onclick="showNotifications()" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge"></span>
+                </button>
+                <button class="action-button" onclick="uploadVideo()" title="Uploader">
+                    <i class="fas fa-upload"></i>
+                </button>
+                <div class="user-profile" onclick="showAccountModal()">
+                    <div class="user-avatar" id="userAvatar">G</div>
+                    <div class="user-name" id="userName">Invité</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENU PRINCIPAL -->
+        <main class="main-content">
+            <div class="category-filters" id="categoryFilters">
+                <!-- Dynamiquement généré -->
+            </div>
+            
+            <h1 class="section-title" id="mainTitle">Vidéos recommandées</h1>
+            
+            <div class="videos-grid" id="videosGrid">
+                <!-- Dynamiquement généré -->
+            </div>
+            
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p>Chargement des vidéos...</p>
+            </div>
+            
+            <div id="endOfContent" style="text-align: center; padding: 40px; color: var(--text-secondary); display: none;">
+                <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 20px; color: var(--primary-purple);"></i>
+                <h3>Vous avez tout vu !</h3>
+                <p>Revenez plus tard pour de nouvelles vidéos</p>
+            </div>
+        </main>
+
+        <!-- SIDEBAR DROITE (CHATS) -->
+        <div class="sidebar-right" id="sidebarRight">
+            <div class="chat-tabs">
+                <div class="chat-tab active" onclick="switchChatTab('community')">
+                    Communauté
+                </div>
+                <div class="chat-tab" onclick="switchChatTab('ai')">
+                    IA Rasstube
+                </div>
+            </div>
+            
+            <!-- CHAT COMMUNAUTÉ -->
+            <div class="chat-container active" id="communityChat">
+                <div class="chat-header">
+                    <div class="chat-icon community">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h3 class="chat-title">Chat Communauté</h3>
+                        <p class="chat-subtitle">Discutez avec d'autres utilisateurs</p>
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="communityMessages">
+                    <div class="message community">
+                        <div class="message-avatar">R</div>
+                        <div class="message-content">
+                            <div class="message-username">Rasstube Bot</div>
+                            <div class="message-text">Bienvenue dans le chat communauté ! Discutez librement avec les autres utilisateurs.</div>
+                            <div class="message-time">Maintenant</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="community-members" id="communityMembers">
+                    <div class="community-member">
+                        <div class="member-status"></div>
+                        <span>Vous</span>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="communityInput" placeholder="Écrire un message...">
+                    <button class="send-message" onclick="sendCommunityMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- CHAT IA -->
+            <div class="chat-container" id="aiChat">
+                <div class="chat-header">
+                    <div class="chat-icon ai">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="chat-title">IA Rasstube</h3>
+                        <p class="chat-subtitle">Assistant intelligent</p>
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="aiMessages">
+                    <div class="message ai">
+                        <div class="message-avatar">AI</div>
+                        <div class="message-content">
+                            <div class="message-username">IA Rasstube</div>
+                            <div class="message-text">Bonjour ! Je suis l'assistant IA de Rasstube. Je peux vous aider à trouver des vidéos, répondre à vos questions et plus encore !</div>
+                            <div class="message-time">Maintenant</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="aiInput" placeholder="Posez une question à l'IA...">
+                    <button class="send-message" onclick="sendAiMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOUTON CHAT MOBILE -->
+        <button class="toggle-chat" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+        </button>
+    </div>
+
     <script>
-        // Données initiales
-        let currentUser = null;
-        let currentTab = 'chat';
-        
-        // Vidéos par défaut avec des recherches populaires
-        const videoDatabase = {
-            'tendances': [
-                {id: 'dQw4w9WgXcQ', title: 'Musique Pop 2024 - Les meilleurs hits', channel: 'Music Channel', views: '2.3M'},
-                {id: 'kJQP7kiw5Fk', title: 'Despacito - Luis Fonsi ft. Daddy Yankee', channel: 'LuisFonsiVEVO', views: '8.1B'},
-                {id: 'JGwWNGJdvx8', title: 'Ed Sheeran - Shape of You', channel: 'Ed Sheeran', views: '5.8B'},
-                {id: '9bZkp7q19f0', title: 'PSY - GANGNAM STYLE', channel: 'officialpsy', views: '4.7B'},
-                {id: 'CevxZvSJLk8', title: 'Kendrick Lamar - HUMBLE.', channel: 'KendrickLamarVEVO', views: '1.2B'},
-                {id: 'OPf0YbXqDm0', title: 'Mark Ronson - Uptown Funk ft. Bruno Mars', channel: 'MarkRonsonVEVO', views: '4.9B'}
+        // ===== CONFIGURATION =====
+        const CONFIG = {
+            API_KEY: 'AIzaSyD-tF9Qv9iPL4CwNfx7Y_dS9KYv2E__wA0', // Clé API YouTube (remplacer par la vôtre)
+            API_URL: 'https://www.googleapis.com/youtube/v3',
+            MAX_RESULTS: 50,
+            DEFAULT_CATEGORIES: [
+                'Tout', 'Musique', 'Jeux vidéo', 'Sport', 'Films', 'Actualités',
+                'En direct', 'Apprendre', 'Comédie', 'Animaux', 'Technologie',
+                'Cuisine', 'Mode', 'Voyage', 'Science', 'Histoire'
             ],
-            'mr bean': [
-                {id: 'zSM4ZyVe8xs', title: 'Mr Bean - Compilation des meilleurs moments', channel: 'Mr Bean Officiel', views: '850M'},
-                {id: 'tPmBkHhOqWo', title: 'Mr Bean à la plage', channel: 'Bean World', views: '150M'},
-                {id: 'V8JsR7rETn8', title: 'Mr Bean au restaurant', channel: 'Mr Bean Comedy', views: '280M'},
-                {id: '8LJj8bJvL4M', title: 'Mr Bean fait les courses', channel: 'Bean TV', views: '95M'}
-            ],
-            'anime': [
-                {id: 'pManp2CoycY', title: 'Demon Slayer: Kimetsu no Yaiba Opening', channel: 'Anime World', views: '85M'},
-                {id: '8QPy2D8Vhjk', title: 'Naruto vs Sasuke - Combat Final', channel: 'Anime Battles', views: '145M'},
-                {id: 'H5v3kku4y6Q', title: 'Attack on Titan Opening 1', channel: 'Anime Music', views: '250M'},
-                {id: 'm4c_7wzN4-M', title: 'One Piece Opening 2024', channel: 'Toei Animation', views: '65M'}
-            ],
-            'jeux vidéo': [
-                {id: 'IOu0DuxFAT0', title: 'Fortnite - Gameplay Épique', channel: 'Ninja', views: '45M'},
-                {id: 'wy8Oo5wQvxU', title: 'Minecraft - Construction Incroyable', channel: 'Dream', views: '120M'},
-                {id: 'CduA0TULnow', title: 'GTA 6 - Premier Trailer', channel: 'Rockstar Games', views: '350M'}
-            ],
-            'musique': [
-                {id: 'kJQP7kiw5Fk', title: 'Luis Fonsi - Despacito ft. Daddy Yankee', channel: 'LuisFonsiVEVO', views: '8.1B'},
-                {id: 'JGwWNGJdvx8', title: 'Ed Sheeran - Shape of You', channel: 'Ed Sheeran', views: '5.8B'},
-                {id: 'dQw4w9WgXcQ', title: 'Musique Populaire 2024', channel: 'Music Hits', views: '1.5B'},
-                {id: 'CevxZvSJLk8', title: 'Kendrick Lamar - HUMBLE.', channel: 'KendrickLamarVEVO', views: '1.2B'}
+            COMMUNITY_USERS: [
+                { name: 'Alex', avatar: 'A', status: 'online' },
+                { name: 'Sarah', avatar: 'S', status: 'online' },
+                { name: 'Mike', avatar: 'M', status: 'offline' },
+                { name: 'Emma', avatar: 'E', status: 'online' },
+                { name: 'Tom', avatar: 'T', status: 'online' }
             ]
         };
 
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTrendingVideos();
-            checkUserSession();
+        // ===== ÉTAT DE L'APPLICATION =====
+        let appState = {
+            user: null,
+            videos: [],
+            currentVideo: null,
+            searchQuery: '',
+            currentCategory: 'Tout',
+            nextPageToken: null,
+            isLoading: false,
+            isLoggedIn: false,
+            chatTab: 'community',
+            player: null,
+            likedVideos: new Set(),
+            watchHistory: [],
+            subscriptions: []
+        };
+
+        // ===== INITIALISATION =====
+        document.addEventListener('DOMContentLoaded', async function() {
+            initializeApp();
+            loadUserData();
+            await loadHomeVideos();
             setupEventListeners();
+            initializeYouTubeAPI();
+            initializeChats();
             
-            // Active le chat par défaut
-            document.getElementById('chatTab').style.display = 'flex';
+            // Ajouter un message de bienvenue
+            showNotification('Bienvenue sur Rasstube !', 'La plateforme vidéo ultime est prête.', 'success');
         });
 
+        function initializeApp() {
+            // Charger les catégories
+            renderCategoryFilters();
+            
+            // Initialiser l'interface utilisateur
+            updateUserInterface();
+            
+            // Vérifier la taille de l'écran
+            checkResponsive();
+            window.addEventListener('resize', checkResponsive);
+        }
+
         function setupEventListeners() {
-            // Recherche avec Enter
+            // Recherche
             document.getElementById('searchInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') performSearch();
             });
             
-            // Chat avec Enter
-            document.getElementById('chatInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') sendChatMessage();
+            // Chat
+            document.getElementById('communityInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendCommunityMessage();
+            });
+            
+            document.getElementById('aiInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendAiMessage();
+            });
+            
+            // Formulaires
+            document.getElementById('accountForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleAccountFormSubmit();
+            });
+            
+            // Infinite scroll
+            window.addEventListener('scroll', handleInfiniteScroll);
+            
+            // Fermer modaux avec Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (document.getElementById('videoPlayerContainer').classList.contains('active')) {
+                        closeVideoPlayer();
+                    }
+                    if (document.getElementById('accountModal').classList.contains('active')) {
+                        closeModal();
+                    }
+                }
             });
         }
 
-        function loadTrendingVideos() {
-            displayVideos(videoDatabase['tendances']);
-            document.getElementById('sectionTitle').textContent = 'Vidéos tendances';
+        // ===== YOUTUBE API INTEGRATION =====
+        async function searchYouTube(query, category = null, pageToken = null) {
+            try {
+                let url = `${CONFIG.API_URL}/search?part=snippet&maxResults=${CONFIG.MAX_RESULTS}&q=${encodeURIComponent(query)}&key=${CONFIG.API_KEY}&type=video`;
+                
+                if (pageToken) {
+                    url += `&pageToken=${pageToken}`;
+                }
+                
+                if (category && category !== 'Tout') {
+                    url += `&videoCategoryId=${getCategoryId(category)}`;
+                }
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error.message);
+                }
+                
+                appState.nextPageToken = data.nextPageToken;
+                return data.items.map(item => ({
+                    id: item.id.videoId,
+                    title: item.snippet.title,
+                    description: item.snippet.description,
+                    channelId: item.snippet.channelId,
+                    channelTitle: item.snippet.channelTitle,
+                    publishedAt: item.snippet.publishedAt,
+                    thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default.url
+                }));
+            } catch (error) {
+                console.error('Erreur YouTube API:', error);
+                showNotification('Erreur', 'Impossible de charger les vidéos. Réessayez.', 'error');
+                return [];
+            }
         }
 
-        function displayVideos(videos) {
+        async function getVideoDetails(videoIds) {
+            try {
+                const ids = videoIds.join(',');
+                const url = `${CONFIG.API_URL}/videos?part=snippet,statistics,contentDetails&id=${ids}&key=${CONFIG.API_KEY}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                return data.items.map(item => ({
+                    id: item.id,
+                    title: item.snippet.title,
+                    description: item.snippet.description,
+                    channelId: item.snippet.channelId,
+                    channelTitle: item.snippet.channelTitle,
+                    publishedAt: item.snippet.publishedAt,
+                    thumbnail: item.snippet.thumbnails.maxres?.url || item.snippet.thumbnails.high.url,
+                    duration: formatDuration(item.contentDetails.duration),
+                    viewCount: formatNumber(item.statistics.viewCount),
+                    likeCount: formatNumber(item.statistics.likeCount),
+                    commentCount: formatNumber(item.statistics.commentCount)
+                }));
+            } catch (error) {
+                console.error('Erreur détails vidéo:', error);
+                return [];
+            }
+        }
+
+        async function getTrendingVideos() {
+            try {
+                const url = `${CONFIG.API_URL}/videos?part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=${CONFIG.MAX_RESULTS}&key=${CONFIG.API_KEY}&regionCode=FR`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                return data.items.map(item => ({
+                    id: item.id,
+                    title: item.snippet.title,
+                    description: item.snippet.description,
+                    channelId: item.snippet.channelId,
+                    channelTitle: item.snippet.channelTitle,
+                    publishedAt: item.snippet.publishedAt,
+                    thumbnail: item.snippet.thumbnails.maxres?.url || item.snippet.thumbnails.high.url,
+                    duration: formatDuration(item.contentDetails.duration),
+                    viewCount: formatNumber(item.statistics.viewCount),
+                    likeCount: formatNumber(item.statistics.likeCount),
+                    commentCount: formatNumber(item.statistics.commentCount)
+                }));
+            } catch (error) {
+                console.error('Erreur vidéos tendances:', error);
+                return [];
+            }
+        }
+
+        // ===== GESTION DES VIDÉOS =====
+        async function loadHomeVideos() {
+            showLoading(true);
+            
+            try {
+                const videos = await getTrendingVideos();
+                appState.videos = videos;
+                renderVideos(videos);
+                updateMainTitle('Vidéos tendances');
+            } catch (error) {
+                showNotification('Erreur', 'Impossible de charger les vidéos.', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            
+            appState.searchQuery = query;
+            appState.currentCategory = 'Tout';
+            showLoading(true);
+            
+            try {
+                const videos = await searchYouTube(query);
+                const videoDetails = await getVideoDetails(videos.map(v => v.id));
+                
+                appState.videos = videoDetails;
+                appState.nextPageToken = null;
+                renderVideos(videoDetails);
+                updateMainTitle(`Résultats pour "${query}"`);
+                
+                // Ajouter à l'historique de recherche
+                addToSearchHistory(query);
+                
+                // Message dans le chat IA
+                addAiMessage(`J'ai trouvé ${videoDetails.length} vidéos pour "${query}" !`);
+                
+                showNotification('Recherche', `${videoDetails.length} vidéos trouvées`, 'success');
+            } catch (error) {
+                showNotification('Erreur', 'Recherche échouée', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function searchCategory(category) {
+            appState.currentCategory = category;
+            updateCategoryFilters();
+            
+            if (category === 'Tout') {
+                loadHomeVideos();
+                return;
+            }
+            
+            document.getElementById('searchInput').value = category;
+            performSearch();
+        }
+
+        async function loadMoreVideos() {
+            if (appState.isLoading || !appState.nextPageToken) return;
+            
+            appState.isLoading = true;
+            showLoading(true);
+            
+            try {
+                const videos = await searchYouTube(
+                    appState.searchQuery || 'tendances',
+                    appState.currentCategory,
+                    appState.nextPageToken
+                );
+                
+                if (videos.length > 0) {
+                    const videoDetails = await getVideoDetails(videos.map(v => v.id));
+                    appState.videos = [...appState.videos, ...videoDetails];
+                    renderVideos(appState.videos);
+                    appState.nextPageToken = null;
+                }
+            } catch (error) {
+                console.error('Erreur chargement supplémentaire:', error);
+            } finally {
+                appState.isLoading = false;
+                showLoading(false);
+            }
+        }
+
+        // ===== INTERFACE UTILISATEUR =====
+        function renderVideos(videos) {
             const grid = document.getElementById('videosGrid');
             grid.innerHTML = '';
+            
+            if (videos.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <i class="fas fa-video-slash" style="font-size: 64px; color: var(--text-muted); margin-bottom: 20px;"></i>
+                        <h3 style="margin-bottom: 10px; color: var(--text-primary);">Aucune vidéo trouvée</h3>
+                        <p style="color: var(--text-secondary);">Essayez une autre recherche ou catégorie</p>
+                    </div>
+                `;
+                return;
+            }
             
             videos.forEach(video => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => playVideo(video.id);
+                card.onclick = () => playVideo(video);
                 
                 card.innerHTML = `
-                    <div class="thumbnail">
-                        <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}">
-                        <div class="video-duration">5:30</div>
+                    <div class="video-thumbnail">
+                        <img src="${video.thumbnail}" alt="${video.title}" class="thumbnail-image" loading="lazy">
+                        <div class="video-overlay">
+                            <div class="video-duration">${video.duration}</div>
+                            <div class="quick-actions">
+                                <button class="quick-action" onclick="event.stopPropagation(); addToWatchLater('${video.id}')" title="Regarder plus tard">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                                <button class="quick-action" onclick="event.stopPropagation(); addToPlaylistModal('${video.id}')" title="Ajouter à une playlist">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="quick-action" onclick="event.stopPropagation(); shareVideoModal('${video.id}')" title="Partager">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="video-info">
-                        <div class="video-title">${video.title}</div>
-                        <div class="channel-info">
-                            <div class="channel-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="channel-name">${video.channel}</div>
-                        </div>
+                        <h3 class="video-title">${video.title}</h3>
                         <div class="video-meta">
-                            <span>${video.views} vues</span>
-                            <span>• Il y a 2 mois</span>
+                            <span class="video-stats">
+                                <span>${video.viewCount} vues</span>
+                                <span>• ${formatDate(video.publishedAt)}</span>
+                            </span>
+                            ${appState.likedVideos.has(video.id) ? '<i class="fas fa-heart" style="color: var(--primary-red);"></i>' : ''}
                         </div>
+                        <div class="channel-info">
+                            <div class="channel-avatar">${video.channelTitle.charAt(0)}</div>
+                            <div class="channel-name">${video.channelTitle}</div>
+                        </div>
+                        <p class="video-description">${video.description.substring(0, 100)}...</p>
                     </div>
                 `;
                 
@@ -825,368 +2210,920 @@
             });
         }
 
-        function performSearch() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!query) return;
+        function renderCategoryFilters() {
+            const container = document.getElementById('categoryFilters');
+            container.innerHTML = '';
             
-            const grid = document.getElementById('videosGrid');
-            const title = document.getElementById('sectionTitle');
-            
-            grid.innerHTML = '<div class="loading">Recherche en cours...</div>';
-            
-            setTimeout(() => {
-                let results = [];
-                
-                // Recherche intelligente
-                if (query.includes('mr bean') || query.includes('bean')) {
-                    results = videoDatabase['mr bean'];
-                    title.textContent = 'Résultats pour : Mr Bean';
-                } 
-                else if (query.includes('anime') || query.includes('animé')) {
-                    results = videoDatabase['anime'];
-                    title.textContent = 'Résultats pour : Anime';
-                }
-                else if (query.includes('musique') || query.includes('music')) {
-                    results = videoDatabase['musique'];
-                    title.textContent = 'Résultats pour : Musique';
-                }
-                else if (query.includes('jeu') || query.includes('game') || query.includes('fortnite') || query.includes('minecraft')) {
-                    results = videoDatabase['jeux vidéo'];
-                    title.textContent = 'Résultats pour : Jeux vidéo';
-                }
-                else {
-                    // Recherche dans toutes les vidéos
-                    const allVideos = Object.values(videoDatabase).flat();
-                    results = allVideos.filter(video => 
-                        video.title.toLowerCase().includes(query) ||
-                        video.channel.toLowerCase().includes(query)
-                    );
-                    
-                    if (results.length === 0) {
-                        results = videoDatabase['tendances'];
-                        title.textContent = 'Aucun résultat trouvé. Voici les tendances :';
-                    } else {
-                        title.textContent = `Résultats pour : ${query}`;
-                    }
-                }
-                
-                displayVideos(results);
-                
-                // Ajouter au chat
-                addChatMessage('bot', `J'ai trouvé ${results.length} vidéo(s) pour "${query}" !`);
-                
-            }, 800);
-        }
-
-        function searchCategory(category) {
-            document.getElementById('searchInput').value = category;
-            performSearch();
-        }
-
-        function playVideo(videoId) {
-            const modal = document.getElementById('videoModal');
-            const frame = document.getElementById('videoFrame');
-            
-            frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeVideo() {
-            const modal = document.getElementById('videoModal');
-            const frame = document.getElementById('videoFrame');
-            
-            frame.src = '';
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Gestion des onglets
-        function switchTab(tab) {
-            currentTab = tab;
-            
-            // Mettre à jour les onglets actifs
-            document.querySelectorAll('.sidebar-tab').forEach(t => {
-                t.classList.remove('active');
+            CONFIG.DEFAULT_CATEGORIES.forEach(category => {
+                const button = document.createElement('button');
+                button.className = `category-filter ${category === appState.currentCategory ? 'active' : ''}`;
+                button.textContent = category;
+                button.onclick = () => searchCategory(category);
+                container.appendChild(button);
             });
-            
-            document.querySelector(`.sidebar-tab[onclick*="${tab}"]`).classList.add('active');
-            
-            // Afficher le bon contenu
-            document.getElementById('chatTab').style.display = 'none';
-            document.getElementById('accountTab').style.display = 'none';
-            document.getElementById('userProfile').style.display = 'none';
-            
-            if (tab === 'chat') {
-                document.getElementById('chatTab').style.display = 'flex';
-            } 
-            else if (tab === 'account') {
-                if (currentUser) {
-                    document.getElementById('userProfile').style.display = 'block';
-                    document.getElementById('displayName').textContent = currentUser.name;
-                    document.getElementById('displayEmail').textContent = currentUser.email;
-                } else {
-                    document.getElementById('accountTab').style.display = 'block';
+        }
+
+        function updateCategoryFilters() {
+            document.querySelectorAll('.category-filter').forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent === appState.currentCategory) {
+                    button.classList.add('active');
                 }
+            });
+        }
+
+        function updateMainTitle(title) {
+            document.getElementById('mainTitle').textContent = title;
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingIndicator').style.display = show ? 'flex' : 'none';
+        }
+
+        // ===== PLAYER VIDEO =====
+        function initializeYouTubeAPI() {
+            // L'API YouTube est chargée via la balise script
+            if (window.YT && window.YT.Player) {
+                appState.player = new YT.Player('youtube-player', {
+                    height: '100%',
+                    width: '100%',
+                    playerVars: {
+                        autoplay: 1,
+                        controls: 1,
+                        rel: 0,
+                        showinfo: 0,
+                        iv_load_policy: 3
+                    },
+                    events: {
+                        onReady: onPlayerReady,
+                        onStateChange: onPlayerStateChange
+                    }
+                });
             }
         }
 
-        // Chat IA
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
+        function playVideo(video) {
+            appState.currentVideo = video;
+            
+            // Mettre à jour l'interface du player
+            document.getElementById('playerTitle').textContent = video.title;
+            document.getElementById('playerDescription').textContent = video.description;
+            document.getElementById('likeCount').textContent = video.likeCount;
+            document.getElementById('dislikeCount').textContent = Math.floor(parseInt(video.likeCount) * 0.1).toLocaleString();
+            
+            // Charger la vidéo
+            if (appState.player) {
+                appState.player.loadVideoById(video.id);
+            }
+            
+            // Afficher le player
+            document.getElementById('videoPlayerContainer').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Ajouter à l'historique
+            addToWatchHistory(video);
+        }
+
+        function closeVideoPlayer() {
+            if (appState.player) {
+                appState.player.stopVideo();
+            }
+            
+            document.getElementById('videoPlayerContainer').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function onPlayerReady(event) {
+            console.log('Player YouTube prêt');
+        }
+
+        function onPlayerStateChange(event) {
+            // Gérer les changements d'état du player
+        }
+
+        function toggleLike() {
+            const button = document.querySelector('.player-action.like');
+            const isActive = button.classList.contains('active');
+            
+            if (isActive) {
+                button.classList.remove('active');
+                appState.likedVideos.delete(appState.currentVideo.id);
+            } else {
+                button.classList.add('active');
+                appState.likedVideos.add(appState.currentVideo.id);
+                document.querySelector('.player-action.dislike').classList.remove('active');
+            }
+            
+            saveUserData();
+        }
+
+        function toggleDislike() {
+            const button = document.querySelector('.player-action.dislike');
+            const isActive = button.classList.contains('active');
+            
+            if (isActive) {
+                button.classList.remove('active');
+            } else {
+                button.classList.add('active');
+                document.querySelector('.player-action.like').classList.remove('active');
+                appState.likedVideos.delete(appState.currentVideo.id);
+            }
+            
+            saveUserData();
+        }
+
+        // ===== CHAT SYSTEM =====
+        function initializeChats() {
+            // Initialiser le chat communauté
+            updateCommunityMembers();
+            
+            // Ajouter quelques messages initiaux
+            setTimeout(() => {
+                addCommunityMessage('Alex', 'Salut tout le monde ! Des nouvelles vidéos intéressantes ?');
+                addCommunityMessage('Sarah', 'Je viens de découvrir une chaîne géniale sur la science !');
+                addCommunityMessage('Emma', 'Quelqu\'un a vu le dernier live de gaming ?');
+            }, 2000);
+        }
+
+        function switchChatTab(tab) {
+            appState.chatTab = tab;
+            
+            // Mettre à jour les onglets
+            document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.chat-container').forEach(c => c.classList.remove('active'));
+            
+            document.querySelector(`.chat-tab[onclick*="${tab}"]`).classList.add('active');
+            document.getElementById(`${tab}Chat`).classList.add('active');
+            
+            // Mettre à jour le bouton mobile
+            document.querySelector('.toggle-chat i').className = 
+                tab === 'community' ? 'fas fa-users' : 'fas fa-robot';
+        }
+
+        function sendCommunityMessage() {
+            const input = document.getElementById('communityInput');
             const message = input.value.trim();
             
             if (!message) return;
             
-            addChatMessage('user', message);
+            // Ajouter le message de l'utilisateur
+            addCommunityMessage(appState.user?.name || 'Vous', message);
             input.value = '';
             
-            // Réponse de l'IA
+            // Simuler des réponses de la communauté
             setTimeout(() => {
-                const response = generateAIResponse(message);
-                addChatMessage('bot', response);
-            }, 1000);
+                const responses = [
+                    'Intéressant ! Je vais regarder ça.',
+                    'Quelqu\'un a d\'autres recommandations ?',
+                    'Je suis d\'accord avec toi !',
+                    'As-tu vu la dernière vidéo de cette chaîne ?',
+                    'Excellent choix !'
+                ];
+                
+                const randomUser = CONFIG.COMMUNITY_USERS[
+                    Math.floor(Math.random() * CONFIG.COMMUNITY_USERS.length)
+                ];
+                
+                if (randomUser.status === 'online') {
+                    addCommunityMessage(randomUser.name, responses[Math.floor(Math.random() * responses.length)]);
+                }
+            }, 1000 + Math.random() * 2000);
         }
 
-        function addChatMessage(sender, text) {
-            const messagesDiv = document.getElementById('chatMessages');
+        function addCommunityMessage(username, text) {
+            const container = document.getElementById('communityMessages');
+            const isUser = username === (appState.user?.name || 'Vous');
+            
             const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'community'}`;
             
-            messageDiv.className = `message ${sender}`;
-            messageDiv.textContent = text;
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${username.charAt(0)}</div>
+                <div class="message-content">
+                    ${!isUser ? `<div class="message-username">${username}</div>` : ''}
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${formatTime(new Date())}</div>
+                </div>
+            `;
             
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
         }
 
-        function generateAIResponse(message) {
+        function sendAiMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Ajouter le message de l'utilisateur
+            addAiMessage(message, 'user');
+            input.value = '';
+            
+            // Générer une réponse IA
+            setTimeout(() => {
+                generateAiResponse(message);
+            }, 500);
+        }
+
+        function addAiMessage(text, sender = 'ai') {
+            const container = document.getElementById('aiMessages');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${sender === 'user' ? (appState.user?.name?.charAt(0) || 'U') : 'AI'}</div>
+                <div class="message-content">
+                    ${sender === 'ai' ? '<div class="message-username">IA Rasstube</div>' : ''}
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${formatTime(new Date())}</div>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function generateAiResponse(message) {
             const msg = message.toLowerCase();
+            let response = '';
             
             if (msg.includes('bonjour') || msg.includes('salut') || msg.includes('coucou')) {
-                return `👋 Bonjour${currentUser ? ' ' + currentUser.name : ''} ! Comment puis-je vous aider ?`;
+                response = `Bonjour${appState.user ? ' ' + appState.user.name : ''} ! Comment puis-je vous aider aujourd'hui ?`;
+            } else if (msg.includes('cherche') || msg.includes('trouve') || msg.includes('vidéo')) {
+                const searchTerm = extractSearchTerm(message);
+                response = `Je peux vous aider à trouver des vidéos sur "${searchTerm}". Tapez "${searchTerm}" dans la barre de recherche en haut !`;
+            } else if (msg.includes('mr bean') || msg.includes('mrbean')) {
+                response = "Mr Bean ! Bien sûr. Tapez 'Mr Bean' dans la recherche pour voir toutes ses vidéos comiques.";
+            } else if (msg.includes('anime') || msg.includes('animé')) {
+                response = "Pour les animés, cherchez 'anime' dans la barre de recherche. Vous trouverez les meilleurs openings et AMV !";
+            } else if (msg.includes('aide') || msg.includes('aide-moi')) {
+                response = "Je peux vous aider à :\n• Trouver des vidéos spécifiques\n• Explorer par catégories\n• Gérer votre compte\n• Discuter avec la communauté\nQue souhaitez-vous faire ?";
+            } else if (msg.includes('merci')) {
+                response = "De rien ! N'hésitez pas si vous avez besoin d'autre chose. 😊";
+            } else {
+                const responses = [
+                    "Je comprends. Pouvez-vous préciser votre demande ?",
+                    "Je peux vous aider à trouver du contenu sur Rasstube. Que cherchez-vous ?",
+                    "Intéressant ! Voulez-vous que je recherche quelque chose pour vous ?",
+                    `Essayez de me demander : "Trouve-moi des vidéos de ${getRandomCategory()}"`
+                ];
+                response = responses[Math.floor(Math.random() * responses.length)];
             }
             
-            if (msg.includes('mr bean') || msg.includes('mrbean')) {
-                return "🎬 Mr Bean ! J'adore ses vidéos. Tape 'Mr Bean' dans la barre de recherche pour voir toutes ses compilations drôles !";
-            }
-            
-            if (msg.includes('anime') || msg.includes('animé')) {
-                return "🇯🇵 Pour les animés, cherchez 'anime' dans la recherche ! Je vais vous montrer les meilleurs openings et AMV.";
-            }
-            
-            if (msg.includes('aide') || msg.includes('aide-moi')) {
-                return "🆘 Je peux vous aider à :\n• Trouver des vidéos\n• Rechercher par catégorie\n• Gérer votre compte\nQue souhaitez-vous faire ?";
-            }
-            
-            if (msg.includes('merci')) {
-                return "😊 De rien ! N'hésitez pas si vous avez besoin d'autre chose.";
-            }
-            
-            // Réponses par défaut
-            const responses = [
-                "Intéressant ! Voulez-vous que je recherche des vidéos sur ce sujet ?",
-                "Je comprends. Essayez de taper votre recherche dans la barre en haut !",
-                `Je peux vous aider à trouver des vidéos sur n'importe quel sujet. Dites-moi ce que vous cherchez !`
-            ];
-            
-            return responses[Math.floor(Math.random() * responses.length)];
+            addAiMessage(response);
         }
 
-        // Gestion des comptes
-        function checkUserSession() {
-            const userData = localStorage.getItem('rasstube_user');
-            if (userData) {
-                currentUser = JSON.parse(userData);
-                document.querySelector('.user-btn').innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
-            }
-        }
-
-        function showRegisterForm() {
-            const accountTab = document.getElementById('accountTab');
-            accountTab.innerHTML = `
-                <h3 class="form-title">Inscription</h3>
-                <div class="form-group">
-                    <input type="text" id="registerName" class="form-input" placeholder="Nom d'utilisateur">
-                </div>
-                <div class="form-group">
-                    <input type="email" id="registerEmail" class="form-input" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="registerPassword" class="form-input" placeholder="Mot de passe">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="registerConfirm" class="form-input" placeholder="Confirmer le mot de passe">
-                </div>
-                <button class="form-btn" onclick="registerUser()">Créer un compte</button>
-                
-                <div class="form-switch">
-                    Déjà un compte ? <a onclick="showLoginForm()">Se connecter</a>
-                </div>
+        function updateCommunityMembers() {
+            const container = document.getElementById('communityMembers');
+            container.innerHTML = '';
+            
+            // Ajouter l'utilisateur actuel
+            const userMember = document.createElement('div');
+            userMember.className = 'community-member';
+            userMember.innerHTML = `
+                <div class="member-status"></div>
+                <span>${appState.user?.name || 'Vous'}</span>
             `;
-        }
-
-        function showLoginForm() {
-            const accountTab = document.getElementById('accountTab');
-            accountTab.innerHTML = `
-                <h3 class="form-title">Connexion</h3>
-                <div class="form-group">
-                    <input type="email" id="loginEmail" class="form-input" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="loginPassword" class="form-input" placeholder="Mot de passe">
-                </div>
-                <button class="form-btn" onclick="loginUser()">Se connecter</button>
-                
-                <div class="form-switch">
-                    Pas de compte ? <a onclick="showRegisterForm()">S'inscrire</a>
-                </div>
-            `;
-        }
-
-        function loginUser() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+            container.appendChild(userMember);
             
-            if (!email || !password) {
-                alert('Veuillez remplir tous les champs');
-                return;
+            // Ajouter les autres membres
+            CONFIG.COMMUNITY_USERS.forEach(user => {
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'community-member';
+                memberDiv.innerHTML = `
+                    <div class="member-status ${user.status}"></div>
+                    <span>${user.name}</span>
+                `;
+                container.appendChild(memberDiv);
+            });
+        }
+
+        // ===== GESTION DES COMPTES =====
+        function showAccountModal(isLogin = true) {
+            const modal = document.getElementById('accountModal');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const button = document.getElementById('submitButton');
+            const switchText = document.getElementById('switchText');
+            const switchLink = document.getElementById('switchLink');
+            
+            if (isLogin) {
+                title.textContent = 'Connexion';
+                subtitle.textContent = 'Accédez à toutes les fonctionnalités';
+                button.textContent = 'Se connecter';
+                switchText.textContent = 'Pas de compte ?';
+                switchLink.textContent = 'S\'inscrire';
+                
+                document.getElementById('nameGroup').style.display = 'none';
+                document.getElementById('confirmGroup').style.display = 'none';
+            } else {
+                title.textContent = 'Inscription';
+                subtitle.textContent = 'Rejoignez la communauté Rasstube';
+                button.textContent = 'Créer un compte';
+                switchText.textContent = 'Déjà un compte ?';
+                switchLink.textContent = 'Se connecter';
+                
+                document.getElementById('nameGroup').style.display = 'block';
+                document.getElementById('confirmGroup').style.display = 'block';
             }
             
-            // Simulation de connexion
-            currentUser = {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('accountModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Réinitialiser le formulaire
+            document.getElementById('accountForm').reset();
+        }
+
+        function switchForm() {
+            const isLogin = document.getElementById('modalTitle').textContent === 'Connexion';
+            showAccountModal(!isLogin);
+        }
+
+        function handleAccountFormSubmit() {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const isLogin = document.getElementById('modalTitle').textContent === 'Connexion';
+            
+            if (isLogin) {
+                loginUser(email, password);
+            } else {
+                const name = document.getElementById('nameInput').value;
+                const confirm = document.getElementById('confirmInput').value;
+                
+                if (password !== confirm) {
+                    showNotification('Erreur', 'Les mots de passe ne correspondent pas', 'error');
+                    return;
+                }
+                
+                registerUser(name, email, password);
+            }
+        }
+
+        function loginUser(email, password) {
+            // Simuler la connexion
+            const user = {
+                id: Date.now(),
                 name: email.split('@')[0],
                 email: email,
-                joined: new Date().toLocaleDateString('fr-FR')
+                avatar: email.charAt(0).toUpperCase(),
+                joined: new Date().toISOString()
             };
             
-            localStorage.setItem('rasstube_user', JSON.stringify(currentUser));
+            appState.user = user;
+            appState.isLoggedIn = true;
             
             // Mettre à jour l'interface
-            document.querySelector('.user-btn').innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
-            switchTab('account');
+            updateUserInterface();
             
-            addChatMessage('bot', `🎉 Bienvenue ${currentUser.name} ! Vous êtes maintenant connecté.`);
+            // Fermer le modal
+            closeModal();
+            
+            // Afficher la notification
+            showNotification('Connexion réussie', `Bienvenue ${user.name} !`, 'success');
+            
+            // Message dans le chat
+            addCommunityMessage('Rasstube Bot', `${user.name} vient de se connecter !`);
+            
+            // Sauvegarder les données
+            saveUserData();
         }
 
-        function registerUser() {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirm = document.getElementById('registerConfirm').value;
-            
-            if (!name || !email || !password || !confirm) {
-                alert('Veuillez remplir tous les champs');
-                return;
-            }
-            
-            if (password !== confirm) {
-                alert('Les mots de passe ne correspondent pas');
-                return;
-            }
-            
-            currentUser = {
+        function registerUser(name, email, password) {
+            // Simuler l'inscription
+            const user = {
+                id: Date.now(),
                 name: name,
                 email: email,
-                joined: new Date().toLocaleDateString('fr-FR')
+                avatar: name.charAt(0).toUpperCase(),
+                joined: new Date().toISOString()
             };
             
-            localStorage.setItem('rasstube_user', JSON.stringify(currentUser));
+            appState.user = user;
+            appState.isLoggedIn = true;
             
             // Mettre à jour l'interface
-            document.querySelector('.user-btn').innerHTML = `<i class="fas fa-user"></i> ${currentUser.name}`;
-            switchTab('account');
+            updateUserInterface();
             
-            addChatMessage('bot', `✨ Félicitations ${name} ! Votre compte a été créé avec succès.`);
+            // Fermer le modal
+            closeModal();
+            
+            // Afficher la notification
+            showNotification('Inscription réussie', `Bienvenue dans la communauté ${name} !`, 'success');
+            
+            // Message dans le chat
+            addCommunityMessage('Rasstube Bot', `Bienvenue à ${name}, notre nouveau membre !`);
+            
+            // Sauvegarder les données
+            saveUserData();
         }
 
         function logoutUser() {
-            currentUser = null;
-            localStorage.removeItem('rasstube_user');
+            appState.user = null;
+            appState.isLoggedIn = false;
             
-            document.querySelector('.user-btn').innerHTML = `<i class="fas fa-user"></i> Connexion`;
-            switchTab('account');
+            // Mettre à jour l'interface
+            updateUserInterface();
             
-            addChatMessage('bot', 'Vous avez été déconnecté. À bientôt !');
+            // Afficher la notification
+            showNotification('Déconnexion', 'Vous êtes maintenant déconnecté', 'info');
+            
+            // Message dans le chat
+            addCommunityMessage('Rasstube Bot', 'Un utilisateur s\'est déconnecté.');
         }
 
-        function showAccountTab() {
-            switchTab('account');
-        }
-
-        function showHome() {
-            loadTrendingVideos();
-            setActiveNav('home');
-        }
-
-        function showShorts() {
-            document.getElementById('sectionTitle').textContent = 'Shorts';
-            document.getElementById('videosGrid').innerHTML = '<div class="loading">Shorts en cours de chargement...</div>';
+        function updateUserInterface() {
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
             
+            if (appState.isLoggedIn && appState.user) {
+                userAvatar.textContent = appState.user.avatar;
+                userName.textContent = appState.user.name;
+                
+                // Mettre à jour le bouton de connexion
+                document.querySelector('.user-profile').onclick = () => showUserMenu();
+            } else {
+                userAvatar.textContent = 'G';
+                userName.textContent = 'Invité';
+                
+                // Mettre à jour le bouton de connexion
+                document.querySelector('.user-profile').onclick = () => showAccountModal(true);
+            }
+        }
+
+        // ===== NOTIFICATIONS =====
+        function showNotification(title, message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            if (type === 'warning') icon = 'fa-exclamation-triangle';
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="close-notification" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Supprimer automatiquement après 5 secondes
             setTimeout(() => {
-                displayVideos(videoDatabase['tendances'].slice(0, 4));
-            }, 500);
-            
-            setActiveNav('shorts');
+                if (notification.parentNode) {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(120%)';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
         }
 
-        function showSubscriptions() {
-            document.getElementById('sectionTitle').textContent = 'Abonnements';
-            document.getElementById('videosGrid').innerHTML = '<div class="loading">Chargement des abonnements...</div>';
-            
-            setTimeout(() => {
-                displayVideos(videoDatabase['tendances']);
-            }, 500);
-            
-            setActiveNav('subscriptions');
+        // ===== GESTION DES DONNÉES =====
+        function loadUserData() {
+            try {
+                const data = localStorage.getItem('rasstube_user_data');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    appState.user = parsed.user;
+                    appState.isLoggedIn = parsed.isLoggedIn;
+                    appState.likedVideos = new Set(parsed.likedVideos || []);
+                    appState.watchHistory = parsed.watchHistory || [];
+                    appState.subscriptions = parsed.subscriptions || [];
+                    
+                    updateUserInterface();
+                }
+            } catch (error) {
+                console.error('Erreur chargement données:', error);
+            }
         }
 
-        function showHistory() {
-            document.getElementById('sectionTitle').textContent = 'Historique';
-            document.getElementById('videosGrid').innerHTML = '<div class="loading">Chargement de l\'historique...</div>';
+        function saveUserData() {
+            try {
+                const data = {
+                    user: appState.user,
+                    isLoggedIn: appState.isLoggedIn,
+                    likedVideos: Array.from(appState.likedVideos),
+                    watchHistory: appState.watchHistory,
+                    subscriptions: appState.subscriptions
+                };
+                
+                localStorage.setItem('rasstube_user_data', JSON.stringify(data));
+            } catch (error) {
+                console.error('Erreur sauvegarde données:', error);
+            }
+        }
+
+        function addToWatchHistory(video) {
+            if (!appState.isLoggedIn) return;
             
-            setTimeout(() => {
-                displayVideos(videoDatabase['tendances'].slice(0, 3));
-            }, 500);
+            appState.watchHistory.unshift({
+                videoId: video.id,
+                title: video.title,
+                watchedAt: new Date().toISOString()
+            });
             
-            setActiveNav('history');
+            // Garder seulement les 100 derniers
+            appState.watchHistory = appState.watchHistory.slice(0, 100);
+            
+            saveUserData();
+        }
+
+        function addToSearchHistory(query) {
+            if (!appState.isLoggedIn) return;
+            
+            // Implémenter l'historique de recherche
+        }
+
+        // ===== FONCTIONS UTILITAIRES =====
+        function formatNumber(num) {
+            if (!num) return '0';
+            
+            const n = parseInt(num);
+            if (n >= 1000000) {
+                return (n / 1000000).toFixed(1) + 'M';
+            } else if (n >= 1000) {
+                return (n / 1000).toFixed(1) + 'K';
+            }
+            return n.toLocaleString();
+        }
+
+        function formatDuration(duration) {
+            const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+            if (!match) return '0:00';
+            
+            const hours = (match[1] || '').replace('H', '');
+            const minutes = (match[2] || '').replace('M', '');
+            const seconds = (match[3] || '').replace('S', '');
+            
+            let result = '';
+            if (hours) result += hours + ':';
+            result += (minutes || '0').padStart(2, '0') + ':';
+            result += (seconds || '0').padStart(2, '0');
+            
+            return result;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return "Aujourd'hui";
+            if (diffDays === 1) return "Hier";
+            if (diffDays < 7) return `Il y a ${diffDays} jours`;
+            if (diffDays < 30) return `Il y a ${Math.floor(diffDays / 7)} semaines`;
+            if (diffDays < 365) return `Il y a ${Math.floor(diffDays / 30)} mois`;
+            return `Il y a ${Math.floor(diffDays / 365)} ans`;
+        }
+
+        function formatTime(date) {
+            return date.toLocaleTimeString('fr-FR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+
+        function getCategoryId(category) {
+            const categories = {
+                'Musique': '10',
+                'Jeux vidéo': '20',
+                'Sport': '17',
+                'Films': '1',
+                'Actualités': '25',
+                'En direct': '1',
+                'Apprendre': '27',
+                'Comédie': '23',
+                'Animaux': '15',
+                'Technologie': '28',
+                'Cuisine': '26',
+                'Mode': '22',
+                'Voyage': '19',
+                'Science': '28',
+                'Histoire': '22'
+            };
+            
+            return categories[category] || '0';
+        }
+
+        function extractSearchTerm(message) {
+            const terms = message.match(/"([^"]+)"|'([^']+)'|sur (.+?)(?:\.|$)|de (.+?)(?:\.|$)/);
+            if (terms) {
+                return terms[1] || terms[2] || terms[3] || terms[4] || 'tendances';
+            }
+            
+            const words = message.split(' ');
+            const searchWords = words.filter(word => 
+                !['trouve', 'cherche', 'vidéo', 'vidéos', 'sur', 'de', 'un', 'une', 'des'].includes(word.toLowerCase())
+            );
+            
+            return searchWords.join(' ') || 'tendances';
+        }
+
+        function getRandomCategory() {
+            const categories = ['musique', 'jeux vidéo', 'sport', 'science', 'voyage', 'cuisine'];
+            return categories[Math.floor(Math.random() * categories.length)];
+        }
+
+        // ===== RESPONSIVE =====
+        function checkResponsive() {
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                document.querySelector('.toggle-chat').style.display = 'flex';
+                document.querySelector('.toggle-menu').style.display = 'flex';
+            } else {
+                document.querySelector('.toggle-chat').style.display = 'none';
+                document.querySelector('.toggle-menu').style.display = 'none';
+                document.getElementById('sidebarLeft').classList.remove('active');
+                document.getElementById('sidebarRight').classList.remove('active');
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('sidebarLeft').classList.toggle('active');
+        }
+
+        function toggleChat() {
+            document.getElementById('sidebarRight').classList.toggle('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebarLeft').classList.toggle('collapsed');
+            
+            const icon = document.querySelector('.toggle-sidebar i');
+            if (document.getElementById('sidebarLeft').classList.contains('collapsed')) {
+                icon.className = 'fas fa-chevron-right';
+            } else {
+                icon.className = 'fas fa-chevron-left';
+            }
+        }
+
+        // ===== INFINITE SCROLL =====
+        function handleInfiniteScroll() {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            
+            if (scrollTop + clientHeight >= scrollHeight - 500) {
+                loadMoreVideos();
+            }
+        }
+
+        // ===== FONCTIONS DIVERSES =====
+        function startVoiceSearch() {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'fr-FR';
+                recognition.start();
+                
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('searchInput').value = transcript;
+                    performSearch();
+                };
+                
+                recognition.onerror = function(event) {
+                    showNotification('Recherche vocale', 'Erreur de reconnaissance', 'error');
+                };
+            } else {
+                showNotification('Recherche vocale', 'Non supporté par votre navigateur', 'error');
+            }
+        }
+
+        function uploadVideo() {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
+            
+            showNotification('Upload', 'Fonctionnalité à venir !', 'info');
         }
 
         function showSettings() {
-            alert('Paramètres - Fonctionnalité à venir !');
-            setActiveNav('settings');
+            showNotification('Paramètres', 'Fonctionnalité à venir !', 'info');
         }
 
-        function setActiveNav(item) {
-            document.querySelectorAll('.nav-item').forEach(nav => {
-                nav.classList.remove('active');
-            });
+        function showHelp() {
+            showNotification('Aide', 'Consultez notre centre d\'aide en ligne', 'info');
+        }
+
+        function addToWatchLater(videoId) {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
             
-            if (item === 'home') {
-                document.querySelector('.nav-item[onclick*="showHome"]').classList.add('active');
-            } else if (item === 'shorts') {
-                document.querySelector('.nav-item[onclick*="showShorts"]').classList.add('active');
-            } else if (item === 'subscriptions') {
-                document.querySelector('.nav-item[onclick*="showSubscriptions"]').classList.add('active');
-            } else if (item === 'history') {
-                document.querySelector('.nav-item[onclick*="showHistory"]').classList.add('active');
-            } else if (item === 'settings') {
-                document.querySelector('.nav-item[onclick*="showSettings"]').classList.add('active');
+            showNotification('À regarder', 'Vidéo ajoutée à votre liste', 'success');
+        }
+
+        function addToPlaylistModal(videoId) {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
+            
+            showNotification('Playlist', 'Choisissez une playlist', 'info');
+        }
+
+        function shareVideoModal(videoId) {
+            const video = appState.videos.find(v => v.id === videoId);
+            if (video) {
+                const shareUrl = `https://youtube.com/watch?v=${videoId}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: video.title,
+                        text: 'Regarde cette vidéo sur Rasstube !',
+                        url: shareUrl
+                    });
+                } else {
+                    navigator.clipboard.writeText(shareUrl);
+                    showNotification('Partage', 'Lien copié dans le presse-papier', 'success');
+                }
             }
         }
 
-        // Fermer la vidéo avec Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideo();
+        function shareVideo() {
+            if (appState.currentVideo) {
+                shareVideoModal(appState.currentVideo.id);
             }
-        });
+        }
 
-        // Fermer la vidéo en cliquant en dehors
-        document.getElementById('videoModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeVideo();
+        function addToPlaylist() {
+            if (appState.currentVideo) {
+                addToPlaylistModal(appState.currentVideo.id);
             }
-        });
+        }
+
+        function toggleDescription() {
+            const desc = document.getElementById('playerDescription');
+            const btn = document.querySelector('.show-more');
+            
+            if (desc.style.webkitLineClamp) {
+                desc.style.webkitLineClamp = 'unset';
+                btn.textContent = 'Voir moins';
+            } else {
+                desc.style.webkitLineClamp = '3';
+                btn.textContent = 'Voir plus';
+            }
+        }
+
+        function showUserMenu() {
+            const menu = document.createElement('div');
+            menu.className = 'glass-effect';
+            menu.style.position = 'absolute';
+            menu.style.top = '70px';
+            menu.style.right = '20px';
+            menu.style.padding = '15px';
+            menu.style.borderRadius = '12px';
+            menu.style.minWidth = '200px';
+            menu.style.zIndex = '9999';
+            
+            menu.innerHTML = `
+                <div style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-weight: 600;">${appState.user?.name}</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">${appState.user?.email}</div>
+                </div>
+                <button onclick="loadLikedVideos()" style="display: block; width: 100%; text-align: left; padding: 10px 0; background: none; border: none; color: var(--text-primary); cursor: pointer;">
+                    <i class="fas fa-heart" style="margin-right: 10px;"></i> Vidéos aimées
+                </button>
+                <button onclick="loadWatchLater()" style="display: block; width: 100%; text-align: left; padding: 10px 0; background: none; border: none; color: var(--text-primary); cursor: pointer;">
+                    <i class="fas fa-clock" style="margin-right: 10px;"></i> À regarder
+                </button>
+                <button onclick="showSettings()" style="display: block; width: 100%; text-align: left; padding: 10px 0; background: none; border: none; color: var(--text-primary); cursor: pointer;">
+                    <i class="fas fa-cog" style="margin-right: 10px;"></i> Paramètres
+                </button>
+                <button onclick="logoutUser(); this.parentElement.remove()" style="display: block; width: 100%; text-align: left; padding: 10px 0; background: none; border: none; color: var(--primary-red); cursor: pointer;">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i> Déconnexion
+                </button>
+            `;
+            
+            document.body.appendChild(menu);
+            
+            // Fermer le menu en cliquant ailleurs
+            setTimeout(() => {
+                const closeMenu = (e) => {
+                    if (!menu.contains(e.target) && e.target !== document.querySelector('.user-profile')) {
+                        menu.remove();
+                        document.removeEventListener('click', closeMenu);
+                    }
+                };
+                document.addEventListener('click', closeMenu);
+            }, 100);
+        }
+
+        function loadTrending() {
+            appState.currentCategory = 'Tout';
+            loadHomeVideos();
+            updateMainTitle('Vidéos tendances');
+        }
+
+        function loadSubscriptions() {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
+            
+            showNotification('Abonnements', 'Fonctionnalité à venir !', 'info');
+        }
+
+        function loadHistory() {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
+            
+            showNotification('Historique', 'Fonctionnalité à venir !', 'info');
+        }
+
+        function loadWatchLater() {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
+            
+            showNotification('À regarder', 'Fonctionnalité à venir !', 'info');
+        }
+
+        function loadLikedVideos() {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
+            
+            showNotification('Vidéos aimées', 'Fonctionnalité à venir !', 'info');
+        }
+
+        function loadPlaylists() {
+            if (!appState.isLoggedIn) {
+                showAccountModal(true);
+                return;
+            }
+            
+            showNotification('Playlists', 'Fonctionnalité à venir !', 'info');
+        }
+
+        function showNotifications() {
+            showNotification('Notifications', 'Vous n\'avez pas de nouvelles notifications', 'info');
+        }
+
+        // ===== EXPOSER LES FONCTIONS GLOBALES =====
+        window.performSearch = performSearch;
+        window.playVideo = playVideo;
+        window.closeVideoPlayer = closeVideoPlayer;
+        window.toggleLike = toggleLike;
+        window.toggleDislike = toggleDislike;
+        window.shareVideo = shareVideo;
+        window.addToPlaylist = addToPlaylist;
+        window.toggleDescription = toggleDescription;
+        window.sendCommunityMessage = sendCommunityMessage;
+        window.sendAiMessage = sendAiMessage;
+        window.showAccountModal = showAccountModal;
+        window.closeModal = closeModal;
+        window.switchForm = switchForm;
+        window.switchChatTab = switchChatTab;
+        window.toggleMobileMenu = toggleMobileMenu;
+        window.toggleChat = toggleChat;
+        window.toggleSidebar = toggleSidebar;
+        window.startVoiceSearch = startVoiceSearch;
+        window.uploadVideo = uploadVideo;
+        window.showSettings = showSettings;
+        window.showHelp = showHelp;
+        window.addToWatchLater = addToWatchLater;
+        window.addToPlaylistModal = addToPlaylistModal;
+        window.shareVideoModal = shareVideoModal;
+        window.searchCategory = searchCategory;
+        window.loadHome = loadHomeVideos;
+        window.loadTrending = loadTrending;
+        window.loadSubscriptions = loadSubscriptions;
+        window.loadHistory = loadHistory;
+        window.loadWatchLater = loadWatchLater;
+        window.loadLikedVideos = loadLikedVideos;
+        window.loadPlaylists = loadPlaylists;
+        window.showNotifications = showNotifications;
+        window.logoutUser = logoutUser;
+
+        console.log('RASSTUBE ELITE ULTIMATE - Application chargée avec succès !');
+        console.log('Version: 1.0.0 | Fonctionnalités: YouTube API, Chat IA, Communauté, Player HD');
     </script>
 </body>
 </html>
