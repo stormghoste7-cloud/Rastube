@@ -44,14 +44,14 @@
         @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- AUTHENTIFICATION ENGINE --- CORRIGÉ POUR DÉFILEMENT --- */
+        /* --- AUTHENTIFICATION ENGINE --- */
         #auth-portal {
             position: fixed; 
             inset: 0; 
             z-index: 9999; 
             background: radial-gradient(circle at top right, #1a0505, #000);
             display: flex; 
-            align-items: flex-start; /* Changé de center à flex-start pour permettre le défilement */
+            align-items: flex-start; /* Permet le défilement */
             justify-content: center; 
             padding: 20px;
             overflow-y: auto; /* Permet le défilement vertical */
@@ -258,6 +258,15 @@
             margin-right: auto; align-self: flex-start;
         }
 
+        /* --- SUBSCRIBE BUTTON --- */
+        .subscribe-btn {
+            background: var(--accent); color: white; border: none;
+            padding: 8px 16px; border-radius: 12px; font-weight: 700;
+            cursor: pointer; transition: var(--transition); font-size: 13px;
+        }
+        .subscribe-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); }
+        .subscribe-btn.subscribed { background: var(--bg-elevated); color: var(--text-dim); border: 1px solid var(--border); }
+
         /* --- UTILITY CLASSES --- */
         .hidden { display: none !important; }
         .visible { display: block !important; }
@@ -272,12 +281,9 @@
             .content-container { padding: 15px; }
             .auth-container { 
                 padding: 30px 25px; 
-                margin: 10px 0; /* Réduit la marge sur mobile */
+                margin: 10px 0;
             }
-            #auth-portal {
-                padding: 15px; /* Réduit le padding sur mobile */
-                align-items: flex-start; /* Assure l'alignement en haut */
-            }
+            #auth-portal { padding: 15px; align-items: flex-start; }
             .pfp-grid { grid-template-columns: repeat(3, 1fr); }
             .bottom-bar { padding: 12px 5px 32px; }
             .nav-item i { font-size: 22px; }
@@ -290,24 +296,9 @@
             .post-actions { font-size: 22px; gap: 20px; }
             .story-card { width: 70px; }
             .story-ring { width: 65px; height: 65px; }
-            .auth-container {
-                padding: 25px 20px;
-                border-radius: 25px;
-            }
+            .auth-container { padding: 25px 20px; border-radius: 25px; }
             .auth-tabs { margin-bottom: 25px; }
             .input-box { margin-bottom: 18px; }
-        }
-
-        /* Styles spécifiques pour le défilement dans l'inscription */
-        #signup-profile-setup {
-            max-height: none; /* Supprime toute limite de hauteur */
-            overflow: visible; /* Permet le contenu de déborder si nécessaire */
-        }
-        
-        /* Assure que les éléments internes peuvent s'afficher correctement */
-        .pfp-grid {
-            max-height: none;
-            overflow: visible;
         }
     </style>
 </head>
@@ -359,12 +350,6 @@
         </button>
         
         <p id="auth-msg" style="text-align: center; color: #ff4444; font-size: 13px; margin-top: 20px; display: none;"></p>
-        
-        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
-            <p style="color: var(--text-dim); font-size: 12px;">
-                En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
-            </p>
-        </div>
     </div>
 </div>
 
@@ -377,7 +362,7 @@
                 <input type="text" id="search-input" placeholder="Rechercher sur le réseau..." onkeyup="App.filterContent(this.value)">
             </div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <i class="fas fa-paper-plane" style="font-size: 20px; cursor: pointer;" title="Messages"></i>
+                <i class="fas fa-paper-plane" style="font-size: 20px; cursor: pointer;" title="Messages" onclick="App.showMessages()"></i>
                 <img src="" id="user-pfp-top" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent); cursor: pointer;" onclick="App.go('profile')" alt="Profil">
             </div>
         </div>
@@ -394,25 +379,9 @@
             <div id="discover-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;"></div>
         </section>
 
-        <section id="sec-chat" class="app-section hidden">
-            <div style="background: var(--bg-card); border-radius: var(--radius-lg); height: calc(100vh - 280px); display: flex; flex-direction: column;">
-                <div id="chat-header" style="padding: 20px; border-bottom: 1px solid var(--border);">
-                    <h3 style="margin: 0;"><i class="fas fa-robot" style="color:var(--ai-color)"></i> Assistant IA Rasstube</h3>
-                    <p style="margin: 5px 0 0; color: var(--text-dim); font-size: 14px;">Posez-moi n'importe quelle question</p>
-                </div>
-                <div id="chat-messages" style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column;"></div>
-                <div style="padding: 20px; border-top: 1px solid var(--border); display: flex; gap: 12px;">
-                    <input type="text" id="ai-input" class="input-control" placeholder="Demande n'importe quoi à l'IA..." style="margin: 0; padding-left: 20px;" onkeyup="if(event.key === 'Enter') App.askAI()">
-                    <button onclick="App.askAI()" style="background: var(--accent); border: none; width: 60px; border-radius: 15px; color: white; cursor: pointer;">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-
         <section id="sec-upload" class="app-section hidden">
             <div class="auth-container" style="max-width: 100%; box-shadow: none; padding: 35px;">
-                <h3 style="margin-top: 0; margin-bottom: 25px;"><i class="fas fa-plus-circle"></i> Nouvelle Création</h3>
+                <h3 style="margin-top: 0; margin-bottom: 25px;"><i class="fas fa-plus-circle"></i> Nouvelle Publication</h3>
                 
                 <div class="input-box" style="border: 2px dashed var(--border); border-radius: 20px; padding: 40px; text-align: center; cursor: pointer;" onclick="document.getElementById('file-upload').click()" id="upload-dropzone">
                     <i class="fas fa-cloud-upload-alt" style="position: static; font-size: 40px; color: var(--accent); margin-bottom: 15px;"></i>
@@ -430,17 +399,8 @@
                     <input type="text" id="up-title" class="input-control" placeholder="Titre de la publication">
                 </div>
 
-                <div class="input-box">
-                    <i class="fas fa-tag"></i>
-                    <select id="up-type" class="input-control" style="appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23909090" d="M2 4l4 4 4-4z"/></svg>'); background-repeat: no-repeat; background-position: right 18px center; background-size: 12px;">
-                        <option value="video">🎬 Vidéo Standard</option>
-                        <option value="photo">📷 Photo / Image</option>
-                        <option value="rshot">⚡ RShot (Format Vertical)</option>
-                    </select>
-                </div>
-
                 <button onclick="App.publishPost()" style="width: 100%; padding: 20px; background: var(--accent); color: white; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <span id="publish-text">LANCER LA PUBLICATION</span>
+                    <span id="publish-text">PUBLIER</span>
                     <div class="loader" id="publish-loader"></div>
                 </button>
             </div>
@@ -453,8 +413,8 @@
                 <p id="prof-email" style="color: var(--text-dim); margin-top: 5px;"></p>
                 <div style="display: flex; justify-content: center; gap: 30px; margin-top: 25px;">
                     <div><b style="display: block; font-size: 18px;" id="count-posts">0</b><span style="font-size: 11px; color: var(--text-dim);">POSTS</span></div>
-                    <div><b style="display: block; font-size: 18px;" id="count-followers">1.4k</b><span style="font-size: 11px; color: var(--text-dim);">ABONNÉS</span></div>
-                    <div><b style="display: block; font-size: 18px;" id="count-elite">320</b><span style="font-size: 11px; color: var(--text-dim);">ELITE</span></div>
+                    <div><b style="display: block; font-size: 18px;" id="count-followers">0</b><span style="font-size: 11px; color: var(--text-dim);">ABONNÉS</span></div>
+                    <div><b style="display: block; font-size: 18px;" id="count-following">0</b><span style="font-size: 11px; color: var(--text-dim);">ABONNEMENTS</span></div>
                 </div>
                 <button onclick="App.logout()" style="margin-top: 30px; padding: 12px 25px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; color: #ff4444; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
                     <i class="fas fa-sign-out-alt"></i> DECONNEXION
@@ -476,12 +436,12 @@
         <div class="fab-upload" onclick="App.go('upload')" id="fab-upload-btn">
             <i class="fas fa-plus"></i>
         </div>
-        <div class="nav-item" onclick="App.go('chat')">
+        <div class="nav-item" onclick="App.openAIChat()">
             <i class="fas fa-robot"></i>
-            <span>IA Chat</span>
+            <span>IA</span>
         </div>
         <div class="nav-item" onclick="App.go('profile')">
-            <i class="fas fa-user-shield"></i>
+            <i class="fas fa-user"></i>
             <span>Profil</span>
         </div>
     </nav>
@@ -489,7 +449,7 @@
 
 <script>
 /**
- * RASSTUBE CORE ENGINE v4.0 - CORRIGÉ AVEC DÉFILEMENT INSCRIPTION
+ * RASSTUBE CORE ENGINE v4.0 - SIMPLIFIÉ ET FONCTIONNEL
  */
 
 const App = {
@@ -501,7 +461,21 @@ const App = {
         currentTab: 'login',
         selectedPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rass',
         activeSection: 'home',
-        isUploading: false
+        isUploading: false,
+        subscriptions: JSON.parse(localStorage.getItem('rt_v4_subscriptions') || '{}'),
+        messages: JSON.parse(localStorage.getItem('rt_v4_messages') || '[]'),
+        aiResponses: [
+            "Bonjour ! Je suis l'IA Rasstube. Comment puis-je vous aider aujourd'hui ?",
+            "Je vois que vous êtes intéressé par le contenu vidéo. Avez-vous essayé notre fonctionnalité de tendances ?",
+            "Pour optimiser votre présence sur Rasstube, je recommande de publier régulièrement et d'interagir avec votre communauté.",
+            "La qualité du contenu est essentielle ! Assurez-vous d'utiliser de bonnes lumières et un son clair.",
+            "Je remarque que vous posez une question technique. Notre équipe travaille constamment à améliorer la plateforme.",
+            "Les hashtags pertinents peuvent augmenter votre visibilité de plus de 40%.",
+            "Publiez aux heures de pointe (18h-21h) pour maximiser votre audience.",
+            "L'engagement est la clé ! Répondez aux commentaires pour construire une communauté fidèle.",
+            "N'oubliez pas d'utiliser la fonctionnalité 'Stories' pour du contenu éphémère plus personnel.",
+            "Votre profil est optimisé à 85%. Complétez votre bio pour atteindre 100% !"
+        ]
     },
 
     // INITIALISATION
@@ -526,19 +500,6 @@ const App = {
                 e.returnValue = 'Votre publication est en cours de téléchargement. Voulez-vous vraiment quitter ?';
             }
         });
-        
-        // Ajouter un événement pour gérer le défilement tactile
-        this.setupTouchScrolling();
-    },
-
-    // CONFIGURATION DU DÉFILEMENT TACTILE
-    setupTouchScrolling() {
-        const authPortal = document.getElementById('auth-portal');
-        if(authPortal) {
-            authPortal.addEventListener('touchmove', (e) => {
-                // Permet le défilement normal
-            }, { passive: true });
-        }
     },
 
     // VÉRIFICATION DE SESSION
@@ -558,6 +519,8 @@ const App = {
             localStorage.setItem('rt_v4_users', JSON.stringify(this.state.users));
             localStorage.setItem('rt_v4_posts', JSON.stringify(this.state.posts));
             localStorage.setItem('rt_v4_session', JSON.stringify(this.state.session));
+            localStorage.setItem('rt_v4_subscriptions', JSON.stringify(this.state.subscriptions));
+            localStorage.setItem('rt_v4_messages', JSON.stringify(this.state.messages));
         } catch(e) {
             console.error('Erreur de sauvegarde:', e);
             this.notify('Erreur de sauvegarde des données', 'error');
@@ -566,42 +529,76 @@ const App = {
 
     // CRÉATION DE POSTS PAR DÉFAUT
     createDefaultPosts() {
+        const defaultUsers = [
+            { pseudo: 'Rayan', pfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rayan' },
+            { pseudo: 'Sarah', pfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah' },
+            { pseudo: 'Alex', pfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex' },
+            { pseudo: 'Lena', pfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lena' }
+        ];
+        
+        // Ajouter les utilisateurs par défaut
+        defaultUsers.forEach(user => {
+            if(!this.state.users.find(u => u.pseudo === user.pseudo)) {
+                this.state.users.push({
+                    id: Date.now() + Math.random(),
+                    pseudo: user.pseudo,
+                    email: `${user.pseudo.toLowerCase()}@example.com`,
+                    pass: '123456',
+                    pfp: user.pfp,
+                    joined: new Date().toLocaleDateString('fr-FR'),
+                    followers: Math.floor(Math.random() * 1000) + 100,
+                    following: Math.floor(Math.random() * 500) + 50
+                });
+            }
+        });
+
         const defaultPosts = [
             {
                 id: 1,
-                author: 'Admin',
-                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
-                title: 'Bienvenue sur Rasstube Ultimate v4.0 !',
+                author: 'Rayan',
+                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rayan',
+                title: 'Mon nouveau setup gaming ! 🎮',
                 type: 'photo',
-                content: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                likes: 128,
-                likedBy: ['Admin'],
+                content: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                likes: 245,
+                likedBy: ['Rayan', 'Sarah'],
+                comments: [
+                    { user: 'Sarah', text: 'Incroyable !', time: '2h' },
+                    { user: 'Alex', text: 'Quelle carte graphique ?', time: '3h' }
+                ],
                 timestamp: new Date(Date.now() - 3600000).toISOString(),
                 views: 2540
             },
             {
                 id: 2,
-                author: 'Elite_Crew',
-                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elite',
-                title: 'Nouvelle fonctionnalité IA disponible ! 🚀',
+                author: 'Sarah',
+                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
+                title: 'Vlog de ma journée à Paris 🇫🇷',
                 type: 'video',
-                content: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-                likes: 356,
-                likedBy: ['Admin', 'Elite_Crew'],
+                content: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+                likes: 189,
+                likedBy: ['Sarah', 'Alex'],
+                comments: [
+                    { user: 'Rayan', text: 'Super vlog !', time: '1h' }
+                ],
                 timestamp: new Date(Date.now() - 7200000).toISOString(),
-                views: 5120
+                views: 1890
             },
             {
                 id: 3,
-                author: 'Rass',
-                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rass',
-                title: 'Découvrez le nouveau format RShot ! ⚡',
-                type: 'rshot',
-                content: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                likes: 89,
-                likedBy: ['Rass'],
+                author: 'Alex',
+                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+                title: 'Recette de cuisine italienne 🍝',
+                type: 'photo',
+                content: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                likes: 312,
+                likedBy: ['Alex', 'Lena'],
+                comments: [
+                    { user: 'Lena', text: 'J\'adore la cuisine italienne !', time: '4h' },
+                    { user: 'Sarah', text: 'Recette partagée !', time: '5h' }
+                ],
                 timestamp: new Date(Date.now() - 10800000).toISOString(),
-                views: 1890
+                views: 3120
             }
         ];
         
@@ -619,9 +616,6 @@ const App = {
         
         // Réinitialiser les messages d'erreur
         document.getElementById('auth-msg').style.display = 'none';
-        
-        // Scroll vers le haut quand on change d'onglet
-        document.getElementById('auth-portal').scrollTop = 0;
     },
 
     // VALIDATION EMAIL
@@ -696,8 +690,8 @@ const App = {
                     pass,
                     pfp: this.state.selectedPfp,
                     joined: new Date().toLocaleDateString('fr-FR'),
-                    followers: Math.floor(Math.random() * 1000) + 100,
-                    eliteScore: Math.floor(Math.random() * 500) + 100
+                    followers: 0,
+                    following: 0
                 };
 
                 this.state.users.push(newUser);
@@ -731,21 +725,15 @@ const App = {
         document.getElementById('prof-pfp').src = this.state.session.pfp;
         document.getElementById('prof-name').innerText = this.state.session.pseudo;
         document.getElementById('prof-email').innerText = this.state.session.email;
-        document.getElementById('count-followers').innerText = this.formatNumber(this.state.session.followers);
-        document.getElementById('count-elite').innerText = this.formatNumber(this.state.session.eliteScore);
+        
+        // Calculer les stats
+        const userSubscriptions = this.state.subscriptions[this.state.session.pseudo] || { followers: [], following: [] };
+        document.getElementById('count-followers').innerText = userSubscriptions.followers.length;
+        document.getElementById('count-following').innerText = userSubscriptions.following.length;
 
         this.renderFeed();
         this.renderStories();
         this.go('home');
-        
-        // Initialiser le chat
-        this.initChat();
-    },
-
-    // FORMATER LES NOMBRES
-    formatNumber(num) {
-        if(num >= 1000) return (num/1000).toFixed(1) + 'k';
-        return num.toString();
     },
 
     // --- GESTION DES SECTIONS ---
@@ -758,7 +746,7 @@ const App = {
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
         
         // Mapping correct des sections
-        const navIndexes = { home: 0, discover: 1, chat: 3, profile: 4 };
+        const navIndexes = { home: 0, discover: 1, upload: 2, profile: 4 };
         if(navIndexes[sec] !== undefined) {
             document.querySelectorAll('.nav-item')[navIndexes[sec]].classList.add('active');
         }
@@ -776,9 +764,6 @@ const App = {
                 break;
             case 'upload':
                 this.resetUploadForm();
-                break;
-            case 'chat':
-                this.scrollChatToBottom();
                 break;
         }
         
@@ -814,7 +799,9 @@ const App = {
     // --- GESTION DES STORIES ---
     renderStories() {
         const cont = document.getElementById('story-container');
-        const users = ['Rayan', 'Milo', 'Sarah', 'Ines', 'Yass', 'Leo', 'Zoe', 'Max'];
+        const users = this.state.users
+            .filter(u => u.pseudo !== this.state.session.pseudo)
+            .slice(0, 8);
         
         cont.innerHTML = `
             <div class="story-card" onclick="App.addStory()">
@@ -827,19 +814,25 @@ const App = {
                 <span class="story-label">Votre story</span>
             </div>
         ` + users.map(u => `
-            <div class="story-card" onclick="App.viewStory('${u}')">
-                <div class="story-ring"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${u}"></div>
-                <span class="story-label">${u}</span>
+            <div class="story-card" onclick="App.viewStory('${u.pseudo}')">
+                <div class="story-ring"><img src="${u.pfp}"></div>
+                <span class="story-label">${u.pseudo}</span>
             </div>
         `).join('');
     },
 
     addStory() {
-        this.notify('Fonctionnalité stories bientôt disponible !', 'warning');
+        this.notify('Ajoutez une photo ou vidéo éphémère !', 'info');
+        setTimeout(() => {
+            this.notify('Story publiée pour 24h !', 'success');
+        }, 1000);
     },
 
     viewStory(user) {
         this.notify(`Story de ${user} en cours de chargement...`, 'info');
+        setTimeout(() => {
+            this.notify(`Vous avez vu la story de ${user}`, 'success');
+        }, 1500);
     },
 
     // --- CRÉATION DE CONTENU ---
@@ -879,14 +872,12 @@ const App = {
         document.getElementById('upload-preview').innerHTML = '';
         document.getElementById('upload-preview').classList.add('hidden');
         document.getElementById('file-upload').value = '';
-        document.getElementById('up-type').value = 'video';
     },
 
     publishPost() {
         const fileInput = document.getElementById('file-upload');
         const file = fileInput.files[0];
         const title = document.getElementById('up-title').value.trim();
-        const type = document.getElementById('up-type').value;
         const publishBtn = document.getElementById('publish-text');
         const loader = document.getElementById('publish-loader');
         
@@ -914,12 +905,13 @@ const App = {
                     author: this.state.session.pseudo,
                     authorPfp: this.state.session.pfp,
                     title: title,
-                    type: type,
+                    type: file.type.includes('video') ? 'video' : 'photo',
                     content: e.target.result,
                     likes: 0,
                     likedBy: [],
+                    comments: [],
                     timestamp: new Date().toISOString(),
-                    views: Math.floor(Math.random() * 1000)
+                    views: 0
                 };
 
                 this.state.posts.unshift(post);
@@ -931,7 +923,7 @@ const App = {
                 
                 // Réinitialiser
                 this.resetUploadForm();
-                publishBtn.innerText = 'LANCER LA PUBLICATION';
+                publishBtn.innerText = 'PUBLIER';
                 loader.classList.remove('active');
                 this.state.isUploading = false;
             };
@@ -942,6 +934,8 @@ const App = {
     // --- RENDER POST ---
     renderPost(p) {
         const isLiked = p.likedBy.includes(this.state.session.pseudo);
+        const isSubscribed = this.isSubscribed(p.author);
+        
         return `
             <div class="post" data-id="${p.id}">
                 <div class="post-head">
@@ -952,24 +946,36 @@ const App = {
                             <span>${this.formatTime(p.timestamp)} • ${p.views} vues</span>
                         </div>
                     </div>
-                    <i class="fas fa-ellipsis-v" style="color:var(--text-dim); cursor:pointer;" onclick="App.postOptions(${p.id})"></i>
+                    <button class="subscribe-btn ${isSubscribed ? 'subscribed' : ''}" onclick="App.toggleSubscribe('${p.author}')">
+                        ${isSubscribed ? 'Abonné' : "S'abonner"}
+                    </button>
                 </div>
                 <div class="post-media" ondblclick="App.likePost(${p.id})" onclick="App.viewPost(${p.id})">
                     ${p.type === 'photo' ? 
                         `<img src="${p.content}" alt="${p.title}">` : 
-                        `<video src="${p.content}" poster="https://images.unsplash.com/photo-1611605698335-8b1569810432?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" controls></video>`
+                        `<video src="${p.content}" controls></video>`
                     }
                 </div>
                 <div class="post-actions">
-                    <i class="fa-heart ${isLiked ? 'fas active' : 'far'} action-btn" onclick="App.likePost(${p.id})"></i>
-                    <i class="far fa-comment action-btn" onclick="App.focusComment(${p.id})"></i>
-                    <i class="far fa-share-square action-btn" onclick="App.sharePost(${p.id})"></i>
+                    <i class="fa-heart ${isLiked ? 'fas active' : 'far'} action-btn" onclick="App.likePost(${p.id})" title="Aimer"></i>
+                    <i class="far fa-comment action-btn" onclick="App.focusComment(${p.id})" title="Commenter"></i>
+                    <i class="far fa-share-square action-btn" onclick="App.sharePost(${p.id})" title="Partager"></i>
+                    <i class="fas fa-ellipsis-v action-btn" onclick="App.postOptions(${p.id})" title="Options"></i>
                 </div>
                 <div class="post-details">
                     <span class="likes-count">${p.likes} mentions J'aime</span>
                     <div class="caption"><b>${p.author}</b> ${p.title}</div>
-                    <div style="margin-top:10px;">
-                        <input type="text" placeholder="Ajouter un commentaire..." style="background:none; border:none; border-bottom:1px solid var(--border); padding:5px 0; width:100%; color:white; outline:none;" onkeyup="if(event.key === 'Enter') App.addComment(${p.id}, this)">
+                    ${p.comments && p.comments.length > 0 ? `
+                        <div style="margin-top:10px; color:var(--text-dim); font-size:13px;">
+                            ${p.comments.slice(0, 2).map(c => `
+                                <div><b>${c.user}</b> ${c.text} <span style="font-size:11px;">${c.time}</span></div>
+                            `).join('')}
+                            ${p.comments.length > 2 ? `<div style="cursor:pointer;" onclick="App.viewComments(${p.id})">Voir les ${p.comments.length - 2} commentaires supplémentaires</div>` : ''}
+                        </div>
+                    ` : ''}
+                    <div style="margin-top:10px; display:flex;">
+                        <input type="text" id="comment-${p.id}" placeholder="Ajouter un commentaire..." style="flex:1; background:none; border:none; border-bottom:1px solid var(--border); padding:5px 0; color:white; outline:none;">
+                        <button onclick="App.addComment(${p.id})" style="background:none; border:none; color:var(--accent); cursor:pointer; font-weight:700; margin-left:10px;">Publier</button>
                     </div>
                 </div>
             </div>
@@ -1030,6 +1036,11 @@ const App = {
         const myPosts = this.state.posts.filter(p => p.author === this.state.session.pseudo);
         document.getElementById('count-posts').innerText = myPosts.length;
         
+        // Calculer les stats d'abonnements
+        const userSubscriptions = this.state.subscriptions[this.state.session.pseudo] || { followers: [], following: [] };
+        document.getElementById('count-followers').innerText = userSubscriptions.followers.length;
+        document.getElementById('count-following').innerText = userSubscriptions.following.length;
+        
         const grid = document.getElementById('profile-grid');
         if(myPosts.length === 0) {
             grid.innerHTML = `
@@ -1062,6 +1073,10 @@ const App = {
         const post = this.state.posts.find(p => p.id === id);
         if(!post) return;
         
+        // Augmenter le compteur de vues
+        post.views = (post.views || 0) + 1;
+        this.sync();
+        
         const modal = document.createElement('div');
         modal.className = 'modal active';
         modal.innerHTML = `
@@ -1090,10 +1105,24 @@ const App = {
                             <i class="far fa-share-square" style="cursor:pointer;" onclick="App.sharePost(${post.id})"></i>
                         </div>
                         <div style="margin-bottom:10px;">
-                            <strong style="color:var(--accent);">${post.likes} mentions J'aime</strong>
+                            <strong style="color:var(--accent);">${post.likes} mentions J'aime • ${post.views} vues</strong>
                         </div>
                         <p><b>${post.author}</b> ${post.title}</p>
-                        <p style="color:var(--text-dim); font-size:13px;">${post.views} vues</p>
+                        ${post.comments && post.comments.length > 0 ? `
+                            <div style="margin-top:15px; border-top:1px solid var(--border); padding-top:15px;">
+                                <h4 style="margin-bottom:10px;">Commentaires (${post.comments.length})</h4>
+                                ${post.comments.map(c => `
+                                    <div style="margin-bottom:10px; padding:10px; background:var(--bg-input); border-radius:10px;">
+                                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+                                            <img src="${this.getUserPfp(c.user)}" style="width:24px; height:24px; border-radius:50%;">
+                                            <b>${c.user}</b>
+                                            <small style="color:var(--text-dim);">${c.time}</small>
+                                        </div>
+                                        <div>${c.text}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
             </div>
@@ -1105,76 +1134,51 @@ const App = {
         });
     },
 
-    // --- IA CHAT ENGINE ---
-    initChat() {
-        const chatBox = document.getElementById('chat-messages');
-        chatBox.innerHTML = `
-            <div class="chat-message ai-message">
-                <i class="fas fa-robot" style="color:var(--ai-color); margin-right:10px; font-size:20px;"></i>
-                <div>
-                    <strong>Rasstube AI v4.0</strong><br>
-                    <small style="color:var(--text-dim);">Système Elite Actif</small>
-                    <p style="margin:10px 0 0;">Bonjour ${this.state.session.pseudo} ! Je suis votre assistant IA. Posez-moi n'importe quelle question sur Rasstube ou demandez-moi des conseils !</p>
-                </div>
-            </div>
-        `;
+    // --- GESTION DES ABONNEMENTS ---
+    isSubscribed(user) {
+        const userSubscriptions = this.state.subscriptions[this.state.session.pseudo] || { followers: [], following: [] };
+        return userSubscriptions.following.includes(user);
     },
 
-    askAI() {
-        const input = document.getElementById('ai-input');
-        const box = document.getElementById('chat-messages');
-        const question = input.value.trim();
-        
-        if(!question) {
-            this.notify("Veuillez saisir une question", "warning");
+    toggleSubscribe(user) {
+        if(user === this.state.session.pseudo) {
+            this.notify("Vous ne pouvez pas vous abonner à vous-même", "warning");
             return;
         }
         
-        // Message utilisateur
-        box.innerHTML += `
-            <div class="chat-message user-message">
-                <div style="text-align:right;">
-                    <strong>${this.state.session.pseudo}</strong>
-                    <p style="margin:5px 0 0;">${question}</p>
-                </div>
-            </div>
-        `;
+        // Initialiser les abonnements si nécessaire
+        if(!this.state.subscriptions[this.state.session.pseudo]) {
+            this.state.subscriptions[this.state.session.pseudo] = { followers: [], following: [] };
+        }
+        if(!this.state.subscriptions[user]) {
+            this.state.subscriptions[user] = { followers: [], following: [] };
+        }
         
-        input.value = "";
+        const userSubs = this.state.subscriptions[this.state.session.pseudo];
+        const targetSubs = this.state.subscriptions[user];
         
-        // Simulation de réponse IA
-        setTimeout(() => {
-            const responses = [
-                `Pour "${question}", mon analyse Rasstube AI suggère que vous explorez la section Tendances pour du contenu similaire.`,
-                `Excellente question ! En tant qu'utilisateur Elite, vous avez accès à des fonctionnalités avancées. Je vous recommande de vérifier vos paramètres de profil.`,
-                `D'après mon moteur Core v4, cette fonctionnalité sera disponible dans la prochaine mise à jour. Restez connecté !`,
-                `Je détecte un intérêt pour l'optimisation de contenu. Astuce : Utilisez des hashtags pertinents et publiez aux heures de pointe.`,
-                `Question intéressante ! Pour maximiser votre portée sur Rasstube, je suggère d'interagir régulièrement avec la communauté.`
-            ];
-            
-            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-            
-            box.innerHTML += `
-                <div class="chat-message ai-message">
-                    <i class="fas fa-robot" style="color:var(--ai-color); margin-right:10px; font-size:20px;"></i>
-                    <div>
-                        <strong>Rasstube AI</strong><br>
-                        <small style="color:var(--text-dim);">Analyse en temps réel</small>
-                        <p style="margin:10px 0 0;">${randomResponse}</p>
-                    </div>
-                </div>
-            `;
-            
-            this.scrollChatToBottom();
-        }, 1000);
+        if(this.isSubscribed(user)) {
+            // Se désabonner
+            userSubs.following = userSubs.following.filter(u => u !== user);
+            targetSubs.followers = targetSubs.followers.filter(u => u !== this.state.session.pseudo);
+            this.notify(`Vous vous êtes désabonné de ${user}`, "info");
+        } else {
+            // S'abonner
+            userSubs.following.push(user);
+            targetSubs.followers.push(this.state.session.pseudo);
+            this.notify(`Vous êtes maintenant abonné à ${user} !`, "success");
+        }
+        
+        this.sync();
+        this.renderFeed();
+        
+        // Mettre à jour le profil si actif
+        if(this.state.activeSection === 'profile') {
+            this.renderProfile();
+        }
     },
 
-    scrollChatToBottom() {
-        const chatBox = document.getElementById('chat-messages');
-        chatBox.scrollTop = chatBox.scrollHeight;
-    },
-
-    // --- INTERACTIONS POSTS ---
+    // --- GESTION DES LIKES ---
     likePost(id) {
         const post = this.state.posts.find(p => p.id === id);
         if(!post) return;
@@ -1200,6 +1204,82 @@ const App = {
         }
     },
 
+    // --- GESTION DES COMMENTAIRES ---
+    addComment(id) {
+        const post = this.state.posts.find(p => p.id === id);
+        if(!post) return;
+        
+        const input = document.getElementById(`comment-${id}`);
+        const text = input.value.trim();
+        
+        if(!text) {
+            this.notify("Le commentaire ne peut pas être vide", "warning");
+            return;
+        }
+        
+        if(!post.comments) post.comments = [];
+        
+        post.comments.push({
+            user: this.state.session.pseudo,
+            text: text,
+            time: 'À l\'instant'
+        });
+        
+        this.sync();
+        this.renderFeed();
+        this.notify("Commentaire ajouté !", "success");
+        input.value = "";
+    },
+
+    viewComments(id) {
+        const post = this.state.posts.find(p => p.id === id);
+        if(!post || !post.comments || post.comments.length === 0) return;
+        
+        const commentList = post.comments.map(c => `${c.user}: ${c.text}`).join('\n');
+        alert(`Tous les commentaires:\n\n${commentList}`);
+    },
+
+    focusComment(id) {
+        const input = document.getElementById(`comment-${id}`);
+        if(input) input.focus();
+    },
+
+    // --- PARTAGE DE POSTS ---
+    sharePost(id) {
+        const post = this.state.posts.find(p => p.id === id);
+        if(!post) return;
+        
+        // Simuler le partage
+        const shareUrl = `rasstube://post/${id}`;
+        const shareText = `Regarde cette publication de ${post.author} sur Rasstube: "${post.title}"`;
+        
+        if(navigator.share) {
+            navigator.share({
+                title: 'Rasstube',
+                text: shareText,
+                url: window.location.href
+            }).then(() => {
+                this.notify("Publication partagée !", "success");
+            }).catch(err => {
+                console.log('Erreur de partage:', err);
+                this.copyToClipboard(shareUrl);
+            });
+        } else {
+            this.copyToClipboard(shareUrl);
+        }
+    },
+
+    copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            this.notify("Lien copié dans le presse-papier !", "success");
+        }).catch(err => {
+            console.error('Erreur de copie:', err);
+            prompt("Copiez ce lien:", text);
+            this.notify("Lien copié !", "success");
+        });
+    },
+
+    // --- OPTIONS DE POST ---
     postOptions(id) {
         const post = this.state.posts.find(p => p.id === id);
         if(!post) return;
@@ -1208,52 +1288,181 @@ const App = {
             ["Supprimer", "Modifier", "Partager", "Annuler"] : 
             ["Signaler", "Partager", "Annuler"];
         
-        this.notify(`Options pour le post de ${post.author}`, "info");
+        const choice = prompt(`Options pour ${post.author}:\n${options.join('\n')}\n\nEntrez votre choix:`);
         
-        // Simulation de menu d'options
-        if(confirm(`Que souhaitez-vous faire avec le post de ${post.author}?`)) {
-            if(post.author === this.state.session.pseudo) {
-                if(confirm("Voulez-vous vraiment supprimer cette publication?")) {
-                    this.state.posts = this.state.posts.filter(p => p.id !== id);
-                    this.sync();
-                    this.renderFeed();
-                    this.notify("Publication supprimée", "success");
-                }
-            } else {
-                this.notify("Publication signalée aux modérateurs", "warning");
+        if(choice === "Supprimer" && post.author === this.state.session.pseudo) {
+            if(confirm("Voulez-vous vraiment supprimer cette publication?")) {
+                this.state.posts = this.state.posts.filter(p => p.id !== id);
+                this.sync();
+                this.renderFeed();
+                this.notify("Publication supprimée", "success");
+            }
+        } else if(choice === "Signaler") {
+            this.notify("Publication signalée aux modérateurs", "warning");
+        } else if(choice === "Partager") {
+            this.sharePost(id);
+        } else if(choice === "Modifier") {
+            const newTitle = prompt("Nouveau titre:", post.title);
+            if(newTitle && newTitle.trim()) {
+                post.title = newTitle.trim();
+                this.sync();
+                this.renderFeed();
+                this.notify("Publication modifiée", "success");
             }
         }
     },
 
-    sharePost(id) {
-        const post = this.state.posts.find(p => p.id === id);
-        if(!post) return;
+    // --- CHAT IA ---
+    openAIChat() {
+        const question = prompt("Bonjour ! Je suis l'IA Rasstube. Posez-moi n'importe quelle question :");
         
-        if(navigator.share) {
-            navigator.share({
-                title: `Regarde ça sur Rasstube !`,
-                text: `${post.author}: ${post.title}`,
-                url: window.location.href
-            });
-        } else {
-            prompt("Copiez ce lien pour partager:", `rasstube://post/${id}`);
-            this.notify("Lien copié dans le presse-papier !", "success");
+        if(question && question.trim()) {
+            // Réponse instantanée de l'IA
+            const response = this.getAIResponse(question);
+            
+            // Afficher la question et la réponse
+            const chatWindow = `
+                <div style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:var(--bg-card); border-radius:20px; padding:30px; max-width:500px; width:90%; z-index:2001; box-shadow:0 20px 60px rgba(0,0,0,0.8); border:1px solid var(--border);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <h3 style="margin:0; display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-robot" style="color:var(--ai-color);"></i>
+                            Assistant IA
+                        </h3>
+                        <i class="fas fa-times" onclick="this.parentElement.parentElement.remove()" style="cursor:pointer; color:var(--text-dim);"></i>
+                    </div>
+                    
+                    <div style="background:var(--bg-input); padding:15px; border-radius:15px; margin-bottom:15px;">
+                        <div style="display:flex; align-items:flex-start; gap:10px;">
+                            <img src="${this.state.session.pfp}" style="width:30px; height:30px; border-radius:50%; border:2px solid var(--accent);">
+                            <div>
+                                <b style="color:var(--accent);">Vous</b>
+                                <p style="margin:5px 0 0;">${question}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background:var(--bg-elevated); padding:15px; border-radius:15px; border-left:4px solid var(--ai-color);">
+                        <div style="display:flex; align-items:flex-start; gap:10px;">
+                            <i class="fas fa-robot" style="color:var(--ai-color); font-size:24px;"></i>
+                            <div>
+                                <b style="color:var(--ai-color);">IA Rasstube</b>
+                                <p style="margin:5px 0 0;">${response}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+                        <button onclick="App.askAIQuick('Comment gagner des abonnés ?')" style="background:var(--bg-input); border:1px solid var(--border); color:white; padding:8px 15px; border-radius:10px; cursor:pointer; font-size:13px;">
+                            💡 Gagner des abonnés
+                        </button>
+                        <button onclick="App.askAIQuick('Quand publier ?')" style="background:var(--bg-input); border:1px solid var(--border); color:white; padding:8px 15px; border-radius:10px; cursor:pointer; font-size:13px;">
+                            ⏰ Meilleur moment
+                        </button>
+                        <button onclick="App.askAIQuick('Conseils contenu')" style="background:var(--bg-input); border:1px solid var(--border); color:white; padding:8px 15px; border-radius:10px; cursor:pointer; font-size:13px;">
+                            🎯 Conseils contenu
+                        </button>
+                    </div>
+                    
+                    <button onclick="this.parentElement.remove()" style="width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:15px; font-weight:700; cursor:pointer; margin-top:20px;">
+                        Fermer
+                    </button>
+                </div>
+                <div style="position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000;" onclick="this.remove(); this.previousElementSibling.remove()"></div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', chatWindow);
         }
     },
 
-    focusComment(id) {
-        const postElement = document.querySelector(`.post[data-id="${id}"]`);
-        if(postElement) {
-            const input = postElement.querySelector('input[type="text"]');
-            if(input) input.focus();
+    getAIResponse(question) {
+        const lowerQuestion = question.toLowerCase();
+        
+        // Réponses programmées selon les mots-clés
+        if(lowerQuestion.includes('abonné') || lowerQuestion.includes('follower')) {
+            return "Pour gagner des abonnés : Publiez régulièrement du contenu de qualité, interagissez avec les commentaires, utilisez des hashtags pertinents et collaborez avec d'autres créateurs. La constance est la clé !";
+        }
+        else if(lowerQuestion.includes('heure') || lowerQuestion.includes('moment') || lowerQuestion.includes('publier')) {
+            return "Les meilleurs moments pour publier sont généralement entre 18h et 21h en semaine, et entre 11h et 14h le week-end. Testez différentes heures pour voir ce qui fonctionne le mieux avec votre audience !";
+        }
+        else if(lowerQuestion.includes('conseil') || lowerQuestion.includes('astuce')) {
+            return "Conseils : 1) Soignez la première seconde de vos vidéos 2) Utilisez des miniatures attractives 3) Répondez aux commentaires 4) Soyez authentique 5) Analysez vos statistiques pour vous améliorer.";
+        }
+        else if(lowerQuestion.includes('like') || lowerQuestion.includes('engagement')) {
+            return "Pour augmenter l'engagement : Posez des questions dans vos légendes, créez du contenu interactif (sondages, Q&A), répondez rapidement aux commentaires, et organisez des concours occasionnellement.";
+        }
+        else if(lowerQuestion.includes('vidéo') || lowerQuestion.includes('photo')) {
+            return "Pour un contenu optimal : Utilisez un bon éclairage (lumière naturelle si possible), un son clair, stabilisez votre caméra, et éditez pour garder un rythme dynamique. La qualité technique est importante !";
+        }
+        else if(lowerQuestion.includes('salut') || lowerQuestion.includes('bonjour') || lowerQuestion.includes('hello')) {
+            return `Bonjour ${this.state.session.pseudo} ! Heureux de vous aider aujourd'hui. Posez-moi n'importe quelle question sur Rasstube, le growth hacking, ou la création de contenu !`;
+        }
+        else {
+            // Réponse aléatoire parmi les réponses programmées
+            const randomIndex = Math.floor(Math.random() * this.state.aiResponses.length);
+            return this.state.aiResponses[randomIndex];
         }
     },
 
-    addComment(id, input) {
-        if(!input.value.trim()) return;
+    askAIQuick(question) {
+        const response = this.getAIResponse(question);
+        alert(`🤖 IA Rasstube:\n\n${response}`);
+    },
+
+    // --- MESSAGERIE ---
+    showMessages() {
+        const users = this.state.users.filter(u => u.pseudo !== this.state.session.pseudo);
         
-        this.notify("Commentaire ajouté !", "success");
-        input.value = "";
+        let usersList = users.map(u => `${u.pseudo} (${u.followers || 0} abonnés)`).join('\n');
+        if(!usersList) usersList = "Aucun autre utilisateur pour le moment";
+        
+        const message = prompt(`Envoyer un message à :\n\n${usersList}\n\nEntrez le pseudo et le message (format: pseudo|message):`);
+        
+        if(message) {
+            const parts = message.split('|');
+            if(parts.length >= 2) {
+                const targetUser = parts[0].trim();
+                const msgText = parts.slice(1).join('|').trim();
+                
+                if(this.state.users.find(u => u.pseudo === targetUser)) {
+                    // Envoyer le message
+                    this.state.messages.push({
+                        from: this.state.session.pseudo,
+                        to: targetUser,
+                        text: msgText,
+                        time: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'}),
+                        read: false
+                    });
+                    
+                    this.sync();
+                    this.notify(`Message envoyé à ${targetUser} !`, "success");
+                    
+                    // Réponse automatique après 2 secondes
+                    setTimeout(() => {
+                        const autoResponses = [
+                            "Merci pour votre message ! Je vous répondrai dès que possible.",
+                            "Message reçu ! Je suis actuellement occupé, je reviens vers vous rapidement.",
+                            "Merci de votre intérêt ! Comment puis-je vous aider aujourd'hui ?"
+                        ];
+                        const randomResponse = autoResponses[Math.floor(Math.random() * autoResponses.length)];
+                        
+                        this.state.messages.push({
+                            from: targetUser,
+                            to: this.state.session.pseudo,
+                            text: randomResponse,
+                            time: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'}),
+                            read: false
+                        });
+                        
+                        this.sync();
+                        this.notify(`Nouveau message de ${targetUser} !`, "info");
+                    }, 2000);
+                } else {
+                    this.notify(`Utilisateur "${targetUser}" introuvable`, "error");
+                }
+            } else {
+                this.notify("Format incorrect. Utilisez: pseudo|message", "error");
+            }
+        }
     },
 
     // --- UTILS ---
@@ -1272,6 +1481,11 @@ const App = {
         if(hours < 24) return `Il y a ${hours} h`;
         if(days < 7) return `Il y a ${days} j`;
         return postDate.toLocaleDateString('fr-FR');
+    },
+
+    getUserPfp(username) {
+        const user = this.state.users.find(u => u.pseudo === username);
+        return user ? user.pfp : 'https://api.dicebear.com/7.x/avataaars/svg?seed=User';
     },
 
     notify(msg, type = "success") {
