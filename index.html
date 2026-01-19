@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RASSTUBE ULTIMATE V7</title>
+    <title>RASSTUBE ULTIMATE V9</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --red: #ff0000; --bg: #000; --card: #121212; --text: #fff; --ai: #4285f4; }
@@ -13,8 +13,8 @@
         /* --- AUTHENTIFICATION --- */
         #auth-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .auth-box { background: #111; padding: 25px; border-radius: 25px; width: 100%; max-width: 400px; border: 1px solid #333; text-align: center; max-height: 90vh; overflow-y: auto; }
-        .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .auth-tabs button { flex: 1; background: #222; border: none; color: #888; padding: 10px; border-radius: 10px; cursor: pointer; }
+        .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: #222; padding: 5px; border-radius: 15px; }
+        .auth-tabs button { flex: 1; background: transparent; border: none; color: #888; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
         .auth-tabs button.active { background: var(--red); color: white; }
         .auth-input { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 10px; margin-top: 10px; outline: none; }
         .player-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
@@ -35,14 +35,14 @@
         .page { display: none; padding: 15px; animation: fadeIn 0.3s; }
         .active-page { display: block; }
         .v-card { background: var(--card); border-radius: 15px; overflow: hidden; margin-bottom: 20px; border: 1px solid #222; }
-        .v-card video, .v-card img.main-content { width: 100%; display: block; background: #000; }
+        .v-card video, .v-card img.main-content { width: 100%; display: block; background: #000; max-height: 400px; object-fit: contain; }
         .v-body { padding: 12px; }
         .rshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .rshot-item { aspect-ratio: 9/16; background: #111; border-radius: 12px; overflow: hidden; position: relative; }
         .rshot-item video { width: 100%; height: 100%; object-fit: cover; }
 
         /* --- CHAT IA --- */
-        #chat-container { height: calc(100vh - 350px); overflow-y: auto; background: #080808; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        #chat-container { height: calc(100vh - 350px); overflow-y: auto; background: #080808; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; border: 1px solid #222; }
         .bubble { padding: 10px 14px; border-radius: 15px; max-width: 80%; font-size: 14px; }
         .msg-me { background: var(--red); align-self: flex-end; }
         .msg-ai { background: #1a1a1a; border-left: 4px solid var(--ai); align-self: flex-start; }
@@ -58,64 +58,69 @@
         <h1 style="color:var(--red); margin-bottom:10px;">RASSTUBE</h1>
         <div class="auth-tabs">
             <button id="tab-login" class="active" onclick="switchAuth('login')">Connexion</button>
-            <button id="tab-reg" onclick="switchAuth('reg')">Inscription</button>
+            <button id="tab-reg" onclick="switchAuth('reg')">S'inscrire</button>
         </div>
         
-        <input type="email" id="auth-email" class="auth-input" placeholder="Email">
-        <input type="password" id="auth-pass" class="auth-input" placeholder="Mot de passe">
+        <input type="email" id="auth-email" class="auth-input" placeholder="Ton adresse email">
+        <input type="password" id="auth-pass" class="auth-input" placeholder="Ton mot de passe">
         
         <div id="reg-fields" style="display:none;">
-            <input type="text" id="auth-name" class="auth-input" placeholder="Pseudo">
-            <p style="font-size:12px; margin:10px 0;">Choisis ton personnage :</p>
+            <input type="text" id="auth-name" class="auth-input" placeholder="Ton pseudo">
+            <p style="font-size:12px; margin:15px 0 5px;">Choisis ton Avatar :</p>
             <div class="player-grid" id="player-grid"></div>
-            <button onclick="document.getElementById('pfp-file').click()" style="color:var(--ai); background:none; border:none; font-size:11px; cursor:pointer;">Importer ma propre photo</button>
+            <button onclick="document.getElementById('pfp-file').click()" style="color:var(--ai); background:none; border:none; font-size:11px; cursor:pointer;">Importer ma photo de profil</button>
             <input type="file" id="pfp-file" hidden accept="image/*" onchange="handlePFP(this)">
         </div>
 
-        <button class="btn-main" id="auth-submit" onclick="handleAuth()">ENTRER</button>
+        <button class="btn-main" id="auth-submit" onclick="handleAuth()">VALIDER</button>
     </div>
 </div>
 
 <header id="app-header" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <div class="logo">RASSTUBE</div>
-        <div id="user-top-badge" style="display:flex; align-items:center; gap:8px;"></div>
+        <div id="user-top-badge"></div>
     </div>
 </header>
 
 <main id="app-main" style="display:none;">
     <div id="p-home" class="page active-page"><div id="feed-home"></div></div>
-    <div id="p-rshot" class="page"><div id="feed-rshot" class="rshot-grid"></div></div>
+    <div id="p-rshot" class="page">
+        <h3 style="color:#ff0055;"><i class="fas fa-bolt"></i> RShots</h3>
+        <div id="feed-rshot" class="rshot-grid"></div>
+    </div>
     
     <div id="p-upload" class="page">
-        <h3>Publier</h3>
+        <h3>Publier du contenu</h3>
         <div style="background:#111; padding:15px; border-radius:15px;">
-            <label>Fichier (Vidéo ou Photo) :</label>
+            <label>1. Choisir le fichier (Vidéo ou Image) :</label>
             <input type="file" id="post-file" class="auth-input" accept="video/*,image/*">
             
-            <div id="thumb-wrap" style="margin-top:10px;">
-                <label>Miniature (pour vidéos) :</label>
+            <div id="thumb-wrap" style="margin-top:15px;">
+                <label>2. Miniature (Optionnel pour vidéo) :</label>
                 <input type="file" id="post-thumb" class="auth-input" accept="image/*">
             </div>
 
-            <input type="text" id="post-title" class="auth-input" placeholder="Titre...">
-            <select id="post-type" class="auth-input" onchange="checkType()">
-                <option value="video">Vidéo Classique</option>
-                <option value="photo">Photo</option>
-                <option value="rshot">RShot (Vertical)</option>
+            <input type="text" id="post-title" class="auth-input" placeholder="Titre de la publication...">
+            
+            <select id="post-type" class="auth-input" onchange="toggleThumbView()">
+                <option value="video">🎥 Vidéo Classique</option>
+                <option value="photo">📸 Photo / Image</option>
+                <option value="rshot">⚡ RShot (Vertical)</option>
             </select>
-            <button class="btn-main" onclick="publish()">PUBLIER</button>
+            
+            <button class="btn-main" onclick="publish()">PUBLIER MAINTENANT</button>
         </div>
     </div>
 
     <div id="p-chat" class="page">
         <div style="display:flex; gap:10px; margin-bottom:10px;">
-            <button onclick="setChat('global')" style="flex:1; padding:10px; background:var(--red); border:none; border-radius:10px; color:white;">Global</button>
-            <button onclick="setChat('ai')" style="flex:1; padding:10px; background:#222; border:none; border-radius:10px; color:white;">Gemini IA</button>
+            <button onclick="setChat('global')" id="btn-g" style="flex:1; padding:10px; background:var(--red); border:none; border-radius:10px; color:white;">Global</button>
+            <button onclick="setChat('ai')" id="btn-a" style="flex:1; padding:10px; background:#222; border:none; border-radius:10px; color:white;">Gemini IA</button>
         </div>
         <div id="chat-container"></div>
         <div class="chat-input-area">
-            <input type="text" id="chat-in" class="auth-input" style="margin:0;" placeholder="Message...">
+            <input type="text" id="chat-in" class="auth-input" style="margin:0;" placeholder="Écris un message...">
             <button onclick="sendMsg()" style="background:var(--red); border:none; color:white; width:50px; border-radius:10px;"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
@@ -126,75 +131,84 @@
     <div class="nav-item" onclick="nav('p-rshot', this)"><i class="fas fa-bolt"></i><br>RShot</div>
     <div class="nav-item" onclick="nav('p-upload', this)"><i class="fas fa-plus btn-plus"></i></div>
     <div class="nav-item" onclick="nav('p-chat', this)"><i class="fas fa-comments"></i><br>Chat</div>
-    <div class="nav-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><br>Quitter</div>
+    <div class="nav-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><br>Déconnexion</div>
 </nav>
 
 <script>
-    // --- DATABASE LOCALE ---
-    let accounts = JSON.parse(localStorage.getItem('rs_accounts_v8')) || [];
-    let currentUser = JSON.parse(localStorage.getItem('rs_session_v8')) || null;
-    let posts = JSON.parse(localStorage.getItem('rs_posts_v8')) || [];
-    let messages = JSON.parse(localStorage.getItem('rs_msgs_v8')) || [];
+    // --- VARIABLES DE STOCKAGE ---
+    let accounts = JSON.parse(localStorage.getItem('rs_accounts_v9')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('rs_session_v9')) || null;
+    let posts = JSON.parse(localStorage.getItem('rs_posts_v9')) || [];
+    let messages = JSON.parse(localStorage.getItem('rs_msgs_v9')) || [];
     
     let authMode = 'login';
     let selectedAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
     let chatMode = 'global';
 
-    // --- LOGIQUE AUTH ---
+    // --- SYSTÈME D'AUTHENTIFICATION (CORRIGÉ) ---
     function switchAuth(mode) {
         authMode = mode;
         document.getElementById('reg-fields').style.display = mode === 'reg' ? 'block' : 'none';
         document.getElementById('tab-login').classList.toggle('active', mode === 'login');
         document.getElementById('tab-reg').classList.toggle('active', mode === 'reg');
+        document.getElementById('auth-submit').innerText = mode === 'reg' ? "CRÉER MON COMPTE" : "SE CONNECTER";
     }
 
     function handleAuth() {
-        const email = document.getElementById('auth-email').value;
+        const email = document.getElementById('auth-email').value.toLowerCase().trim();
         const pass = document.getElementById('auth-pass').value;
 
+        if (!email || !pass) return alert("Remplis les champs !");
+
         if (authMode === 'reg') {
+            // Mode Inscription
             const name = document.getElementById('auth-name').value;
-            if (!email || !pass || !name) return alert("Remplis tous les champs !");
-            if (accounts.find(a => a.email === email)) return alert("Cet email est déjà utilisé !");
+            if (!name) return alert("Pseudo requis !");
+            if (accounts.find(a => a.email === email)) {
+                alert("Cet email est déjà utilisé. Essaie de te connecter !");
+                switchAuth('login');
+                return;
+            }
             
             const newUser = { email, pass, name, avatar: selectedAvatar };
             accounts.push(newUser);
-            localStorage.setItem('rs_accounts_v8', JSON.stringify(accounts));
-            loginUser(newUser);
+            localStorage.setItem('rs_accounts_v9', JSON.stringify(accounts));
+            completeLogin(newUser);
         } else {
+            // Mode Connexion
             const user = accounts.find(a => a.email === email && a.pass === pass);
-            if (!user) return alert("Email ou mot de passe incorrect !");
-            loginUser(user);
+            if (!user) return alert("Email ou mot de passe incorrect.");
+            completeLogin(user);
         }
     }
 
-    function loginUser(user) {
+    function completeLogin(user) {
         currentUser = user;
-        localStorage.setItem('rs_session_v8', JSON.stringify(currentUser));
-        initApp();
+        localStorage.setItem('rs_session_v9', JSON.stringify(currentUser));
+        startApp();
     }
 
     function logout() {
-        localStorage.removeItem('rs_session_v8');
+        localStorage.removeItem('rs_session_v9');
         location.reload();
     }
 
     function handlePFP(input) {
         if(input.files[0]) {
             const reader = new FileReader();
-            reader.onload = (e) => { selectedAvatar = e.target.result; alert("Image importée !"); };
+            reader.onload = (e) => { selectedAvatar = e.target.result; alert("Photo importée !"); };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    // --- LOGIQUE PUBLICATION ---
+    // --- PUBLICATION (MINIATURES & PHOTOS) ---
     async function publish() {
         const title = document.getElementById('post-title').value;
         const type = document.getElementById('post-type').value;
         const file = document.getElementById('post-file').files[0];
         const thumb = document.getElementById('post-thumb').files[0];
 
-        if (!title || !file) return alert("Titre et fichier requis !");
+        if (!title || !file) return alert("Il manque le titre ou le fichier !");
 
         const toBase64 = f => new Promise(res => {
             const r = new FileReader();
@@ -215,13 +229,13 @@
             avatar: currentUser.avatar
         });
 
-        localStorage.setItem('rs_posts_v8', JSON.stringify(posts));
-        alert("C'est en ligne !");
+        localStorage.setItem('rs_posts_v9', JSON.stringify(posts));
+        alert("Publication réussie !");
         nav('p-home');
         renderHome();
     }
 
-    // --- RENDU UI ---
+    // --- AFFICHAGE ---
     function renderHome() {
         const feed = document.getElementById('feed-home');
         const rfeed = document.getElementById('feed-rshot');
@@ -233,9 +247,11 @@
                     : `<img src="${p.url}" class="main-content">`
                 }
                 <div class="v-body">
-                    <button class="sub-btn" style="float:right; background:var(--red); color:white; border:none; padding:5px 10px; border-radius:15px; font-size:10px;">S'abonner</button>
-                    <b>${p.title}</b><br>
-                    <small style="color:#888"><img src="${p.avatar}" style="width:18px; border-radius:50%; vertical-align:middle;"> @${p.user}</small>
+                    <button class="sub-btn" style="float:right; background:var(--red); color:white; border:none; padding:6px 12px; border-radius:15px; font-size:11px;">Suivre</button>
+                    <b style="font-size:16px;">${p.title}</b><br>
+                    <div style="margin-top:8px; display:flex; align-items:center; gap:8px; color:#aaa; font-size:12px;">
+                        <img src="${p.avatar}" style="width:22px; height:22px; border-radius:50%;"> @${p.user}
+                    </div>
                 </div>
             </div>
         `).join('');
@@ -247,31 +263,22 @@
         `).join('');
     }
 
-    // --- IA CONVERSATIONNELLE ---
+    // --- CHAT IA ---
     function sendMsg() {
         const input = document.getElementById('chat-in');
-        const text = input.value.trim();
-        if (!text) return;
+        if (!input.value.trim()) return;
 
-        messages.push({ text, user: currentUser.name, mode: chatMode, me: true });
+        messages.push({ text: input.value, user: currentUser.name, mode: chatMode, me: true });
         
         if (chatMode === 'ai') {
             setTimeout(() => {
-                let aiResponse = "Je n'ai pas compris ta question, mais je suis là pour t'aider !";
-                const lower = text.toLowerCase();
-                
-                if (lower.includes("salut") || lower.includes("bonjour")) aiResponse = "Salut " + currentUser.name + " ! Comment se passe ta journée sur Rasstube ?";
-                else if (lower.includes("ça va")) aiResponse = "Je vais super bien, je suis une IA en pleine forme ! Et toi ?";
-                else if (lower.includes("qui es-tu")) aiResponse = "Je suis l'IA Gemini, ton assistant personnel sur Rasstube Ultimate.";
-                else if (lower.includes("vidéo") || lower.includes("publier")) aiResponse = "Pour publier, appuie sur le gros '+' au milieu du menu !";
-                
-                messages.push({ text: aiResponse, user: "Gemini", mode: "ai", me: false });
+                const response = "Salut " + currentUser.name + " ! Je suis Gemini. Ton compte (" + currentUser.email + ") est bien activé !";
+                messages.push({ text: response, user: "Gemini", mode: "ai", me: false });
                 renderChat();
-            }, 800);
+            }, 700);
         }
-
         input.value = "";
-        localStorage.setItem('rs_msgs_v8', JSON.stringify(messages));
+        localStorage.setItem('rs_msgs_v9', JSON.stringify(messages));
         renderChat();
     }
 
@@ -279,14 +286,14 @@
         const box = document.getElementById('chat-container');
         box.innerHTML = messages.filter(m => m.mode === chatMode).map(m => `
             <div class="bubble ${m.me ? 'msg-me' : 'msg-ai'}">
-                <small style="font-size:10px; opacity:0.7; display:block;">${m.user}</small>
+                <small style="font-size:10px; opacity:0.6; display:block;">${m.user}</small>
                 ${m.text}
             </div>
         `).join('');
         box.scrollTop = box.scrollHeight;
     }
 
-    // --- NAVIGATION ET SETUP ---
+    // --- SETUP & NAV ---
     function nav(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(id).classList.add('active-page');
@@ -295,24 +302,26 @@
         if(id === 'p-chat') renderChat();
     }
 
-    function checkType() {
+    function toggleThumbView() {
         document.getElementById('thumb-wrap').style.display = document.getElementById('post-type').value === 'video' ? 'block' : 'none';
     }
 
-    function initApp() {
+    function startApp() {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('app-header').style.display = 'block';
         document.getElementById('app-main').style.display = 'block';
         document.getElementById('app-nav').style.display = 'flex';
         document.getElementById('user-top-badge').innerHTML = `
-            <span>${currentUser.name}</span>
-            <img src="${currentUser.avatar}" style="width:32px; height:32px; border-radius:50%; border:2px solid red;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-weight:bold; font-size:13px;">${currentUser.name}</span>
+                <img src="${currentUser.avatar}" style="width:34px; height:34px; border-radius:50%; border:2px solid var(--red);">
+            </div>
         `;
         renderHome();
     }
 
-    // Setup avatars par défaut
-    const players = ["Felix", "Aria", "Jack", "Milo", "Luna", "Zoe"];
+    // Initialisation des avatars
+    const players = ["Felix", "Jack", "Luna", "Aria", "Zoe", "Milo"];
     players.forEach((p, i) => {
         const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${p}`;
         const div = document.createElement('div');
@@ -326,7 +335,7 @@
         document.getElementById('player-grid').appendChild(div);
     });
 
-    window.onload = () => { if (currentUser) initApp(); };
+    window.onload = () => { if (currentUser) startApp(); };
 </script>
 </body>
 </html>
