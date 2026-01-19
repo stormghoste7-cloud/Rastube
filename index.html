@@ -3,187 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE ZEN v8 | Moteur Intégré</title>
+    <title>RASSTUBE ELITE v9 | Jumeau YouTube</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --card: #0f0f0f;
-            --accent: #FF0032;
-            --text: #FFFFFF;
+            --bg: #0f0f0f;
+            --side: #000000;
+            --accent: #FF0000;
+            --card: #1e1e1e;
+            --text: #ffffff;
         }
 
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding-bottom: 100px;
+            background: var(--bg); color: var(--text);
+            font-family: 'Roboto', Arial, sans-serif; margin: 0;
+            display: grid; grid-template-columns: 240px 1fr 300px;
+            height: 100vh; overflow: hidden;
         }
 
-        /* HEADER & SEARCH */
-        header {
-            background: rgba(0,0,0,0.98);
-            padding: 20px 15px;
-            position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid #1a1a1a;
-            text-align: center;
+        /* --- SIDEBAR GAUCHE (Navigation) --- */
+        .sidebar {
+            background: var(--side); padding: 20px;
+            border-right: 1px solid #222; display: flex; flex-direction: column; gap: 15px;
         }
-        
-        .brand { font-size: 28px; font-weight: 900; color: var(--accent); margin-bottom: 15px; }
+        .logo { font-size: 22px; font-weight: 900; color: var(--accent); margin-bottom: 30px; }
+        .nav-item { padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 15px; }
+        .nav-item:hover, .nav-item.active { background: #222; color: var(--accent); }
 
-        .search-container {
-            display: flex;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
+        /* --- ZONE CENTRALE (Vidéos) --- */
+        main { overflow-y: auto; padding: 20px; }
+        .header-search {
+            position: sticky; top: 0; background: var(--bg); padding-bottom: 20px;
+            display: flex; gap: 10px; z-index: 10;
         }
-
         .search-input {
-            width: 100%;
-            padding: 14px 60px 14px 25px;
-            border-radius: 30px;
-            border: 2px solid #222;
-            background: #111;
-            color: white;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
+            flex: 1; background: #121212; border: 1px solid #333;
+            padding: 12px 20px; border-radius: 25px; color: white; outline: none;
         }
-
-        .search-input:focus { border-color: var(--accent); }
-
         .search-btn {
-            position: absolute;
-            right: 5px; top: 5px;
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            background: var(--accent);
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 18px;
+            background: #333; border: none; color: white;
+            padding: 0 20px; border-radius: 25px; cursor: pointer;
         }
 
-        /* GRILLES */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            padding: 20px;
+        .video-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
         }
+        .video-card { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; }
+        .thumb { width: 100%; aspect-ratio: 16/9; background: #333; position: relative; }
+        .thumb iframe { width: 100%; height: 100%; border: none; }
+        .v-info { padding: 12px; }
+        .v-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .v-meta { font-size: 12px; color: #aaa; }
 
-        .video-card {
-            background: var(--card);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #1a1a1a;
+        /* --- SIDEBAR DROITE (Chats) --- */
+        .chat-section {
+            background: var(--side); border-left: 1px solid #222;
+            display: flex; flex-direction: column;
         }
+        .chat-tabs { display: flex; border-bottom: 1px solid #222; }
+        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .tab.active { border-bottom: 2px solid var(--accent); color: var(--accent); }
 
-        .video-frame {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
+        .chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { background: #222; padding: 8px 12px; border-radius: 10px; font-size: 13px; max-width: 85%; }
+        .msg.bot { background: var(--accent); align-self: flex-start; }
+        .msg.user { align-self: flex-end; background: #444; }
+
+        .chat-input-area { padding: 15px; border-top: 1px solid #222; display: flex; gap: 5px; }
+        .chat-input-area input { flex: 1; background: #111; border: 1px solid #333; padding: 8px; color: white; border-radius: 5px; }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 1000px) {
+            .sidebar, .chat-section { display: none; }
+            body { grid-template-columns: 1fr; }
         }
-
-        .video-frame iframe {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; border: none;
-        }
-
-        .video-label { padding: 15px; font-weight: bold; font-size: 14px; }
-
-        h2 { padding-left: 20px; color: var(--accent); font-size: 20px; }
-        
-        #loading { display: none; text-align: center; padding: 20px; color: var(--accent); }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="brand">RASSTUBE ZEN</div>
-    <div class="search-container">
-        <input type="text" id="query" class="search-input" placeholder="Rechercher absolument tout...">
-        <button class="search-btn" onclick="omniSearch()">
-            <i class="fas fa-search"></i>
-        </button>
+    <div class="sidebar">
+        <div class="logo"><i class="fab fa-youtube"></i> RASSTUBE</div>
+        <div class="nav-item active"><i class="fas fa-home"></i> Accueil</div>
+        <div class="nav-item"><i class="fas fa-bolt"></i> AIR SHORT</div>
+        <div class="nav-item"><i class="fas fa-history"></i> Historique</div>
+        <div class="nav-item"><i class="fas fa-cog"></i> Paramètres</div>
     </div>
-</header>
 
-<div id="loading"><i class="fas fa-spinner fa-spin"></i> Accès au moteur YouTube...</div>
+    <main>
+        <div class="header-search">
+            <input type="text" id="masterSearch" class="search-input" placeholder="Rechercher une vidéo sur YouTube...">
+            <button class="search-btn" onclick="runSearch()"><i class="fas fa-search"></i></button>
+        </div>
 
-<div id="resultsTitle" style="display:none;"><h2>RÉSULTATS DANS L'APPLICATION</h2></div>
-<div class="grid" id="searchGrid"></div>
-
-<h2>AIR SHORT (Vertical)</h2>
-<div class="grid" id="shortsGrid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));"></div>
-
-<h2>DÉCOUVRIR</h2>
-<div class="grid" id="discoverGrid"></div>
-
-<script>
-    // Liste des IDs YouTube pour l'accueil
-    const shorts = ['42jNrBlz6tU', 'pJrjoizQ1R0', 'LfVnPo0uDmw', 'X7YxF9FpmKQ'];
-    const discover = ['HCsp_dthaqY', 'M4MsFXE00js', 'nOSkLiXHELs'];
-
-    function createCard(id, isShort = false) {
-        return `
-            <div class="video-card">
-                <div class="video-frame" style="${isShort ? 'padding-bottom:177%' : ''}">
-                    <iframe src="https://www.youtube.com/embed/${id}?autoplay=0&rel=0" allowfullscreen></iframe>
-                </div>
-                <div class="video-label">Contenu Vidéo #${id}</div>
+        <h2 id="sectionTitle">Recommandations</h2>
+        <div class="video-grid" id="mainGrid">
             </div>
-        `;
-    }
+    </main>
 
-    function omniSearch() {
-        const q = document.getElementById('query').value;
-        if(!q) return;
+    <div class="chat-section">
+        <div class="chat-tabs">
+            <div class="tab active" onclick="switchChat('community')">COMMUNAUTÉ</div>
+            <div class="tab" onclick="switchChat('ai')">IA RASSTUBE</div>
+        </div>
+        <div class="chat-window" id="chatWindow">
+            <div class="msg bot">Bienvenue sur le chat Élite !</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Écrire...">
+            <button class="search-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
 
-        const loader = document.getElementById('loading');
-        const resultsArea = document.getElementById('searchGrid');
-        const title = document.getElementById('resultsTitle');
+    <script>
+        let currentMode = 'community';
 
-        loader.style.display = 'block';
-        resultsArea.innerHTML = '';
+        // --- MOTEUR DE RECHERCHE & VIDÉOS ---
+        const defaultVideos = [
+            { id: 'HCsp_dthaqY', title: 'Airsoft World Cup 2026' },
+            { id: '42jNrBlz6tU', title: 'Tactical Gear Review' },
+            { id: 'pJrjoizQ1R0', title: 'M416 Full Auto Test' },
+            { id: 'LfVnPo0uDmw', title: 'Sniper Gameplay Elite' }
+        ];
 
-        // Simulation de la récupération du moteur YouTube
-        // Pour une application réelle sans clé API, on utilise un système de recherche par mots-clés
-        // Ici, on simule l'affichage de lecteurs basés sur la recherche
-        setTimeout(() => {
-            loader.style.display = 'none';
-            title.style.display = 'block';
-            
-            // Note: Comme on ne peut pas techniquement "scraper" YouTube en pur JS pour des raisons de sécurité,
-            // cette fonction simule l'intégration. Pour avoir les VRAIS résultats, 
-            // il suffit d'ajouter une clé API YouTube Data V3 ici.
-            
-            // On affiche un message d'instruction car c'est la limite du code client pur
-            resultsArea.innerHTML = `
-                <div style="grid-column: 1/-1; background: #1a1a1a; padding: 20px; border-radius: 10px; text-align: center;">
-                    <i class="fab fa-youtube" style="font-size: 40px; color: red;"></i>
-                    <p>Recherche : <b>${q}</b> lancée dans le moteur interne.</p>
-                    <p style="font-size: 13px; color: #888;">Pour afficher les vidéos exactes sans quitter l'app, l'API YouTube doit être connectée à ton domaine.</p>
+        function loadVideos(list) {
+            const grid = document.getElementById('mainGrid');
+            grid.innerHTML = list.map(v => `
+                <div class="video-card">
+                    <div class="thumb">
+                        <iframe src="https://www.youtube.com/embed/${v.id}"></iframe>
+                    </div>
+                    <div class="v-info">
+                        <div class="v-title">${v.title}</div>
+                        <div class="v-meta">1M de vues • il y a 2h</div>
+                    </div>
                 </div>
-            `;
+            `).join('');
+        }
+
+        function runSearch() {
+            const q = document.getElementById('masterSearch').value;
+            if(!q) return;
+            document.getElementById('sectionTitle').innerText = "Résultats pour : " + q;
+            // On simule une recherche en changeant les titres
+            const searchResults = defaultVideos.map(v => ({...v, title: q + " - Version Elite"}));
+            loadVideos(searchResults);
+        }
+
+        // --- SYSTÈME DE CHAT ---
+        function switchChat(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('chatWindow').innerHTML = `<div class="msg bot">Mode ${mode === 'ai' ? 'IA Rasstube' : 'Communautaire'} activé.</div>`;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const win = document.getElementById('chatWindow');
+            if(!input.value) return;
+
+            // Message Utilisateur
+            win.innerHTML += `<div class="msg user">${input.value}</div>`;
             
-            // On fait défiler vers les résultats
-            title.scrollIntoView({ behavior: 'smooth' });
-        }, 800);
-    }
+            const userMsg = input.value.toLowerCase();
+            input.value = '';
 
-    // Chargement initial
-    window.onload = () => {
-        document.getElementById('shortsGrid').innerHTML = shorts.map(id => createCard(id, true)).join('');
-        document.getElementById('discoverGrid').innerHTML = discover.map(id => createCard(id)).join('');
-    };
+            // Réponse automatique
+            setTimeout(() => {
+                if(currentMode === 'ai') {
+                    let response = "Je suis l'IA Rasstube. Je peux t'aider à trouver des vidéos d'Airsoft !";
+                    if(userMsg.includes("salut")) response = "Salut chef ! Prêt pour une partie d'Airsoft ?";
+                    if(userMsg.includes("airsoft")) response = "L'Airsoft est ma passion. Regarde la vidéo #pJrjoizQ1R0 !";
+                    win.innerHTML += `<div class="msg bot">${response}</div>`;
+                } else {
+                    win.innerHTML += `<div class="msg bot"><b>Membre_Elite:</b> C'est vrai, superbe vidéo !</div>`;
+                }
+                win.scrollTop = win.scrollHeight;
+            }, 600);
+        }
 
-    // Touche Entrée
-    document.getElementById('query').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') omniSearch();
-    });
-</script>
+        // Initialisation
+        window.onload = () => loadVideos(defaultVideos);
+        document.getElementById('masterSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') runSearch() });
+        document.getElementById('chatInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage() });
 
+    </script>
 </body>
 </html>
