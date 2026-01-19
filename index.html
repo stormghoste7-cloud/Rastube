@@ -3,207 +3,606 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RASSTUBE ULTIMATE | v4.0 Elite Ecosystem</title>
+    <title>ANIME SAMA | Streaming d'Anime Ultime</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --accent: #FF0032;
-            --accent-soft: rgba(255, 0, 50, 0.15);
-            --accent-glow: rgba(255, 0, 50, 0.5);
-            --bg-deep: #050505;
-            --bg-card: #0F0F0F;
-            --bg-elevated: #1A1A1A;
-            --bg-input: #121212;
+            --anime-pink: #FF2D95;
+            --anime-blue: #00C2FF;
+            --anime-purple: #9D4EDD;
+            --anime-orange: #FF6B35;
+            --anime-green: #00FF9D;
+            --bg-deep: #0A0A1A;
+            --bg-card: #121230;
+            --bg-elevated: #1A1A3A;
+            --bg-input: #171736;
             --text-main: #FFFFFF;
-            --text-dim: #909090;
-            --border: rgba(255, 255, 255, 0.08);
-            --ai-color: #00D1FF;
-            --ai-glow: rgba(0, 209, 255, 0.3);
-            --success: #00FF85;
-            --warning: #FFAA00;
-            --youtube-red: #FF0000;
-            --instagram-purple: #E4405F;
-            --tiktok-pink: #FF0050;
+            --text-dim: #A0A0CC;
+            --border: rgba(255, 255, 255, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--anime-pink), var(--anime-purple));
+            --gradient-secondary: linear-gradient(135deg, var(--anime-blue), var(--anime-green));
             --radius-xl: 32px;
             --radius-lg: 20px;
             --radius-md: 12px;
             --shadow-lg: 0 20px 40px rgba(0,0,0,0.6);
+            --shadow-neon: 0 0 30px rgba(255, 45, 149, 0.3);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* RESET & BASE */
+        /* ANIME THEME */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            background-color: var(--bg-deep); color: var(--text-main); 
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden; -webkit-user-select: none;
+            background: var(--bg-deep); 
+            color: var(--text-main); 
+            margin: 0; 
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
             min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(157, 78, 221, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 45, 149, 0.1) 0%, transparent 20%);
         }
 
-        /* ANIMATIONS */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulseAccent { 0% { box-shadow: 0 0 0 0 var(--accent-glow); } 70% { box-shadow: 0 0 0 15px rgba(255, 0, 50, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 50, 0); } }
-        @keyframes pulseAI { 0% { box-shadow: 0 0 0 0 var(--ai-glow); } 70% { box-shadow: 0 0 0 10px rgba(0, 209, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 209, 255, 0); } }
-        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes heartbeat { 0% { transform: scale(1); } 25% { transform: scale(1.1); } 50% { transform: scale(1); } 75% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes typing { 0% { width: 0; } 100% { width: 100%; } }
-        @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        /* ANIMATIONS ANIME */
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        @keyframes slideInRight { 
+            from { transform: translateX(100%); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+        
+        @keyframes slideInLeft { 
+            from { transform: translateX(-100%); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+        
+        @keyframes pulse { 
+            0%, 100% { transform: scale(1); } 
+            50% { transform: scale(1.05); } 
+        }
+        
+        @keyframes glow { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.7; } 
+        }
+        
+        @keyframes float { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-10px); } 
+        }
+        
+        @keyframes shimmer { 
+            0% { background-position: -200% center; } 
+            100% { background-position: 200% center; } 
+        }
+        
+        @keyframes heartbeat { 
+            0% { transform: scale(1); } 
+            25% { transform: scale(1.1); } 
+            50% { transform: scale(1); } 
+            75% { transform: scale(1.1); } 
+            100% { transform: scale(1); } 
+        }
+        
+        @keyframes spin { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
+        
+        @keyframes typing { 
+            from { width: 0; } 
+            to { width: 100%; } 
+        }
 
-        /* --- AUTHENTIFICATION ENGINE --- */
+        /* AUTHENTIFICATION */
         #auth-portal {
-            position: fixed; 
-            inset: 0; 
-            z-index: 9999; 
-            background: radial-gradient(circle at top right, #1a0505, #000);
-            display: flex; 
-            align-items: flex-start;
-            justify-content: center; 
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg, #0A0A1A 0%, #1A0A2A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .auth-container {
-            width: 100%; 
-            max-width: 440px; 
-            background: var(--bg-card);
-            border-radius: var(--radius-xl); 
+            width: 100%;
+            max-width: 480px;
+            background: rgba(18, 18, 48, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
             border: 1px solid var(--border);
-            padding: 40px 35px; 
-            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-lg), var(--shadow-neon);
             animation: fadeIn 0.8s ease;
-            margin: 20px 0;
-        }
-
-        .auth-tabs {
-            display: flex; background: var(--bg-input); padding: 6px;
-            border-radius: 18px; margin-bottom: 30px; border: 1px solid var(--border);
-        }
-
-        .auth-tabs button {
-            flex: 1; padding: 14px; border: none; background: none;
-            color: var(--text-dim); font-weight: 700; cursor: pointer;
-            border-radius: 14px; transition: var(--transition);
-        }
-
-        .auth-tabs button.active { background: var(--accent); color: white; box-shadow: 0 4px 15px var(--accent-glow); }
-
-        .input-box { margin-bottom: 20px; position: relative; }
-        .input-box i { position: absolute; left: 18px; top: 18px; color: var(--text-dim); font-size: 18px; }
-        .input-control {
-            width: 100%; padding: 18px 18px 18px 52px; background: var(--bg-input);
-            border: 1px solid var(--border); border-radius: 18px; color: white;
-            font-size: 15px; transition: var(--transition);
-        }
-        .input-control:focus { border-color: var(--accent); outline: none; background: #161616; }
-
-        .pfp-selector { text-align: center; margin-bottom: 25px; }
-        .pfp-main-preview {
-            width: 110px; height: 110px; border-radius: 50%;
-            border: 3px solid var(--accent); padding: 4px; object-fit: cover;
-            margin-bottom: 15px; transition: var(--transition);
-        }
-        .pfp-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 15px;
-        }
-        .pfp-item {
-            aspect-ratio: 1; border-radius: 14px; overflow: hidden; cursor: pointer;
-            border: 2px solid transparent; transition: var(--transition);
-        }
-        .pfp-item.selected { border-color: var(--accent); transform: scale(1.1); }
-        .pfp-item img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* --- CORE APP LAYOUT --- */
-        #main-app { display: none; padding-bottom: 90px; min-height: 100vh; }
-
-        .top-nav {
-            position: sticky; top: 0; z-index: 1000;
-            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(25px);
-            padding: 15px 20px; border-bottom: 1px solid var(--border);
-        }
-
-        .nav-wrapper {
-            max-width: 1400px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .brand { 
-            font-size: 28px; font-weight: 900; 
-            background: linear-gradient(45deg, #FF0032, #FF8A00);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -1.5px;
-            animation: glow 2s infinite;
-        }
-
-        .search-bar {
-            background: var(--bg-elevated); border-radius: 14px;
-            padding: 10px 18px; display: flex; align-items: center;
-            width: 40%; border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-        .search-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        .search-bar input { background: none; border: none; color: white; margin-left: 10px; width: 100%; outline: none; }
-
-        /* --- SECTIONS --- */
-        .content-container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
-
-        /* Stories Instagram Style */
-        .story-scroller {
-            display: flex; gap: 18px; overflow-x: auto; padding: 10px 0 25px;
-            scrollbar-width: none;
-        }
-        .story-scroller::-webkit-scrollbar { display: none; }
-        .story-card {
-            flex-shrink: 0; width: 85px; text-align: center; cursor: pointer;
-            transition: var(--transition);
-        }
-        .story-card:hover { transform: translateY(-5px); }
-        .story-ring {
-            width: 78px; height: 78px; border-radius: 50%; padding: 3px;
-            background: linear-gradient(45deg, var(--instagram-purple), var(--tiktok-pink));
-            margin-bottom: 8px; transition: var(--transition);
-        }
-        .story-card img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--bg-deep); object-fit: cover; }
-        .story-card:active .story-ring { transform: scale(0.9); }
-        .story-label { font-size: 11px; font-weight: 600; color: var(--text-dim); }
-
-        /* --- RSSHORT SECTION (TikTok Style) --- */
-        #sec-rsshort {
             position: relative;
-            height: calc(100vh - 140px);
             overflow: hidden;
         }
 
-        .rsshort-container {
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .brand-anime {
+            font-size: 42px;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+            animation: glow 2s infinite;
+            position: relative;
+        }
+
+        .brand-anime::after {
+            content: 'サマ';
+            font-size: 24px;
+            position: absolute;
+            top: -10px;
+            right: 50px;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: var(--bg-input);
+            padding: 6px;
+            border-radius: 18px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .auth-tabs button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: none;
+            color: var(--text-dim);
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 14px;
+            transition: var(--transition);
+        }
+
+        .auth-tabs button.active {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 45, 149, 0.3);
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 18px;
+            top: 18px;
+            color: var(--anime-pink);
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 18px 18px 18px 52px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 15px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 0;
+        }
+
+        .input-control:focus {
+            border-color: var(--anime-pink);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 45, 149, 0.2);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 22px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 800;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 45, 149, 0.4);
+        }
+
+        .auth-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        /* MAIN APP */
+        #main-app {
+            display: none;
+            padding-bottom: 90px;
+            min-height: 100vh;
+        }
+
+        /* TOP NAVIGATION */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(25px);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1.5px;
+            animation: glow 2s infinite;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            font-size: 24px;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-bar {
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            width: 40%;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--anime-pink);
+            box-shadow: var(--shadow-neon);
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text-dim);
+            transition: var(--transition);
+        }
+
+        .notification-bell:hover {
+            color: var(--anime-pink);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--gradient-primary);
+            color: white;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: heartbeat 1s infinite;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(18, 18, 48, 0.95);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid var(--border);
+            padding: 12px 10px 22px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: var(--text-dim);
+            text-align: center;
+            flex: 1;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-item.active {
+            color: var(--anime-pink);
+            transform: translateY(-5px);
+        }
+
+        .nav-item.active i {
+            animation: float 3s infinite;
+        }
+
+        .nav-item i {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-item span {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .nav-item:hover {
+            color: var(--anime-pink);
+            transform: translateY(-3px);
+        }
+
+        .fab-upload {
+            background: var(--gradient-primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -45px;
+            border: 6px solid var(--bg-deep);
+            color: white !important;
+            font-size: 26px !important;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+            z-index: 1001;
+            transition: var(--transition);
+        }
+
+        .fab-upload:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 0 30px rgba(255, 45, 149, 0.5);
+        }
+
+        /* CONTENT SECTIONS */
+        .content-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 20px 0;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 24px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .see-all {
+            color: var(--anime-pink);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .see-all:hover {
+            transform: translateX(5px);
+        }
+
+        /* ANIME CAROUSEL */
+        .anime-carousel {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 10px 0 25px;
+            scrollbar-width: none;
+        }
+
+        .anime-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .anime-card {
+            flex-shrink: 0;
+            width: 220px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: var(--shadow-lg), var(--shadow-neon);
+            border-color: var(--anime-pink);
+        }
+
+        .anime-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .anime-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .anime-info {
+            padding: 15px;
+        }
+
+        .anime-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .anime-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .anime-rating {
+            color: #FFAA00;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--bg-input);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        /* PLAYER SECTION */
+        #sec-player {
+            position: relative;
+            height: calc(100vh - 140px);
+            overflow: hidden;
+            background: #000;
+        }
+
+        .player-container {
+            width: 100%;
             height: 100%;
             position: relative;
         }
 
-        .rsshort-video {
+        #anime-video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 0;
+            object-fit: contain;
+            background: #000;
         }
 
-        .rsshort-overlay {
+        .player-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
             padding: 30px 20px 100px;
             color: white;
             z-index: 2;
         }
 
-        .rsshort-side-buttons {
+        .player-controls {
             position: absolute;
             right: 20px;
             bottom: 150px;
@@ -214,7 +613,7 @@
             z-index: 3;
         }
 
-        .rsshort-btn {
+        .player-btn {
             background: none;
             border: none;
             color: white;
@@ -227,7 +626,7 @@
             transition: var(--transition);
         }
 
-        .rsshort-btn i {
+        .player-btn i {
             width: 50px;
             height: 50px;
             background: rgba(0,0,0,0.5);
@@ -239,416 +638,254 @@
             transition: var(--transition);
         }
 
-        .rsshort-btn.active i {
-            color: var(--accent);
-            background: rgba(255, 0, 50, 0.2);
-            animation: pulseAccent 2s infinite;
+        .player-btn.active i {
+            color: var(--anime-pink);
+            background: rgba(255, 45, 149, 0.2);
+            animation: pulse 2s infinite;
         }
 
-        .rsshort-btn:active i {
+        .player-btn:active i {
             transform: scale(1.2);
         }
 
-        .rsshort-btn:hover i {
+        .player-btn:hover i {
             transform: scale(1.1);
             background: rgba(255, 255, 255, 0.1);
         }
 
-        .rsshort-progress {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: rgba(255,255,255,0.3);
-            z-index: 4;
-        }
-
-        .rsshort-progress-bar {
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        /* --- IA CHAT SECTION (Addictive AI Chat) --- */
-        #sec-aichat {
+        /* BOT FRIEND SECTION */
+        #sec-bot {
             position: relative;
-            height: calc(100vh - 140px);
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 100%);
+            min-height: calc(100vh - 140px);
+            background: linear-gradient(135deg, var(--bg-deep) 0%, #1A0A2A 100%);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            border: 1px solid rgba(0, 209, 255, 0.1);
+            border: 1px solid rgba(157, 78, 221, 0.1);
+            padding: 20px;
         }
 
-        .ai-chat-header {
-            background: rgba(0, 209, 255, 0.1);
+        .bot-header {
+            background: rgba(157, 78, 221, 0.1);
             padding: 20px;
-            border-bottom: 1px solid var(--ai-glow);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(157, 78, 221, 0.2);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .ai-avatar {
-            width: 50px;
-            height: 50px;
+        .bot-avatar {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: linear-gradient(45deg, var(--ai-color), #0099ff);
+            background: var(--gradient-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 40px;
+            animation: float 3s infinite;
+            border: 4px solid var(--anime-blue);
+        }
+
+        .bot-info h3 {
+            margin: 0;
+            color: var(--anime-blue);
             font-size: 24px;
-            animation: pulseAI 3s infinite;
         }
 
-        .ai-chat-messages {
-            height: calc(100% - 180px);
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .ai-message {
-            max-width: 70%;
-            padding: 15px;
-            border-radius: 20px;
-            position: relative;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .ai-message.user {
-            background: linear-gradient(135deg, var(--accent), #ff3366);
-            color: white;
-            margin-left: auto;
-            border-bottom-right-radius: 5px;
-        }
-
-        .ai-message.bot {
-            background: rgba(0, 209, 255, 0.1);
-            border: 1px solid var(--ai-glow);
-            margin-right: auto;
-            border-bottom-left-radius: 5px;
-        }
-
-        .ai-typing {
-            display: flex;
-            gap: 5px;
-            padding: 10px 20px;
-            background: rgba(0, 209, 255, 0.05);
-            border-radius: 20px;
-            width: fit-content;
-        }
-
-        .ai-typing span {
-            width: 8px;
-            height: 8px;
-            background: var(--ai-color);
-            border-radius: 50%;
-            animation: pulseAI 1.5s infinite;
-        }
-
-        .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
-        .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
-
-        .ai-quick-actions {
-            display: flex;
-            gap: 10px;
-            padding: 15px;
-            overflow-x: auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .ai-quick-btn {
-            background: rgba(0, 209, 255, 0.1);
-            border: 1px solid var(--ai-glow);
-            color: var(--ai-color);
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .ai-quick-btn:hover {
-            background: rgba(0, 209, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .ai-input-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(5, 5, 5, 0.9);
-            padding: 15px;
-            display: flex;
-            gap: 10px;
-            border-top: 1px solid var(--border);
-        }
-
-        .ai-input {
-            flex: 1;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            padding: 15px 20px;
-            color: white;
+        .bot-info p {
+            margin: 5px 0 0;
+            color: var(--text-dim);
             font-size: 14px;
-            outline: none;
-            transition: var(--transition);
         }
 
-        .ai-input:focus {
-            border-color: var(--ai-color);
-            box-shadow: 0 0 15px var(--ai-glow);
+        .bot-status {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .ai-send-btn {
-            background: linear-gradient(45deg, var(--ai-color), #0099ff);
-            border: none;
-            width: 50px;
-            height: 50px;
+        .status-dot {
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            color: white;
+            background: var(--anime-green);
+            animation: pulse 2s infinite;
+        }
+
+        .bot-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .bot-action-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .bot-action-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--anime-pink);
+            box-shadow: var(--shadow-neon);
+        }
+
+        .bot-action-card i {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: var(--anime-pink);
+        }
+
+        .bot-activity {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 18px;
+        }
+
+        /* MY LIBRARY */
+        #sec-library {
+            min-height: calc(100vh - 140px);
+        }
+
+        .library-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            color: var(--text-dim);
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            animation: pulseAI 3s infinite;
+            white-space: nowrap;
         }
 
-        .ai-send-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px var(--ai-glow);
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--anime-pink);
         }
 
-        /* --- EXPLORE SECTION --- */
-        .explore-grid {
+        .library-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 20px;
+        }
+
+        /* PROFILE SECTION */
+        #sec-profile {
+            min-height: calc(100vh - 140px);
+            padding: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            align-items: flex-start;
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--anime-pink);
+            padding: 5px;
+            object-fit: cover;
+            background: var(--gradient-primary);
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 30px;
             margin-top: 20px;
         }
 
-        .explore-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            transition: var(--transition);
-            border: 1px solid var(--border);
-            cursor: pointer;
+        .stat-item {
+            text-align: center;
         }
 
-        .explore-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent);
-        }
-
-        .explore-thumbnail {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
+        .stat-value {
             display: block;
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .explore-info {
-            padding: 15px;
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-dim);
         }
 
-        /* --- UPLOAD SECTION --- */
-        #upload-dropzone {
-            transition: var(--transition);
-        }
-
-        #upload-dropzone:hover {
-            border-color: var(--accent);
-            background: var(--accent-soft);
-            transform: translateY(-5px);
-        }
-
-        /* --- BOTTOM NAV --- */
-        .bottom-bar {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(30px);
-            border-top: 1px solid var(--border); padding: 12px 10px 22px;
-            display: flex; justify-content: space-around; align-items: center;
-            z-index: 1000;
-        }
-        .nav-item { 
-            color: var(--text-dim); text-align: center; 
-            flex: 1; transition: var(--transition); cursor: pointer; 
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .nav-item.active { color: var(--accent); transform: translateY(-5px); }
-        .nav-item.active i { animation: float 3s infinite; }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; transition: var(--transition); }
-        .nav-item span { font-size: 10px; font-weight: 700; text-transform: uppercase; }
-
-        .nav-item:hover {
-            color: var(--accent);
-            transform: translateY(-3px);
-        }
-
-        .fab-upload {
-            background: var(--accent); width: 60px; height: 60px;
-            border-radius: 22px; display: flex; align-items: center; justify-content: center;
-            margin-top: -45px; border: 6px solid var(--bg-deep);
-            color: white !important; font-size: 26px !important;
-            animation: pulseAccent 2s infinite;
-            cursor: pointer;
-            z-index: 1001;
-            transition: var(--transition);
-        }
-
-        .fab-upload:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-
-        /* --- NOTIFICATION BADGES --- */
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: 5px;
-            background: var(--accent);
-            color: white;
-            font-size: 10px;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: heartbeat 1s infinite;
-        }
-
-        /* --- LOADING SKELETONS --- */
-        .skeleton {
-            background: linear-gradient(90deg, var(--bg-input) 25%, var(--bg-elevated) 50%, var(--bg-input) 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: var(--radius-md);
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .nav-wrapper { flex-wrap: wrap; gap: 15px; }
-            .search-bar { width: 100%; order: 3; }
-            .content-container { padding: 0 15px; }
-            .auth-container { padding: 30px 25px; margin: 10px 0; }
-            #auth-portal { padding: 15px; }
-            .pfp-grid { grid-template-columns: repeat(3, 1fr); }
-            .bottom-bar { padding: 12px 5px 22px; }
-            .nav-item i { font-size: 20px; }
-            .nav-item span { font-size: 9px; }
-            .explore-grid { grid-template-columns: 1fr; }
-            .ai-chat-messages { height: calc(100% - 160px); }
-        }
-
-        /* --- UTILITY CLASSES --- */
+        /* UTILITIES */
         .hidden { display: none !important; }
         .visible { display: block !important; }
         .text-center { text-align: center; }
         .mt-20 { margin-top: 20px; }
         .mb-20 { margin-bottom: 20px; }
 
-        /* --- ADDICTIVE ELEMENTS --- */
-        .streak-counter {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: var(--accent);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 14px;
-            z-index: 999;
-            animation: pulseAccent 2s infinite;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        /* LOADER */
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--anime-pink);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
         }
 
-        .xp-bar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 6px;
-            background: var(--bg-input);
-            border-radius: 3px;
-            overflow: hidden;
-            z-index: 999;
-        }
-
-        .xp-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), #ff8a00);
-            transition: width 0.5s ease;
-        }
-
-        .daily-reward {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            background: linear-gradient(45deg, #ff8a00, #ff0032);
-            color: white;
-            padding: 15px;
-            border-radius: var(--radius-lg);
-            z-index: 999;
-            animation: pulseAccent 3s infinite;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* --- ACHIEVEMENTS --- */
-        .achievement-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--bg-card);
-            border: 2px solid var(--accent);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            z-index: 9999;
-            animation: fadeIn 0.5s ease;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 0 50px rgba(255, 0, 50, 0.5);
-        }
-
-        .achievement-icon {
-            font-size: 50px;
-            color: gold;
-            margin-bottom: 20px;
-            animation: float 2s infinite;
-        }
-        
-        /* --- TOAST NOTIFICATIONS --- */
+        /* TOAST NOTIFICATIONS */
         .toast {
             position: fixed;
             top: 20px;
             right: 20px;
             background: var(--bg-card);
-            border-left: 4px solid var(--accent);
+            border-left: 4px solid var(--anime-pink);
             border-radius: var(--radius-md);
             padding: 15px 20px;
             display: flex;
@@ -659,87 +896,116 @@
             box-shadow: var(--shadow-lg);
             min-width: 300px;
         }
-        
-        .toast.success { border-color: var(--success); }
+
+        .toast.success { border-color: var(--anime-green); }
         .toast.error { border-color: #ff4444; }
-        .toast.info { border-color: var(--ai-color); }
-        
+        .toast.info { border-color: var(--anime-blue); }
+
         .toast i {
             font-size: 24px;
         }
-        
-        .toast.success i { color: var(--success); }
+
+        .toast.success i { color: var(--anime-green); }
         .toast.error i { color: #ff4444; }
-        .toast.info i { color: var(--ai-color); }
-        
-        /* --- LOADER --- */
-        .loader {
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: none;
+        .toast.info i { color: var(--anime-blue); }
+
+        /* ACHIEVEMENT POPUP */
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-card);
+            border: 2px solid var(--anime-pink);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            z-index: 9999;
+            animation: fadeIn 0.5s ease;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(255, 45, 149, 0.5);
+        }
+
+        .achievement-icon {
+            font-size: 50px;
+            color: gold;
+            margin-bottom: 20px;
+            animation: float 2s infinite;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-wrapper {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+                order: 3;
+            }
+            
+            .content-container {
+                padding: 0 15px;
+            }
+            
+            .auth-container {
+                padding: 30px 25px;
+            }
+            
+            .anime-card {
+                width: 160px;
+            }
+            
+            .anime-card img {
+                height: 220px;
+            }
+            
+            .library-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .bot-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
+<!-- NOTIFICATION SYSTEM -->
 <div id="notification-box"></div>
-
-<!-- XP Bar -->
-<div class="xp-bar hidden" id="xp-bar">
-    <div class="xp-progress" id="xp-progress" style="width: 30%"></div>
-</div>
-
-<!-- Streak Counter -->
-<div class="streak-counter hidden" id="streak-counter">
-    <i class="fas fa-fire"></i>
-    <span id="streak-days">7 jours</span>
-</div>
-
-<!-- Daily Reward -->
-<div class="daily-reward hidden" id="daily-reward" onclick="App.claimDailyReward()">
-    <i class="fas fa-gift"></i>
-    <div>
-        <strong>RÉCOMPENSE QUOTIDIENNE</strong>
-        <div style="font-size: 12px;">Cliquez pour réclamer !</div>
-    </div>
-</div>
 
 <!-- AUTHENTIFICATION PORTAL -->
 <div id="auth-portal">
     <div class="auth-container">
-        <div class="brand text-center" style="margin-bottom: 30px; font-size: 42px;">RASSTUBE</div>
+        <div class="brand-anime">ANIME SAMA</div>
         
         <div class="auth-tabs">
-            <button id="tab-login" class="active" onclick="App.toggleAuth('login')">CONNEXION</button>
-            <button id="tab-signup" onclick="App.toggleAuth('signup')">INSCRIPTION</button>
+            <button id="tab-login" class="active" onclick="AnimeSama.toggleAuth('login')">CONNEXION</button>
+            <button id="tab-signup" onclick="AnimeSama.toggleAuth('signup')">INSCRIPTION</button>
         </div>
 
         <div id="signup-profile-setup" class="hidden">
-            <div class="pfp-selector">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Rass" class="pfp-main-preview" id="auth-pfp-preview">
-                <div class="mt-20">
-                    <button onclick="App.triggerPfpUpload()" style="background:var(--accent-soft); color:var(--accent); border:none; padding:10px 20px; border-radius:12px; font-weight:700; cursor:pointer; display: inline-flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-camera"></i> MA PHOTO
-                    </button>
-                </div>
-                <input type="file" id="real-pfp-input" class="hidden" accept="image/*" onchange="App.handlePfpFile(event)">
-                
-                <div class="pfp-grid" id="default-avatars"></div>
-            </div>
-            
             <div class="input-box">
-                <i class="fas fa-user-tag"></i>
-                <input type="text" id="reg-pseudo" class="input-control" placeholder="Ton Pseudo Elite">
+                <i class="fas fa-user-ninja"></i>
+                <input type="text" id="reg-username" class="input-control" placeholder="Nom d'otaku">
             </div>
         </div>
 
         <div class="input-box">
             <i class="fas fa-envelope"></i>
-            <input type="email" id="auth-email" class="input-control" placeholder="Adresse e-mail">
+            <input type="email" id="auth-email" class="input-control" placeholder="Email">
         </div>
         
         <div class="input-box">
@@ -747,8 +1013,8 @@
             <input type="password" id="auth-pass" class="input-control" placeholder="Mot de passe (6+ caractères)">
         </div>
 
-        <button onclick="App.executeAuth()" id="auth-btn" style="width: 100%; padding: 22px; background: var(--accent); color: white; border: none; border-radius: 20px; font-weight: 800; font-size: 16px; margin-top: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <span id="auth-btn-text">REJOINDRE LE RÉSEAU</span>
+        <button onclick="AnimeSama.executeAuth()" class="auth-btn">
+            <span id="auth-btn-text">ENTRER DANS LE MONDE ANIME</span>
             <div class="loader" id="auth-loader"></div>
         </button>
         
@@ -760,18 +1026,20 @@
 <div id="main-app">
     <header class="top-nav">
         <div class="nav-wrapper">
-            <div class="brand">RASSTUBE</div>
-            <div class="search-bar">
-                <i class="fas fa-search" style="color:var(--text-dim)"></i>
-                <input type="text" id="search-input" placeholder="Rechercher vidéos, photos, personnes..." onkeyup="App.filterContent(this.value)">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                ANIME SAMA
             </div>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <div style="position:relative; cursor:pointer;" onclick="App.showNotifications()">
-                    <i class="fas fa-bell" style="font-size: 20px;" title="Notifications"></i>
-                    <div class="notification-badge" id="notification-badge" style="display:none;">3</div>
+            <div class="search-bar">
+                <i class="fas fa-search" style="color:var(--anime-pink)"></i>
+                <input type="text" id="search-input" placeholder="Rechercher un anime...">
+            </div>
+            <div class="user-menu">
+                <div class="notification-bell" onclick="AnimeSama.showNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-badge" id="notification-badge">3</div>
                 </div>
-                <i class="fas fa-paper-plane" style="font-size: 20px; cursor: pointer;" title="Messages" onclick="App.showMessages()"></i>
-                <img src="" id="user-pfp-top" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent); cursor: pointer;" onclick="App.go('profile')" alt="Profil">
+                <img src="" id="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--anime-pink); cursor: pointer;" onclick="AnimeSama.go('profile')" alt="Avatar">
             </div>
         </div>
     </header>
@@ -779,162 +1047,159 @@
     <main class="content-container">
         <!-- HOME SECTION -->
         <section id="sec-home" class="app-section">
-            <div class="story-scroller" id="story-container"></div>
-            <div id="main-feed"></div>
+            <div class="section-header">
+                <h2>🎌 Nouveautés du Moment</h2>
+                <div class="see-all" onclick="AnimeSama.go('library')">Voir tout</div>
+            </div>
+            <div class="anime-carousel" id="trending-anime"></div>
+
+            <div class="section-header">
+                <h2>🔥 Continu à regarder</h2>
+                <div class="see-all" onclick="AnimeSama.go('library')">Historique</div>
+            </div>
+            <div class="anime-carousel" id="continue-watching"></div>
+
+            <div class="section-header">
+                <h2>⭐ Recommandations personnalisées</h2>
+                <div class="see-all" onclick="AnimeSama.showMoreRecommendations()">Plus</div>
+            </div>
+            <div class="anime-carousel" id="recommended-anime"></div>
+
+            <div class="section-header">
+                <h2>🏆 Top du mois</h2>
+                <div class="see-all" onclick="AnimeSama.showRankings()">Classement</div>
+            </div>
+            <div class="anime-carousel" id="top-anime"></div>
         </section>
 
-        <!-- RSSHORT SECTION -->
-        <section id="sec-rsshort" class="app-section hidden">
-            <div class="reels-indicator" style="position:absolute; top:20px; left:20px; background:linear-gradient(45deg, var(--tiktok-pink), #00f2ea); color:white; padding:6px 12px; border-radius:20px; font-weight:700; font-size:12px; z-index:3;">
-                <i class="fas fa-play-circle"></i> RSSHORT
+        <!-- PLAYER SECTION -->
+        <section id="sec-player" class="app-section hidden">
+            <div class="player-container" id="player-container">
+                <video id="anime-video" controls playsinline>
+                    <source src="" type="video/mp4">
+                </video>
+                <div class="player-overlay" id="player-overlay"></div>
+                <div class="player-controls" id="player-controls"></div>
             </div>
-            <div class="rsshort-progress">
-                <div class="rsshort-progress-bar" id="rsshort-progress"></div>
-            </div>
-            <div class="rsshort-container" id="rsshort-container"></div>
-            <div class="rsshort-side-buttons" id="rsshort-side-buttons"></div>
-            <div class="rsshort-overlay" id="rsshort-overlay"></div>
         </section>
 
-        <!-- IA CHAT SECTION -->
-        <section id="sec-aichat" class="app-section hidden">
-            <div class="ai-chat-header">
-                <div class="ai-avatar">
+        <!-- BOT FRIEND SECTION -->
+        <section id="sec-bot" class="app-section hidden">
+            <div class="bot-header">
+                <div class="bot-avatar">
                     <i class="fas fa-robot"></i>
                 </div>
-                <div>
-                    <h3 style="margin:0; color:var(--ai-color);">Assistant IA Rasstube</h3>
-                    <p style="margin:5px 0 0; color:var(--text-dim); font-size:14px;">En ligne • Prêt à vous aider</p>
+                <div class="bot-info">
+                    <h3>Kaito - Ton Pote Anime</h3>
+                    <p>Bot spécialisé dans la découverte et l'ajout d'animés</p>
+                    <div class="bot-status">
+                        <div class="status-dot"></div>
+                        <span>En ligne - Scanne les nouveaux épisodes</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="ai-chat-messages" id="ai-chat-messages">
-                <div class="ai-message bot">
-                    <strong>🤖 IA Rasstube:</strong>
-                    <p>Bonjour ! Je suis votre assistant IA personnel. Je peux vous aider à créer du contenu, analyser vos performances, et même vous donner des conseils personnalisés !</p>
+
+            <div class="section-header">
+                <h2>🤖 Actions de Kaito</h2>
+            </div>
+            <div class="bot-actions">
+                <div class="bot-action-card" onclick="AnimeSama.botAction('add_random')">
+                    <i class="fas fa-plus-circle"></i>
+                    <h4>Ajouter un Anime Aléatoire</h4>
+                    <p>Kaito va chercher un anime au hasard dans sa base</p>
                 </div>
-                <div class="ai-message bot">
-                    <p>Que souhaitez-vous faire aujourd'hui ? 😊</p>
+                <div class="bot-action-card" onclick="AnimeSama.botAction('scan_new')">
+                    <i class="fas fa-search"></i>
+                    <h4>Scanner les Nouveautés</h4>
+                    <p>Vérifie les nouveaux épisodes sortis cette semaine</p>
+                </div>
+                <div class="bot-action-card" onclick="AnimeSama.botAction('recommend')">
+                    <i class="fas fa-star"></i>
+                    <h4>Recommander un Anime</h4>
+                    <p>Suggère un anime basé sur tes préférences</p>
+                </div>
+                <div class="bot-action-card" onclick="AnimeSama.botAction('update_library')">
+                    <i class="fas fa-sync-alt"></i>
+                    <h4>Mettre à jour la Bibliothèque</h4>
+                    <p>Actualise tous les animés avec les dernières infos</p>
                 </div>
             </div>
-            
-            <div class="ai-quick-actions" id="ai-quick-actions">
-                <div class="ai-quick-btn" onclick="App.sendAIQuick('Conseils pour gagner des abonnés')">💡 Growth Hacking</div>
-                <div class="ai-quick-btn" onclick="App.sendAIQuick('Idées de contenu tendance')">🚀 Contenu viral</div>
-                <div class="ai-quick-btn" onclick="App.sendAIQuick('Analyser mes performances')">📊 Analytics</div>
-                <div class="ai-quick-btn" onclick="App.sendAIQuick('Optimiser mes publications')">⚡ Optimisation</div>
-                <div class="ai-quick-btn" onclick="App.sendAIQuick('Me raconter une blague')">😂 Divertissement</div>
+
+            <div class="section-header">
+                <h2>📅 Activité Récente</h2>
             </div>
-            
-            <div class="ai-input-container">
-                <input type="text" class="ai-input" id="ai-input" placeholder="Posez-moi n'importe quelle question..." onkeypress="if(event.key === 'Enter') App.sendAIMessage()">
-                <button class="ai-send-btn" onclick="App.sendAIMessage()">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+            <div class="bot-activity" id="bot-activity">
+                <!-- Les activités seront ajoutées dynamiquement -->
             </div>
         </section>
 
-        <!-- UPLOAD SECTION -->
-        <section id="sec-upload" class="app-section hidden">
-            <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
-                <h3 style="margin-top: 0; margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-plus-circle" style="color:var(--accent)"></i> Nouvelle Publication
-                </h3>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                    <div>
-                        <div style="border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 40px; text-align: center; cursor: pointer;" onclick="document.getElementById('file-upload').click()" id="upload-dropzone">
-                            <i class="fas fa-cloud-upload-alt" style="font-size: 50px; color: var(--accent); margin-bottom: 15px;"></i>
-                            <p style="margin: 0; font-weight: 700; font-size: 18px;">Importer un fichier</p>
-                            <p style="margin: 10px 0 0; font-size: 14px; color: var(--text-dim);">Vidéo, photo ou RShort</p>
-                            <input type="file" id="file-upload" class="hidden" accept="video/*,image/*" onchange="App.previewUpload(event)" multiple>
-                        </div>
-
-                        <div id="upload-preview" class="hidden" style="margin-top: 25px; border-radius: var(--radius-lg); overflow: hidden;"></div>
-                    </div>
-
-                    <div>
-                        <div class="input-box">
-                            <i class="fas fa-heading"></i>
-                            <input type="text" id="up-title" class="input-control" placeholder="Titre de la publication">
-                        </div>
-
-                        <div class="input-box">
-                            <i class="fas fa-tag"></i>
-                            <input type="text" id="up-tags" class="input-control" placeholder="Hashtags (séparés par des virgules)">
-                        </div>
-
-                        <div class="input-box">
-                            <i class="fas fa-layer-group"></i>
-                            <select id="up-type" class="input-control">
-                                <option value="video">🎬 Vidéo Standard</option>
-                                <option value="photo">📷 Photo</option>
-                                <option value="rshort">⚡ RShort (format court)</option>
-                            </select>
-                        </div>
-
-                        <button onclick="App.publishPost()" style="width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: var(--radius-md); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px;">
-                            <i class="fas fa-paper-plane"></i>
-                            <span id="publish-text">PUBLIER</span>
-                            <div class="loader" id="publish-loader"></div>
-                        </button>
-                        
-                        <div style="margin-top: 20px; padding: 15px; background: var(--accent-soft); border-radius: var(--radius-md);">
-                            <p style="margin: 0; font-size: 13px; color: var(--accent);">
-                                <i class="fas fa-lightbulb"></i> Conseil IA : Utilisez des hashtags pertinents pour 3x plus de visibilité !
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <!-- MY LIBRARY SECTION -->
+        <section id="sec-library" class="app-section hidden">
+            <div class="section-header">
+                <h2>📚 Ma Bibliothèque</h2>
+                <div class="see-all" onclick="AnimeSama.refreshLibrary()">Actualiser</div>
             </div>
+
+            <div class="library-filters">
+                <button class="filter-btn active" onclick="AnimeSama.filterLibrary('all')">Tous</button>
+                <button class="filter-btn" onclick="AnimeSama.filterLibrary('watching')">En cours</button>
+                <button class="filter-btn" onclick="AnimeSama.filterLibrary('completed')">Terminés</button>
+                <button class="filter-btn" onclick="AnimeSama.filterLibrary('planned')">À voir</button>
+                <button class="filter-btn" onclick="AnimeSama.filterLibrary('favorites')">Favoris</button>
+                <button class="filter-btn" onclick="AnimeSama.filterLibrary('added_by_bot')">Ajoutés par Kaito</button>
+            </div>
+
+            <div class="library-grid" id="library-grid"></div>
         </section>
 
         <!-- PROFILE SECTION -->
         <section id="sec-profile" class="app-section hidden">
-            <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
-                <div style="display: flex; gap: 30px; margin-bottom: 40px; align-items: flex-start;">
-                    <img src="" id="prof-pfp" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent); padding: 5px; object-fit: cover;">
+            <div class="profile-header">
+                <img src="" id="profile-avatar" class="profile-avatar" alt="Avatar">
+                <div style="flex: 1;">
+                    <h2 id="profile-username" style="margin: 0 0 10px 0;"></h2>
+                    <p id="profile-email" style="color: var(--text-dim); margin: 0 0 20px 0;"></p>
+                    <p id="profile-bio" style="margin: 0 0 20px 0; line-height: 1.5;">Otaku passionné depuis 2023. Amateur de shonen et romance.</p>
                     
-                    <div style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
-                            <h2 id="prof-name" style="margin: 0; font-size: 28px; font-weight: 800;"></h2>
-                            <button onclick="App.editProfile()" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); padding: 8px 20px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer;">
-                                <i class="fas fa-edit"></i> Modifier
-                            </button>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="stat-anime-watched">0</span>
+                            <span class="stat-label">Animés vus</span>
                         </div>
-                        
-                        <p id="prof-email" style="color: var(--text-dim); margin-top: 5px; margin-bottom: 20px;"></p>
-                        
-                        <p id="prof-bio" style="margin-bottom: 25px; line-height: 1.5;"></p>
-                        
-                        <div style="display: flex; gap: 30px;">
-                            <div style="text-align: center;">
-                                <b style="display: block; font-size: 18px;" id="count-posts">0</b>
-                                <span style="font-size: 13px; color: var(--text-dim);">Publications</span>
-                            </div>
-                            <div style="text-align: center;">
-                                <b style="display: block; font-size: 18px;" id="count-followers">0</b>
-                                <span style="font-size: 13px; color: var(--text-dim);">Abonnés</span>
-                            </div>
-                            <div style="text-align: center;">
-                                <b style="display: block; font-size: 18px;" id="count-following">0</b>
-                                <span style="font-size: 13px; color: var(--text-dim);">Abonnements</span>
-                            </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stat-hours">0</span>
+                            <span class="stat-label">Heures</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stat-favorites">0</span>
+                            <span class="stat-label">Favoris</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stat-streak">0</span>
+                            <span class="stat-label">Jours streak</span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div style="display: flex; border-bottom: 1px solid var(--border); margin-bottom: 30px;">
-                    <button class="profile-tab active" onclick="App.switchProfileTab('posts')" style="padding: 15px 20px; background: none; border: none; color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: 700; cursor: pointer;">
-                        <i class="fas fa-th-large"></i> Publications
-                    </button>
-                    <button class="profile-tab" onclick="App.switchProfileTab('rshorts')" style="padding: 15px 20px; background: none; border: none; color: var(--text-dim); font-weight: 600; cursor: pointer;">
-                        <i class="fas fa-play-circle"></i> RShorts
-                    </button>
+            <div class="section-header">
+                <h2>🎯 Mes Objectifs</h2>
+            </div>
+            <div class="bot-actions">
+                <div class="bot-action-card">
+                    <i class="fas fa-trophy"></i>
+                    <h4>Regarder 100 épisodes</h4>
+                    <p>Progression: <span id="goal-episodes">0</span>/100</p>
                 </div>
-
-                <div id="profile-posts" class="profile-content">
-                    <div class="photos-grid" id="profile-grid"></div>
+                <div class="bot-action-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h4>7 jours de suite</h4>
+                    <p>Streak actuel: <span id="goal-streak">0</span> jours</p>
+                </div>
+                <div class="bot-action-card">
+                    <i class="fas fa-heart"></i>
+                    <h4>10 animés favoris</h4>
+                    <p>Ajoutés: <span id="goal-favorites">0</span>/10</p>
                 </div>
             </div>
         </section>
@@ -942,22 +1207,22 @@
 
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-bar">
-        <div class="nav-item active" onclick="App.go('home')">
+        <div class="nav-item active" onclick="AnimeSama.go('home')">
             <i class="fas fa-home"></i>
             <span>Accueil</span>
         </div>
-        <div class="nav-item" onclick="App.go('rsshort')">
-            <i class="fas fa-play-circle"></i>
-            <span>RShort</span>
+        <div class="nav-item" onclick="AnimeSama.go('library')">
+            <i class="fas fa-book"></i>
+            <span>Bibliothèque</span>
         </div>
-        <div class="fab-upload" onclick="App.go('upload')" id="fab-upload-btn">
-            <i class="fas fa-plus"></i>
-        </div>
-        <div class="nav-item" onclick="App.go('aichat')">
+        <div class="fab-upload" onclick="AnimeSama.go('bot')" id="fab-bot-btn">
             <i class="fas fa-robot"></i>
-            <span>IA</span>
         </div>
-        <div class="nav-item" onclick="App.go('profile')">
+        <div class="nav-item" onclick="AnimeSama.go('player')">
+            <i class="fas fa-play-circle"></i>
+            <span>Player</span>
+        </div>
+        <div class="nav-item" onclick="AnimeSama.go('profile')">
             <i class="fas fa-user"></i>
             <span>Profil</span>
         </div>
@@ -966,536 +1231,324 @@
 
 <script>
 /**
- * RASSTUBE ULTIMATE v4.0 - Addictive AI Chat & Social Network
+ * ANIME SAMA - Plateforme de Streaming d'Anime
+ * Avec Kaito le bot qui ajoute automatiquement des animés
  */
 
-const App = {
+const AnimeSama = {
     // ÉTAT GLOBAL
     state: {
-        users: JSON.parse(localStorage.getItem('rt_v4_users') || '[]'),
-        posts: JSON.parse(localStorage.getItem('rt_v4_posts') || '[]'),
-        session: JSON.parse(localStorage.getItem('rt_v4_session') || 'null'),
+        users: JSON.parse(localStorage.getItem('anime_users') || '[]'),
+        animes: JSON.parse(localStorage.getItem('anime_library') || '[]'),
+        session: JSON.parse(localStorage.getItem('anime_session') || 'null'),
         currentTab: 'login',
-        selectedPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rass',
         activeSection: 'home',
-        isUploading: false,
-        subscriptions: JSON.parse(localStorage.getItem('rt_v4_subscriptions') || '{}'),
-        messages: JSON.parse(localStorage.getItem('rt_v4_messages') || '[]'),
-        savedPosts: JSON.parse(localStorage.getItem('rt_v4_saved') || '[]'),
-        currentRshort: 0,
-        rshortPlaying: true,
-        profileTab: 'posts',
         
-        // Système addictif
-        streakDays: parseInt(localStorage.getItem('rt_streak') || '1'),
-        lastLogin: localStorage.getItem('rt_last_login') || '',
-        xp: parseInt(localStorage.getItem('rt_xp') || '150'),
-        level: parseInt(localStorage.getItem('rt_level') || '1'),
-        dailyRewardClaimed: localStorage.getItem('rt_daily_reward') === new Date().toDateString(),
+        // Système de visionnage
+        watchingHistory: JSON.parse(localStorage.getItem('anime_history') || '[]'),
+        favorites: JSON.parse(localStorage.getItem('anime_favorites') || '[]'),
+        watchlist: JSON.parse(localStorage.getItem('anime_watchlist') || '[]'),
         
-        // IA Chat
-        aiConversation: [],
-        aiPersonality: 'enthusiastic',
+        // Bot Kaito
+        botActivity: JSON.parse(localStorage.getItem('bot_activity') || '[]'),
+        botLastUpdate: localStorage.getItem('bot_last_update') || '',
         
-        // Réponses IA programmées
-        aiResponses: {
-            growth: [
-                "🎯 Pour gagner des abonnés rapidement : Publiez du contenu à heure fixe chaque jour, utilisez au moins 5 hashtags pertinents, et collaborez avec d'autres créateurs de votre niche !",
-                "🚀 Astuce growth : Les 3 premières secondes de votre vidéo sont cruciales. Commencez par quelque chose de choquant, drôle ou intriguant pour retenir l'attention !",
-                "💡 Conseil IA : Analysez vos heures de pointe d'engagement (généralement 18h-21h) et programmez vos publications en conséquence pour maximiser la visibilité !",
-                "📈 Pour augmenter l'engagement : Posez des questions dans vos légendes, répondez à tous les commentaires dans l'heure, et organisez des Q&A en direct !"
-            ],
-            content: [
-                "✨ Idées de contenu viral : 1) Tutoriels rapides (60s max) 2) Avant/Après 3) Défis tendance 4) Réactions express 5) Contenu éducatif animé !",
-                "🎬 Format gagnant : Les RShorts de moins de 30 secondes avec musique tendance ont 3x plus de chances de devenir viraux !",
-                "📱 Conseil création : Utilisez des transitions fluides, des sous-titres dynamiques et des effets sonores pour rendre votre contenu plus professionnel !",
-                "🔥 Tendances du moment : #CapCutChallenge, #AIArt, #SatisfyingVideos, #LearnIn60Seconds - Sautez sur ces trends rapidement !"
-            ],
-            analytics: [
-                "📊 Votre contenu performe mieux les week-ends entre 11h et 14h. Le taux d'engagement est 40% plus élevé à ces moments !",
-                "📈 Votre vidéo la plus vue a gardé 75% des viewers jusqu'à la fin. Répliquez ce format !",
-                "🎯 Votre audience est principalement composée de 18-24 ans (65%). Adaptez votre contenu à cette démographie !",
-                "📉 Conseil : Les vidéos entre 60 et 90 secondes ont le meilleur taux de rétention sur votre profil."
-            ],
-            optimization: [
-                "⚡ Optimisez vos hashtags : Utilisez 3 hashtags populaires (1M+), 3 hashtags moyens (100k-1M) et 3 hashtags de niche (<100k) !",
-                "🎨 Améliorez vos miniatures : Utilisez des couleurs vives, des visages expressifs et du texte en gros caractères !",
-                "🔍 SEO pour Rasstube : Incluez vos mots-clés principaux dans les 50 premiers caractères de votre description !",
-                "💎 Pro-tip : Utilisez des appels à l'action clairs (Likez si..., Abonnez-vous pour...) pour booster vos interactions !"
-            ],
-            entertainment: [
-                "😂 Pourquoi les développeurs détestent-ils la nature ? Parce qu'il y a trop de bugs ! 🐛",
-                "🎮 Savais-tu que le premier tweet a été envoyé en 2006 ? Moi non plus, je suis une IA de 2024 ! 😄",
-                "✨ Blague IA : Combien de programmeurs faut-il pour changer une ampoule ? Aucun, c'est un problème matériel ! 💡",
-                "😆 Pourquoi le livre de mathématiques était-il triste ? Parce qu'il avait trop de problèmes !"
-            ],
-            general: [
-                "🌟 Salut ! Je suis ravi de discuter avec vous aujourd'hui. Comment puis-je vous aider à dominer Rasstube ?",
-                "🤖 En tant qu'IA Rasstube, j'ai analysé des milliers de contenus viraux. Laissez-moi vous guider vers le succès !",
-                "💫 Wow, excellente question ! Permettez-moi de vous donner les insights les plus récents du marché...",
-                "🚀 Prêt à passer au niveau supérieur ? Je détecte un grand potentiel dans votre profil. Continuons !"
-            ]
-        }
+        // Statistiques
+        stats: JSON.parse(localStorage.getItem('anime_stats') || JSON.stringify({
+            animeWatched: 0,
+            hoursWatched: 0,
+            currentStreak: 0,
+            lastWatchDate: '',
+            goals: {
+                episodes: 100,
+                streak: 7,
+                favorites: 10
+            }
+        })),
+        
+        // Anime par défaut
+        defaultAnimes: [
+            {
+                id: 1,
+                title: "Attack on Titan: The Final Season",
+                description: "La guerre pour Paradis atteint son paroxysme alors que Eren déclenche le Rumbling.",
+                episodes: 16,
+                currentEpisode: 0,
+                duration: "24 min",
+                status: "En cours",
+                genre: ["Action", "Drame", "Fantasy"],
+                rating: 9.1,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 2,
+                title: "Demon Slayer: Kimetsu no Yaiba",
+                description: "Tanjiro devient un pourfendeur de démons pour venger sa famille et soigner sa sœur.",
+                episodes: 55,
+                currentEpisode: 0,
+                duration: "23 min",
+                status: "En cours",
+                genre: ["Action", "Fantasy", "Aventure"],
+                rating: 8.7,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 3,
+                title: "Jujutsu Kaisen Season 2",
+                description: "Satoru Gojo et Suguru Geto au lycée, et la descente aux enfers de ce dernier.",
+                episodes: 23,
+                currentEpisode: 0,
+                duration: "24 min",
+                status: "Terminé",
+                genre: ["Action", "Horreur", "Surnaturel"],
+                rating: 8.9,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 4,
+                title: "Chainsaw Man",
+                description: "Denji fusionne avec son chien-démon et devient Chainsaw Man pour le gouvernement.",
+                episodes: 12,
+                currentEpisode: 0,
+                duration: "24 min",
+                status: "Terminé",
+                genre: ["Action", "Horreur", "Comédie"],
+                rating: 8.5,
+                year: 2022,
+                cover: "https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 5,
+                title: "Spy × Family Part 2",
+                description: "Loid Forger, espion, crée une famille factice pour une mission, sans savoir que sa fille adoptive est télépathe et sa femme une tueuse à gages.",
+                episodes: 25,
+                currentEpisode: 0,
+                duration: "24 min",
+                status: "En cours",
+                genre: ["Action", "Comédie", "Famille"],
+                rating: 8.8,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 6,
+                title: "My Hero Academia Season 6",
+                description: "La guerre totale entre les héros et la Meta Liberation Army.",
+                episodes: 25,
+                currentEpisode: 0,
+                duration: "24 min",
+                status: "Terminé",
+                genre: ["Action", "Super-héros", "Drame"],
+                rating: 8.4,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 7,
+                title: "Vinland Saga Season 2",
+                description: "Thorfinn cherche la rédemption dans une ferme d'esclaves après la mort de son père.",
+                episodes: 24,
+                currentEpisode: 0,
+                duration: "24 min",
+                status: "Terminé",
+                genre: ["Action", "Historique", "Drame"],
+                rating: 9.0,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            },
+            {
+                id: 8,
+                title: "Bocchi the Rock!",
+                description: "Hitori Goto, une guitariste solitaire, rejoint un groupe de rock pour surmonter son anxiété sociale.",
+                episodes: 12,
+                currentEpisode: 0,
+                duration: "23 min",
+                status: "Terminé",
+                genre: ["Comédie", "Musique", "Tranche de vie"],
+                rating: 8.6,
+                year: 2022,
+                cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                addedBy: "system",
+                addedDate: new Date().toISOString()
+            }
+        ],
+        
+        // Nouveaux animés pour le bot
+        newAnimesPool: [
+            {
+                id: 100,
+                title: "Frieren: Beyond Journey's End",
+                description: "Une elfe mage réfléchit sur la vie et la mort après la disparition de ses compagnons de quête.",
+                episodes: 28,
+                genre: ["Aventure", "Fantasy", "Drame"],
+                rating: 9.2,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 101,
+                title: "The Apothecary Diaries",
+                description: "Une jeune femme utilise ses connaissances en médecine pour résoudre des mystères dans la Cité Interdite.",
+                episodes: 24,
+                genre: ["Mystère", "Historique", "Drame"],
+                rating: 8.7,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 102,
+                title: "Solo Leveling",
+                description: "Un chasseur faible devient progressivement le plus fort après avoir été choisi par un système mystérieux.",
+                episodes: 12,
+                genre: ["Action", "Fantasy", "Aventure"],
+                rating: 8.9,
+                year: 2024,
+                cover: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 103,
+                title: "Delicious in Dungeon",
+                description: "Un groupe d'aventuriers cuisine des monstres dans un donjon pour économiser de l'argent.",
+                episodes: 24,
+                genre: ["Aventure", "Fantasy", "Comédie"],
+                rating: 8.5,
+                year: 2024,
+                cover: "https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 104,
+                title: "Oshi no Ko",
+                description: "Un gynécologue et sa patiente, une idole, se réincarnent comme ses enfants jumeaux.",
+                episodes: 11,
+                genre: ["Drame", "Mystère", "Surnaturel"],
+                rating: 8.8,
+                year: 2023,
+                cover: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            }
+        ]
     },
 
     // INITIALISATION
     init() {
         this.verifySession();
-        this.renderAvatars();
-        this.sync();
-
+        this.initializeAnimes();
+        this.checkBotAutoUpdate();
+        
         if(this.state.session) {
             this.launch();
+        } else {
+            document.getElementById('auth-portal').classList.remove('hidden');
         }
-        
-        // Créer des données par défaut
-        if(this.state.posts.length === 0) {
-            this.createDefaultData();
-        }
-        
-        // Vérifier la récompense quotidienne
-        this.checkDailyReward();
     },
 
-    // CRÉATION DES DONNÉES PAR DÉFAUT
-    createDefaultData() {
-        const defaultUsers = [
-            { 
-                id: 1,
-                pseudo: 'Rayan', 
-                email: 'rayan@example.com',
-                pass: '123456',
-                pfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rayan',
-                bio: 'Gamer & Content Creator 🎮 • 1M+ sur Rasstube',
-                followers: 1245,
-                following: 89,
-                joined: new Date().toLocaleDateString('fr-FR')
-            },
-            { 
-                id: 2,
-                pseudo: 'Sarah', 
-                email: 'sarah@example.com',
-                pass: '123456',
-                pfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
-                bio: 'Photographe voyage 🌍 • Aventurière digitale',
-                followers: 892,
-                following: 156,
-                joined: new Date().toLocaleDateString('fr-FR')
-            },
-            { 
-                id: 3,
-                pseudo: 'Alex', 
-                email: 'alex@example.com',
-                pass: '123456',
-                pfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
-                bio: 'Chef cuisinier 👨‍🍳 • Recettes en 60s',
-                followers: 2103,
-                following: 234,
-                joined: new Date().toLocaleDateString('fr-FR')
-            }
-        ];
+    // INITIALISATION DES ANIMÉS
+    initializeAnimes() {
+        if(this.state.animes.length === 0) {
+            this.state.animes = this.state.defaultAnimes;
+            this.sync();
+        }
         
-        defaultUsers.forEach(user => {
-            if(!this.state.users.find(u => u.pseudo === user.pseudo)) {
-                this.state.users.push(user);
-            }
-        });
-
-        const defaultPosts = [
-            {
-                id: 1,
-                author: 'Rayan',
-                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rayan',
-                title: 'Nouveau record sur Fortnite ! 🎮 #gaming #fortnite #record',
-                type: 'rshort',
-                content: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-                likes: 1245,
-                likedBy: ['Rayan', 'Sarah'],
-                comments: 89,
-                shares: 45,
-                views: 12500,
-                duration: 15,
-                timestamp: new Date(Date.now() - 3600000).toISOString(),
-                tags: ['gaming', 'fortnite', 'record']
-            },
-            {
-                id: 2,
-                author: 'Sarah',
-                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
-                title: 'Coucher de soleil à Bali 🌅 #voyage #bali #photographie #paradis',
-                type: 'photo',
-                content: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                likes: 892,
-                likedBy: ['Sarah', 'Alex'],
-                comments: 67,
-                shares: 23,
-                views: 8900,
-                timestamp: new Date(Date.now() - 7200000).toISOString(),
-                tags: ['voyage', 'bali', 'photographie']
-            }
-        ];
-        
-        this.state.posts = defaultPosts;
-        this.sync();
+        // Ajouter quelques activités au bot
+        if(this.state.botActivity.length === 0) {
+            const initialActivities = [
+                {
+                    id: 1,
+                    type: "add",
+                    anime: "Attack on Titan: The Final Season",
+                    timestamp: new Date(Date.now() - 86400000).toISOString(),
+                    message: "Nouvel anime ajouté à la bibliothèque"
+                },
+                {
+                    id: 2,
+                    type: "update",
+                    anime: "Demon Slayer",
+                    timestamp: new Date(Date.now() - 172800000).toISOString(),
+                    message: "Nouveaux épisodes disponibles"
+                },
+                {
+                    id: 3,
+                    type: "scan",
+                    anime: null,
+                    timestamp: new Date(Date.now() - 259200000).toISOString(),
+                    message: "Scan hebdomadaire des nouveautés effectué"
+                }
+            ];
+            
+            this.state.botActivity = initialActivities;
+            this.sync();
+        }
     },
 
-    // LANCEMENT APP
+    // VÉRIFICATION AUTO DU BOT
+    checkBotAutoUpdate() {
+        const today = new Date().toDateString();
+        
+        // Si le bot n'a pas mis à jour aujourd'hui
+        if(this.state.botLastUpdate !== today && Math.random() > 0.7) {
+            this.autoAddNewAnime();
+            this.state.botLastUpdate = today;
+            localStorage.setItem('bot_last_update', today);
+        }
+    },
+
+    // LANCEMENT DE L'APPLICATION
     launch() {
         document.getElementById('auth-portal').classList.add('hidden');
         document.getElementById('main-app').style.display = 'block';
         
         // Mettre à jour l'interface
-        document.getElementById('user-pfp-top').src = this.state.session.pfp;
-        document.getElementById('prof-pfp').src = this.state.session.pfp;
-        document.getElementById('prof-name').innerText = this.state.session.pseudo;
-        document.getElementById('prof-email').innerText = this.state.session.email;
-        document.getElementById('prof-bio').innerText = this.state.session.bio || "Aucune bio pour le moment";
-        
-        // Mettre à jour les streaks et XP
-        this.updateStreak();
-        this.updateXPBar();
-        
-        // Afficher les éléments addictifs
-        document.getElementById('xp-bar').classList.remove('hidden');
-        document.getElementById('streak-counter').classList.remove('hidden');
-        if(!this.state.dailyRewardClaimed) {
-            document.getElementById('daily-reward').classList.remove('hidden');
+        if(this.state.session) {
+            document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${this.state.session.username}`;
+            document.getElementById('profile-avatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${this.state.session.username}`;
+            document.getElementById('profile-username').innerText = this.state.session.username;
+            document.getElementById('profile-email').innerText = this.state.session.email;
         }
         
-        // Afficher la badge de notification
-        document.getElementById('notification-badge').style.display = 'block';
-        
-        this.updateProfileStats();
-        this.renderFeed();
-        this.renderStories();
+        this.updateStats();
+        this.renderHomeSections();
+        this.renderBotActivity();
+        this.renderLibrary();
         this.go('home');
         
-        // Déclencher une notification de bienvenue
+        // Notification de bienvenue
         setTimeout(() => {
-            this.notify(`🔥 Streak de ${this.state.streakDays} jours ! Continuez comme ça !`, 'success');
-            this.showAchievement('Bienvenue !', 'fas fa-trophy', 'Vous avez ouvert Rasstube aujourd\'hui !');
+            this.notify("🎌 Bienvenue sur Anime Sama !", "success");
         }, 1000);
-    },
-
-    // SYSTÈME ADDICTIF
-    updateStreak() {
-        const today = new Date().toDateString();
-        const yesterday = new Date(Date.now() - 86400000).toDateString();
-        
-        if(this.state.lastLogin === today) {
-            // Déjà connecté aujourd'hui
-            return;
-        } else if(this.state.lastLogin === yesterday) {
-            // Streak continu
-            this.state.streakDays++;
-            this.showAchievement('Streak de ' + this.state.streakDays + ' jours !', 'fas fa-fire', 'Vous vous connectez chaque jour !');
-        } else {
-            // Streak brisé
-            this.state.streakDays = 1;
-        }
-        
-        this.state.lastLogin = today;
-        document.getElementById('streak-days').innerText = this.state.streakDays + ' jours';
-        localStorage.setItem('rt_streak', this.state.streakDays.toString());
-        localStorage.setItem('rt_last_login', today);
-    },
-
-    updateXPBar() {
-        const xpNeededForNextLevel = this.state.level * 100;
-        const progress = (this.state.xp % 100) / 100 * 100;
-        document.getElementById('xp-progress').style.width = progress + '%';
-    },
-
-    addXP(amount) {
-        this.state.xp += amount;
-        const oldLevel = this.state.level;
-        this.state.level = Math.floor(this.state.xp / 100) + 1;
-        
-        if(this.state.level > oldLevel) {
-            this.showAchievement('Niveau ' + this.state.level + ' atteint !', 'fas fa-star', 'Vous progressez rapidement !');
-            this.notify(`🎉 Félicitations ! Vous avez atteint le niveau ${this.state.level} !`, 'success');
-        }
-        
-        localStorage.setItem('rt_xp', this.state.xp.toString());
-        localStorage.setItem('rt_level', this.state.level.toString());
-        this.updateXPBar();
-    },
-
-    checkDailyReward() {
-        const today = new Date().toDateString();
-        if(localStorage.getItem('rt_daily_reward') !== today) {
-            this.state.dailyRewardClaimed = false;
-        }
-    },
-
-    claimDailyReward() {
-        this.state.dailyRewardClaimed = true;
-        localStorage.setItem('rt_daily_reward', new Date().toDateString());
-        
-        const rewardXP = 50 + (this.state.streakDays * 10);
-        this.addXP(rewardXP);
-        
-        document.getElementById('daily-reward').classList.add('hidden');
-        this.showAchievement('Récompense quotidienne !', 'fas fa-gift', `+${rewardXP} XP gagnés !`);
-        this.notify(`🎁 Récompense quotidienne : +${rewardXP} XP ! Revenez demain !`, 'success');
-    },
-
-    showAchievement(title, icon, description) {
-        const popup = document.createElement('div');
-        popup.className = 'achievement-popup';
-        popup.innerHTML = `
-            <div class="achievement-icon">
-                <i class="${icon}"></i>
-            </div>
-            <h3 style="margin:0 0 10px 0; color:var(--accent);">${title}</h3>
-            <p style="margin:0; color:var(--text-dim);">${description}</p>
-            <button onclick="this.parentElement.remove()" style="margin-top:20px; padding:10px 20px; background:var(--accent); color:white; border:none; border-radius:var(--radius-md); cursor:pointer;">
-                Super !
-            </button>
-        `;
-        
-        document.body.appendChild(popup);
-        
-        setTimeout(() => {
-            if(popup.parentElement) {
-                popup.remove();
-            }
-        }, 5000);
-    },
-
-    // IA CHAT ADDICTIVE
-    sendAIMessage() {
-        const input = document.getElementById('ai-input');
-        const message = input.value.trim();
-        
-        if(!message) return;
-        
-        // Ajouter le message utilisateur
-        this.addAIMessage(message, 'user');
-        input.value = '';
-        
-        // Réponse IA avec délai
-        setTimeout(() => {
-            this.generateAIResponse(message);
-        }, 1000 + Math.random() * 1000);
-    },
-
-    sendAIQuick(message) {
-        document.getElementById('ai-input').value = message;
-        this.sendAIMessage();
-    },
-
-    addAIMessage(text, sender) {
-        const container = document.getElementById('ai-chat-messages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `ai-message ${sender}`;
-        
-        if(sender === 'user') {
-            messageDiv.innerHTML = `<strong>👤 Vous:</strong><p>${text}</p>`;
-        } else {
-            messageDiv.innerHTML = `<strong>🤖 IA Rasstube:</strong><p>${text}</p>`;
-        }
-        
-        container.appendChild(messageDiv);
-        container.scrollTop = container.scrollHeight;
-        
-        // Ajouter XP pour interaction
-        if(sender === 'user') {
-            this.addXP(5);
-        }
-    },
-
-    generateAIResponse(userMessage) {
-        const lowerMessage = userMessage.toLowerCase();
-        let response = '';
-        
-        // Montrer l'indicateur de frappe
-        const typingIndicator = document.createElement('div');
-        typingIndicator.className = 'ai-typing';
-        typingIndicator.innerHTML = '<span></span><span></span><span></span>';
-        document.getElementById('ai-chat-messages').appendChild(typingIndicator);
-        
-        // Générer une réponse basée sur le message
-        setTimeout(() => {
-            typingIndicator.remove();
-            
-            if(lowerMessage.includes('abonné') || lowerMessage.includes('follower') || lowerMessage.includes('croissance')) {
-                response = this.state.aiResponses.growth[Math.floor(Math.random() * this.state.aiResponses.growth.length)];
-            } else if(lowerMessage.includes('contenu') || lowerMessage.includes('idée') || lowerMessage.includes('vidéo')) {
-                response = this.state.aiResponses.content[Math.floor(Math.random() * this.state.aiResponses.content.length)];
-            } else if(lowerMessage.includes('analyse') || lowerMessage.includes('stat') || lowerMessage.includes('performance')) {
-                response = this.state.aiResponses.analytics[Math.floor(Math.random() * this.state.aiResponses.analytics.length)];
-            } else if(lowerMessage.includes('optim') || lowerMessage.includes('hashtag') || lowerMessage.includes('seo')) {
-                response = this.state.aiResponses.optimization[Math.floor(Math.random() * this.state.aiResponses.optimization.length)];
-            } else if(lowerMessage.includes('blague') || lowerMessage.includes('drôle') || lowerMessage.includes('rire')) {
-                response = this.state.aiResponses.entertainment[Math.floor(Math.random() * this.state.aiResponses.entertainment.length)];
-            } else {
-                response = this.state.aiResponses.general[Math.floor(Math.random() * this.state.aiResponses.general.length)];
-            }
-            
-            // Ajouter des éléments addictifs
-            if(Math.random() > 0.7) {
-                response += `\n\n🎮 **Astuce du jour** : ${this.getDailyTip()}`;
-            }
-            
-            if(Math.random() > 0.8) {
-                response += `\n\n🔥 **Votre streak** : ${this.state.streakDays} jours - Continuez comme ça !`;
-            }
-            
-            this.addAIMessage(response, 'bot');
-            
-            // Ajouter XP pour réponse IA
-            this.addXP(10);
-        }, 1500 + Math.random() * 2000);
-    },
-
-    getDailyTip() {
-        const tips = [
-            "Likez 10 posts par jour pour augmenter votre visibilité de 30%",
-            "Postez un RShort entre 18h et 20h pour maximiser les vues",
-            "Utilisez 3 hashtags exacts dans vos 3 premiers commentaires",
-            "Répondez aux commentaires dans les 15 minutes pour booster l'algorithme",
-            "Collaborez avec un créateur de votre niche cette semaine"
-        ];
-        return tips[Math.floor(Math.random() * tips.length)];
-    },
-
-    // RSSHORT ADDICTIVE
-    renderRshorts() {
-        const rshorts = this.state.posts.filter(p => p.type === 'rshort');
-        if(rshorts.length === 0) {
-            document.getElementById('rsshort-container').innerHTML = `
-                <div style="display:flex; align-items:center; justify-content:center; height:100%; background:var(--bg-deep); color:white;">
-                    <div style="text-align:center;">
-                        <i class="fas fa-play-circle" style="font-size:60px; color:var(--tiktok-pink); margin-bottom:20px;"></i>
-                        <h3>Aucun RShort disponible</h3>
-                        <p>Soyez le premier à créer un RShort !</p>
-                        <button onclick="App.go('upload')" style="margin-top:20px; padding:12px 25px; background:var(--tiktok-pink); color:white; border:none; border-radius:var(--radius-md); cursor:pointer;">
-                            Créer mon premier RShort
-                        </button>
-                    </div>
-                </div>
-            `;
-            return;
-        }
-        
-        const currentRshort = rshorts[this.state.currentRshort];
-        
-        // Container principal
-        document.getElementById('rsshort-container').innerHTML = `
-            <video class="rsshort-video" id="rsshort-video" autoplay muted playsinline>
-                <source src="${currentRshort.content}" type="video/mp4">
-            </video>
-        `;
-        
-        // Overlay avec infos
-        document.getElementById('rsshort-overlay').innerHTML = `
-            <div style="margin-bottom:15px;">
-                <h3 style="margin:0 0 10px 0; display:flex; align-items:center; gap:10px;">
-                    <img src="${currentRshort.authorPfp}" style="width:40px; height:40px; border-radius:50%; border:2px solid var(--accent);">
-                    ${currentRshort.author}
-                </h3>
-                <p style="margin:0; font-size:16px;">${currentRshort.title}</p>
-            </div>
-            <div style="display:flex; gap:15px; font-size:13px; color:var(--text-dim);">
-                <span><i class="fas fa-music"></i> Son original</span>
-                <span><i class="fas fa-eye"></i> ${this.formatNumber(currentRshort.views)} vues</span>
-                <span><i class="fas fa-clock"></i> ${this.formatTime(currentRshort.timestamp)}</span>
-            </div>
-        `;
-        
-        // Boutons latéraux avec animations
-        document.getElementById('rsshort-side-buttons').innerHTML = `
-            <div class="rsshort-btn ${currentRshort.likedBy.includes(this.state.session.pseudo) ? 'active' : ''}" onclick="App.likePost(${currentRshort.id})">
-                <i class="fas fa-heart"></i>
-                <span>${this.formatNumber(currentRshort.likes)}</span>
-            </div>
-            <div class="rsshort-btn" onclick="App.focusComment(${currentRshort.id})">
-                <i class="fas fa-comment"></i>
-                <span>${this.formatNumber(currentRshort.comments)}</span>
-            </div>
-            <div class="rsshort-btn" onclick="App.sharePost(${currentRshort.id})">
-                <i class="fas fa-share"></i>
-                <span>${this.formatNumber(currentRshort.shares)}</span>
-            </div>
-            <div class="rsshort-btn" onclick="App.toggleRshortPlay()">
-                <i class="fas fa-${this.state.rshortPlaying ? 'pause' : 'play'}"></i>
-                <span>${this.state.rshortPlaying ? 'Pause' : 'Play'}</span>
-            </div>
-            <div class="rsshort-btn" onclick="App.nextRshort()">
-                <i class="fas fa-forward"></i>
-                <span>Suivant</span>
-            </div>
-        `;
-        
-        // Configurer la vidéo
-        const video = document.getElementById('rsshort-video');
-        if(video) {
-            video.onended = () => {
-                this.nextRshort();
-                this.addXP(3); // XP pour avoir regardé jusqu'au bout
-            };
-            video.onclick = () => this.toggleRshortPlay();
-            
-            if(this.state.rshortPlaying) {
-                video.play();
-            } else {
-                video.pause();
-            }
-            
-            // Barre de progression
-            video.ontimeupdate = () => {
-                const progress = (video.currentTime / video.duration) * 100;
-                document.getElementById('rsshort-progress').style.width = progress + '%';
-            };
-        }
-        
-        // Ajouter une vue
-        setTimeout(() => {
-            currentRshort.views = (currentRshort.views || 0) + 1;
-            this.sync();
-        }, 3000);
-    },
-
-    toggleRshortPlay() {
-        const video = document.getElementById('rsshort-video');
-        if(video) {
-            if(this.state.rshortPlaying) {
-                video.pause();
-            } else {
-                video.play();
-            }
-            this.state.rshortPlaying = !this.state.rshortPlaying;
-            this.renderRshorts();
-        }
-    },
-
-    nextRshort() {
-        const rshorts = this.state.posts.filter(p => p.type === 'rshort');
-        this.state.currentRshort = (this.state.currentRshort + 1) % rshorts.length;
-        this.renderRshorts();
-        this.addXP(2); // XP pour avoir changé de vidéo
     },
 
     // AUTHENTIFICATION
     toggleAuth(tab) {
         this.state.currentTab = tab;
         
-        // Mettre à jour les onglets visuels
         document.getElementById('tab-login').classList.toggle('active', tab === 'login');
         document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
         
-        // Afficher/masquer la section de profil pour l'inscription
         const profileSetup = document.getElementById('signup-profile-setup');
-        if (tab === 'signup') {
+        if(tab === 'signup') {
             profileSetup.classList.remove('hidden');
-            document.getElementById('auth-btn-text').innerText = "CRÉER MON COMPTE";
+            document.getElementById('auth-btn-text').innerText = "REJOINDRE ANIME SAMA";
         } else {
             profileSetup.classList.add('hidden');
-            document.getElementById('auth-btn-text').innerText = "REJOINDRE LE RÉSEAU";
+            document.getElementById('auth-btn-text').innerText = "ENTRER DANS LE MONDE ANIME";
         }
         
-        // Réinitialiser le message d'erreur
         document.getElementById('auth-msg').style.display = 'none';
     },
 
@@ -1503,42 +1556,31 @@ const App = {
         const email = document.getElementById('auth-email').value.trim();
         const password = document.getElementById('auth-pass').value.trim();
         
-        // Validation de base
-        if (!email || !password) {
+        if(!email || !password) {
             this.showAuthMessage('Veuillez remplir tous les champs', 'error');
             return;
         }
         
-        if (password.length < 6) {
+        if(password.length < 6) {
             this.showAuthMessage('Le mot de passe doit faire au moins 6 caractères', 'error');
             return;
         }
         
-        if (this.state.currentTab === 'signup') {
-            // MODE INSCRIPTION
-            const pseudo = document.getElementById('reg-pseudo').value.trim();
-            if (!pseudo) {
-                this.showAuthMessage('Veuillez choisir un pseudo', 'error');
-                return;
-            }
+        if(this.state.currentTab === 'signup') {
+            const username = document.getElementById('reg-username').value.trim() || `Otaku_${Math.floor(Math.random() * 1000)}`;
             
-            // Vérifier si l'email existe déjà
-            if (this.state.users.find(u => u.email === email)) {
+            if(this.state.users.find(u => u.email === email)) {
                 this.showAuthMessage('Cet email est déjà utilisé', 'error');
                 return;
             }
             
-            // Créer le nouvel utilisateur
             const newUser = {
                 id: Date.now(),
-                pseudo: pseudo,
+                username: username,
                 email: email,
-                pass: password,
-                pfp: this.state.selectedPfp,
-                bio: 'Nouveau membre de Rasstube !',
-                followers: 0,
-                following: 0,
-                joined: new Date().toLocaleDateString('fr-FR')
+                password: password,
+                avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`,
+                joinDate: new Date().toISOString()
             };
             
             this.state.users.push(newUser);
@@ -1547,16 +1589,14 @@ const App = {
             
             this.showAuthMessage('Compte créé avec succès !', 'success');
             
-            // Lancement de l'application après un délai
             setTimeout(() => {
                 this.launch();
             }, 1000);
             
         } else {
-            // MODE CONNEXION
-            const user = this.state.users.find(u => u.email === email && u.pass === password);
+            const user = this.state.users.find(u => u.email === email && u.password === password);
             
-            if (!user) {
+            if(!user) {
                 this.showAuthMessage('Email ou mot de passe incorrect', 'error');
                 return;
             }
@@ -1579,82 +1619,488 @@ const App = {
         msgEl.style.display = 'block';
     },
 
-    // GESTION DES POSTS
-    likePost(id) {
-        const post = this.state.posts.find(p => p.id === id);
-        if(!post) return;
+    // NAVIGATION
+    go(section) {
+        document.querySelectorAll('.app-section').forEach(s => s.classList.add('hidden'));
+        document.getElementById('sec-' + section).classList.remove('hidden');
         
-        const index = post.likedBy.indexOf(this.state.session.pseudo);
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        const navIndexes = { home: 0, library: 1, player: 3, profile: 4 };
+        if(navIndexes[section] !== undefined) {
+            document.querySelectorAll('.nav-item')[navIndexes[section]].classList.add('active');
+        }
+        
+        document.getElementById('fab-bot-btn').classList.toggle('active', section === 'bot');
+        
+        if(section === 'home') {
+            this.renderHomeSections();
+        } else if(section === 'bot') {
+            this.renderBotActivity();
+        } else if(section === 'library') {
+            this.renderLibrary();
+        }
+    },
+
+    // RENDER HOME SECTIONS
+    renderHomeSections() {
+        this.renderCarousel('trending-anime', this.state.animes.slice(0, 6));
+        this.renderCarousel('continue-watching', this.state.watchingHistory.slice(0, 6));
+        this.renderCarousel('recommended-anime', this.state.animes.slice(6, 12));
+        this.renderCarousel('top-anime', [...this.state.animes].sort((a, b) => b.rating - a.rating).slice(0, 6));
+    },
+
+    renderCarousel(containerId, animes) {
+        const container = document.getElementById(containerId);
+        if(!container) return;
+        
+        container.innerHTML = animes.map(anime => `
+            <div class="anime-card" onclick="AnimeSama.playAnime(${anime.id})">
+                ${anime.addedBy === 'kaito' ? '<div class="anime-badge">NEW</div>' : ''}
+                <img src="${anime.cover}" alt="${anime.title}">
+                <div class="anime-info">
+                    <div class="anime-title">${anime.title}</div>
+                    <div class="anime-meta">
+                        <span>${anime.year}</span>
+                        <span class="anime-rating">⭐ ${anime.rating}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(anime.currentEpisode / anime.episodes) * 100}%"></div>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-dim);">
+                        ${anime.currentEpisode}/${anime.episodes} épisodes
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    // BOT KAITO
+    botAction(action) {
+        switch(action) {
+            case 'add_random':
+                this.addRandomAnime();
+                break;
+            case 'scan_new':
+                this.scanNewEpisodes();
+                break;
+            case 'recommend':
+                this.recommendAnime();
+                break;
+            case 'update_library':
+                this.updateLibrary();
+                break;
+        }
+    },
+
+    addRandomAnime() {
+        if(this.state.newAnimesPool.length === 0) return;
+        
+        const randomAnime = this.state.newAnimesPool[
+            Math.floor(Math.random() * this.state.newAnimesPool.length)
+        ];
+        
+        const newAnime = {
+            ...randomAnime,
+            id: Date.now(),
+            currentEpisode: 0,
+            duration: "24 min",
+            status: "En cours",
+            addedBy: "kaito",
+            addedDate: new Date().toISOString()
+        };
+        
+        this.state.animes.unshift(newAnime);
+        
+        // Ajouter une activité
+        this.addBotActivity({
+            type: "add",
+            anime: newAnime.title,
+            message: "Nouvel anime ajouté à la bibliothèque"
+        });
+        
+        this.sync();
+        this.renderHomeSections();
+        this.renderLibrary();
+        
+        this.notify(`🎌 Kaito a ajouté "${newAnime.title}" !`, "success");
+        this.showAchievement("Nouvel Anime !", "fas fa-plus-circle", `${newAnime.title} a été ajouté par Kaito !`);
+    },
+
+    autoAddNewAnime() {
+        if(this.state.newAnimesPool.length === 0) return;
+        
+        const randomAnime = this.state.newAnimesPool[
+            Math.floor(Math.random() * this.state.newAnimesPool.length)
+        ];
+        
+        const newAnime = {
+            ...randomAnime,
+            id: Date.now(),
+            currentEpisode: 0,
+            duration: "24 min",
+            status: "En cours",
+            addedBy: "kaito",
+            addedDate: new Date().toISOString()
+        };
+        
+        this.state.animes.unshift(newAnime);
+        
+        // Ajouter une activité
+        this.addBotActivity({
+            type: "auto_add",
+            anime: newAnime.title,
+            message: "Kaito a automatiquement ajouté un nouvel anime"
+        });
+        
+        this.sync();
+        
+        if(this.state.activeSection === 'home') {
+            this.renderHomeSections();
+        }
+        
+        this.notify(`🤖 Kaito a trouvé un nouvel anime : "${newAnime.title}"`, "info");
+    },
+
+    scanNewEpisodes() {
+        // Simuler la recherche de nouveaux épisodes
+        const updatedAnimes = this.state.animes.slice(0, 3).map(anime => {
+            if(anime.status === "En cours") {
+                const newEpisodes = Math.floor(Math.random() * 3);
+                if(newEpisodes > 0) {
+                    anime.episodes += newEpisodes;
+                    return anime;
+                }
+            }
+            return anime;
+        });
+        
+        this.addBotActivity({
+            type: "scan",
+            anime: null,
+            message: "Scan des nouveaux épisodes effectué"
+        });
+        
+        this.sync();
+        this.renderHomeSections();
+        
+        this.notify("🔍 Kaito a scanné les nouveaux épisodes !", "success");
+    },
+
+    recommendAnime() {
+        const recommendations = [
+            "Si tu aimes l'action, essaye 'Chainsaw Man' !",
+            "Pour du feel-good, 'Bocchi the Rock!' est parfait !",
+            "Fan de fantasy ? 'Frieren' est un must-watch !",
+            "Envie de mystery ? 'The Apothecary Diaries' t'attend !"
+        ];
+        
+        const randomRec = recommendations[Math.floor(Math.random() * recommendations.length)];
+        
+        this.addBotActivity({
+            type: "recommend",
+            anime: null,
+            message: randomRec
+        });
+        
+        this.notify(`💡 ${randomRec}`, "info");
+    },
+
+    updateLibrary() {
+        this.addBotActivity({
+            type: "update",
+            anime: null,
+            message: "Mise à jour complète de la bibliothèque"
+        });
+        
+        this.renderHomeSections();
+        this.renderLibrary();
+        
+        this.notify("📚 Bibliothèque mise à jour !", "success");
+    },
+
+    addBotActivity(activity) {
+        const newActivity = {
+            id: Date.now(),
+            ...activity,
+            timestamp: new Date().toISOString()
+        };
+        
+        this.state.botActivity.unshift(newActivity);
+        if(this.state.botActivity.length > 10) {
+            this.state.botActivity = this.state.botActivity.slice(0, 10);
+        }
+        
+        this.sync();
+        this.renderBotActivity();
+    },
+
+    renderBotActivity() {
+        const container = document.getElementById('bot-activity');
+        if(!container) return;
+        
+        container.innerHTML = this.state.botActivity.map(activity => `
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-${this.getActivityIcon(activity.type)}"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">${activity.message}</div>
+                    ${activity.anime ? `<div style="font-size: 12px; color: var(--text-dim);">${activity.anime}</div>` : ''}
+                    <div style="font-size: 11px; color: var(--text-dim);">
+                        ${new Date(activity.timestamp).toLocaleString()}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    getActivityIcon(type) {
+        switch(type) {
+            case 'add': return 'plus-circle';
+            case 'scan': return 'search';
+            case 'recommend': return 'star';
+            case 'update': return 'sync-alt';
+            case 'auto_add': return 'robot';
+            default: return 'info-circle';
+        }
+    },
+
+    // BIBLIOTHÈQUE
+    renderLibrary(filter = 'all') {
+        const grid = document.getElementById('library-grid');
+        if(!grid) return;
+        
+        let filteredAnimes = [...this.state.animes];
+        
+        switch(filter) {
+            case 'watching':
+                filteredAnimes = filteredAnimes.filter(a => a.currentEpisode > 0 && a.currentEpisode < a.episodes);
+                break;
+            case 'completed':
+                filteredAnimes = filteredAnimes.filter(a => a.currentEpisode >= a.episodes);
+                break;
+            case 'planned':
+                filteredAnimes = filteredAnimes.filter(a => a.currentEpisode === 0);
+                break;
+            case 'favorites':
+                filteredAnimes = filteredAnimes.filter(a => this.state.favorites.includes(a.id));
+                break;
+            case 'added_by_bot':
+                filteredAnimes = filteredAnimes.filter(a => a.addedBy === 'kaito');
+                break;
+        }
+        
+        grid.innerHTML = filteredAnimes.map(anime => `
+            <div class="anime-card" onclick="AnimeSama.playAnime(${anime.id})">
+                ${anime.addedBy === 'kaito' ? '<div class="anime-badge">BOT</div>' : ''}
+                <img src="${anime.cover}" alt="${anime.title}">
+                <div class="anime-info">
+                    <div class="anime-title">${anime.title}</div>
+                    <div class="anime-meta">
+                        <span>${anime.year}</span>
+                        <span class="anime-rating">⭐ ${anime.rating}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(anime.currentEpisode / anime.episodes) * 100}%"></div>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-dim);">
+                        ${anime.currentEpisode}/${anime.episodes} épisodes
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        // Mettre à jour les boutons de filtre
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.textContent.toLowerCase().includes(filter)) {
+                btn.classList.add('active');
+            }
+        });
+    },
+
+    filterLibrary(filter) {
+        this.renderLibrary(filter);
+    },
+
+    refreshLibrary() {
+        this.renderLibrary();
+        this.notify("🔄 Bibliothèque actualisée !", "success");
+    },
+
+    // PLAYER
+    playAnime(animeId) {
+        const anime = this.state.animes.find(a => a.id === animeId);
+        if(!anime) return;
+        
+        // Mettre à jour l'historique
+        if(!this.state.watchingHistory.some(h => h.animeId === animeId)) {
+            this.state.watchingHistory.unshift({
+                animeId: animeId,
+                animeTitle: anime.title,
+                lastEpisode: anime.currentEpisode,
+                lastWatched: new Date().toISOString()
+            });
+            
+            if(this.state.watchingHistory.length > 10) {
+                this.state.watchingHistory = this.state.watchingHistory.slice(0, 10);
+            }
+        }
+        
+        // Simuler la lecture d'une vidéo
+        const video = document.getElementById('anime-video');
+        const overlay = document.getElementById('player-overlay');
+        
+        // Utiliser une vidéo d'exemple
+        video.src = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+        
+        overlay.innerHTML = `
+            <div style="margin-bottom:15px;">
+                <h3 style="margin:0 0 10px 0; display:flex; align-items:center; gap:10px;">
+                    ${anime.title}
+                </h3>
+                <p style="margin:0; font-size:16px;">${anime.description}</p>
+            </div>
+            <div style="display:flex; gap:15px; font-size:13px; color:var(--text-dim);">
+                <span><i class="fas fa-play-circle"></i> Épisode ${anime.currentEpisode + 1}</span>
+                <span><i class="fas fa-clock"></i> ${anime.duration}</span>
+                <span><i class="fas fa-star"></i> ${anime.rating}</span>
+            </div>
+        `;
+        
+        // Simuler les contrôles
+        const controls = document.getElementById('player-controls');
+        controls.innerHTML = `
+            <div class="player-btn" onclick="AnimeSama.toggleFavorite(${animeId})">
+                <i class="fas ${this.state.favorites.includes(animeId) ? 'fa-heart' : 'fa-heart'}"></i>
+                <span>Favori</span>
+            </div>
+            <div class="player-btn" onclick="AnimeSama.nextEpisode(${animeId})">
+                <i class="fas fa-forward"></i>
+                <span>Épisode suivant</span>
+            </div>
+            <div class="player-btn" onclick="AnimeSama.addToWatchlist(${animeId})">
+                <i class="fas fa-bookmark"></i>
+                <span>Watchlist</span>
+            </div>
+        `;
+        
+        this.go('player');
+        
+        // Mettre à jour les stats
+        this.updateWatchStats();
+    },
+
+    nextEpisode(animeId) {
+        const anime = this.state.animes.find(a => a.id === animeId);
+        if(anime && anime.currentEpisode < anime.episodes) {
+            anime.currentEpisode++;
+            this.sync();
+            
+            this.notify(`▶️ Épisode ${anime.currentEpisode} de "${anime.title}" marqué comme vu`, "success");
+            
+            // Mettre à jour les stats
+            this.updateStats();
+            
+            // Revenir à l'accueil
+            setTimeout(() => this.go('home'), 2000);
+        }
+    },
+
+    toggleFavorite(animeId) {
+        const index = this.state.favorites.indexOf(animeId);
         
         if(index === -1) {
-            post.likes++;
-            post.likedBy.push(this.state.session.pseudo);
-            this.notify("❤️ Publication aimée ! +5 XP", "success");
-            this.addXP(5);
-            
-            // Animation spéciale
-            const heart = document.createElement('div');
-            heart.innerHTML = '<i class="fas fa-heart" style="color:var(--accent); font-size:50px;"></i>';
-            heart.style.cssText = 'position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000; animation:heartbeat 0.5s ease;';
-            document.getElementById('rsshort-container').appendChild(heart);
-            setTimeout(() => heart.remove(), 500);
+            this.state.favorites.push(animeId);
+            this.notify("❤️ Ajouté aux favoris", "success");
         } else {
-            post.likes--;
-            post.likedBy.splice(index, 1);
-            this.notify("Like retiré", "info");
+            this.state.favorites.splice(index, 1);
+            this.notify("Favori retiré", "info");
         }
         
         this.sync();
-        this.renderRshorts();
+        this.updateStats();
     },
 
-    sharePost(id) {
-        const post = this.state.posts.find(p => p.id === id);
-        if(!post) return;
+    addToWatchlist(animeId) {
+        if(!this.state.watchlist.includes(animeId)) {
+            this.state.watchlist.push(animeId);
+            this.notify("📌 Ajouté à la watchlist", "success");
+            this.sync();
+        }
+    },
+
+    // STATISTIQUES
+    updateStats() {
+        const stats = this.state.stats;
         
-        post.shares = (post.shares || 0) + 1;
-        this.sync();
-        this.addXP(10);
+        // Compter les animés vus
+        stats.animeWatched = this.state.animes.filter(a => a.currentEpisode > 0).length;
         
-        this.notify("📤 Partage réussi ! +10 XP", "success");
+        // Calculer les heures regardées
+        stats.hoursWatched = this.state.animes.reduce((total, anime) => {
+            return total + (anime.currentEpisode * 0.4); // 24min = 0.4h
+        }, 0).toFixed(1);
         
-        if(navigator.share) {
-            navigator.share({
-                title: `${post.author} sur Rasstube`,
-                text: post.title,
-                url: window.location.href
-            });
+        // Mettre à jour le streak
+        const today = new Date().toDateString();
+        const yesterday = new Date(Date.now() - 86400000).toDateString();
+        
+        if(stats.lastWatchDate === today) {
+            // Déjà regardé aujourd'hui
+        } else if(stats.lastWatchDate === yesterday) {
+            stats.currentStreak++;
         } else {
-            navigator.clipboard.writeText(`Regarde ce RShort sur Rasstube !\n\n${post.author}: ${post.title}`);
+            stats.currentStreak = 1;
         }
         
-        this.renderRshorts();
-    },
-
-    focusComment(id) {
-        this.notify("💬 Section commentaires bientôt disponible !", "info");
-        this.addXP(3);
-    },
-
-    // FONCTIONS UTILITAIRES
-    formatNumber(num) {
-        if(num >= 1000000) return (num/1000000).toFixed(1) + 'M';
-        if(num >= 1000) return (num/1000).toFixed(1) + 'k';
-        return num;
-    },
-
-    formatTime(timestamp) {
-        const now = new Date();
-        const postDate = new Date(timestamp);
-        const diff = now - postDate;
-        const hours = Math.floor(diff / 3600000);
+        stats.lastWatchDate = today;
         
-        if(hours < 1) return "À l'instant";
-        if(hours < 24) return `Il y a ${hours}h`;
-        return `${Math.floor(hours/24)}j`;
+        // Mettre à jour l'interface
+        document.getElementById('stat-anime-watched').innerText = stats.animeWatched;
+        document.getElementById('stat-hours').innerText = stats.hoursWatched;
+        document.getElementById('stat-favorites').innerText = this.state.favorites.length;
+        document.getElementById('stat-streak').innerText = stats.currentStreak;
+        
+        // Objectifs
+        document.getElementById('goal-episodes').innerText = 
+            this.state.animes.reduce((total, anime) => total + anime.currentEpisode, 0);
+        document.getElementById('goal-streak').innerText = stats.currentStreak;
+        document.getElementById('goal-favorites').innerText = this.state.favorites.length;
+        
+        this.sync();
     },
 
-    notify(msg, type = "success") {
+    updateWatchStats() {
+        this.updateStats();
+    },
+
+    // UTILITAIRES
+    verifySession() {
+        if(this.state.session) {
+            const userExists = this.state.users.find(u => u.email === this.state.session.email);
+            if(!userExists) {
+                this.state.session = null;
+                this.sync();
+            }
+        }
+    },
+
+    sync() {
+        localStorage.setItem('anime_users', JSON.stringify(this.state.users));
+        localStorage.setItem('anime_library', JSON.stringify(this.state.animes));
+        localStorage.setItem('anime_session', JSON.stringify(this.state.session));
+        localStorage.setItem('anime_history', JSON.stringify(this.state.watchingHistory));
+        localStorage.setItem('anime_favorites', JSON.stringify(this.state.favorites));
+        localStorage.setItem('anime_watchlist', JSON.stringify(this.state.watchlist));
+        localStorage.setItem('bot_activity', JSON.stringify(this.state.botActivity));
+        localStorage.setItem('anime_stats', JSON.stringify(this.state.stats));
+    },
+
+    notify(msg, type = "info") {
         const box = document.getElementById('notification-box');
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
@@ -1674,249 +2120,54 @@ const App = {
         }, 3000);
     },
 
-    // FONCTIONS DE NAVIGATION
-    go(sec) {
-        document.querySelectorAll('.app-section').forEach(s => s.classList.add('hidden'));
-        document.getElementById('sec-' + sec).classList.remove('hidden');
+    showAchievement(title, icon, description) {
+        const popup = document.createElement('div');
+        popup.className = 'achievement-popup';
+        popup.innerHTML = `
+            <div class="achievement-icon">
+                <i class="${icon}"></i>
+            </div>
+            <h3 style="margin:0 0 10px 0; color:var(--anime-pink);">${title}</h3>
+            <p style="margin:0; color:var(--text-dim);">${description}</p>
+            <button onclick="this.parentElement.remove()" style="margin-top:20px; padding:10px 20px; background:var(--gradient-primary); color:white; border:none; border-radius:var(--radius-md); cursor:pointer;">
+                Super !
+            </button>
+        `;
         
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
+        document.body.appendChild(popup);
         
-        const navIndexes = { home: 0, rsshort: 1, aichat: 3, profile: 4 };
-        if(navIndexes[sec] !== undefined) {
-            document.querySelectorAll('.nav-item')[navIndexes[sec]].classList.add('active');
-        }
-        
-        document.getElementById('fab-upload-btn').classList.toggle('active', sec === 'upload');
-        
-        if(sec === 'rsshort') {
-            this.renderRshorts();
-        } else if(sec === 'aichat') {
-            this.addXP(2); // XP pour avoir visité le chat IA
-        }
-        
-        this.state.activeSection = sec;
-    },
-
-    // FONCTIONS D'UTILISATEUR
-    verifySession() {
-        if(this.state.session) {
-            // Vérifier si l'utilisateur existe toujours
-            const userExists = this.state.users.find(u => u.email === this.state.session.email);
-            if(!userExists) {
-                this.state.session = null;
-                this.sync();
+        setTimeout(() => {
+            if(popup.parentElement) {
+                popup.remove();
             }
-        }
+        }, 5000);
     },
 
-    sync() {
-        localStorage.setItem('rt_v4_users', JSON.stringify(this.state.users));
-        localStorage.setItem('rt_v4_posts', JSON.stringify(this.state.posts));
-        localStorage.setItem('rt_v4_session', JSON.stringify(this.state.session));
-        localStorage.setItem('rt_v4_subscriptions', JSON.stringify(this.state.subscriptions));
-        localStorage.setItem('rt_v4_messages', JSON.stringify(this.state.messages));
-        localStorage.setItem('rt_v4_saved', JSON.stringify(this.state.savedPosts));
+    showNotifications() {
+        this.notify("🔔 3 nouveaux épisodes disponibles !", "info");
     },
 
-    updateProfileStats() {
-        const userPosts = this.state.posts.filter(p => p.author === this.state.session.pseudo);
-        document.getElementById('count-posts').innerText = userPosts.length;
-        document.getElementById('count-followers').innerText = this.state.session.followers || 0;
-        document.getElementById('count-following').innerText = this.state.session.following || 0;
+    showMoreRecommendations() {
+        this.notify("✨ Plus de recommandations bientôt disponibles !", "info");
     },
 
-    renderStories() {
-        const container = document.getElementById('story-container');
-        const stories = this.state.users.slice(0, 8);
-        
-        container.innerHTML = stories.map(user => `
-            <div class="story-card" onclick="App.viewStory('${user.pseudo}')">
-                <div class="story-ring">
-                    <img src="${user.pfp}" alt="${user.pseudo}">
-                </div>
-                <div class="story-label">${user.pseudo}</div>
-            </div>
-        `).join('');
-    },
-
-    renderFeed() {
-        const container = document.getElementById('main-feed');
-        const posts = this.state.posts.slice(0, 10);
-        
-        container.innerHTML = posts.map(post => `
-            <div class="explore-card" onclick="App.viewPost(${post.id})">
-                <img src="${post.type === 'photo' ? post.content : 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" class="explore-thumbnail">
-                <div class="explore-info">
-                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                        <img src="${post.authorPfp}" style="width:30px; height:30px; border-radius:50%;">
-                        <strong>${post.author}</strong>
-                    </div>
-                    <p style="margin:0 0 10px 0;">${post.title}</p>
-                    <div style="display:flex; gap:15px; font-size:12px; color:var(--text-dim);">
-                        <span><i class="fas fa-heart"></i> ${this.formatNumber(post.likes)}</span>
-                        <span><i class="fas fa-comment"></i> ${this.formatNumber(post.comments)}</span>
-                        <span><i class="fas fa-eye"></i> ${this.formatNumber(post.views)}</span>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    },
-
-    renderAvatars() {
-        const container = document.getElementById('default-avatars');
-        if (!container) return;
-        
-        const avatars = [
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Rass',
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Taylor',
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Jordan',
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Casey',
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Avery',
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Riley',
-            'https://api.dicebear.com/7.x/avataaars/svg?seed=Skyler'
-        ];
-        
-        container.innerHTML = avatars.map(url => `
-            <div class="pfp-item" onclick="App.selectPfp('${url}')">
-                <img src="${url}" alt="Avatar">
-            </div>
-        `).join('');
-        
-        // Sélectionner le premier avatar par défaut
-        this.selectPfp(avatars[0]);
-    },
-
-    selectPfp(url) {
-        this.state.selectedPfp = url;
-        document.getElementById('auth-pfp-preview').src = url;
-        document.querySelectorAll('.pfp-item').forEach(item => {
-            item.classList.remove('selected');
-            if (item.querySelector('img').src === url) {
-                item.classList.add('selected');
-            }
-        });
-    },
-
-    handlePfpFile(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                this.state.selectedPfp = event.target.result;
-                document.getElementById('auth-pfp-preview').src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    },
-
-    triggerPfpUpload() {
-        document.getElementById('real-pfp-input').click();
-    },
-
-    editProfile() {
-        this.notify("✏️ Édition du profil bientôt disponible !", "info");
-    },
-
-    showNotifications() { 
-        this.notify("🎉 3 nouvelles notifications !", "info");
-        this.addXP(2);
-    },
-    
-    showMessages() { 
-        this.notify("💬 Messages bientôt disponibles !", "info");
-    },
-    
-    switchProfileTab(tab) {
-        this.state.profileTab = tab;
-        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        // Ici, on pourrait charger les posts ou rshorts spécifiques
-        if(tab === 'rshorts') {
-            this.notify("⚡ RShorts de l'utilisateur", "info");
-        }
-    },
-    
-    viewStory(user) {
-        this.notify(`📖 Histoire de ${user}`, "info");
-        this.addXP(1);
-    },
-    
-    viewPost(id) {
-        this.notify("🔍 Affichage du post", "info");
-        this.addXP(1);
-    },
-    
-    filterContent(query) {
-        if(query.length > 2) {
-            this.notify(`🔍 Recherche: ${query}`, "info");
-        }
-    },
-    
-    previewUpload(event) {
-        const files = event.target.files;
-        if(files.length > 0) {
-            const preview = document.getElementById('upload-preview');
-            preview.classList.remove('hidden');
-            preview.innerHTML = `<img src="${URL.createObjectURL(files[0])}" style="width:100%; border-radius:var(--radius-md);">`;
-        }
-    },
-    
-    publishPost() {
-        const title = document.getElementById('up-title').value;
-        const tags = document.getElementById('up-tags').value;
-        const type = document.getElementById('up-type').value;
-        
-        if(!title) {
-            this.notify("Veuillez ajouter un titre", "error");
-            return;
-        }
-        
-        this.notify("🎉 Publication réussie ! +20 XP", "success");
-        this.addXP(20);
-        
-        // Réinitialiser le formulaire
-        document.getElementById('up-title').value = '';
-        document.getElementById('up-tags').value = '';
-        document.getElementById('upload-preview').classList.add('hidden');
-        document.getElementById('upload-preview').innerHTML = '';
-        
-        // Revenir à l'accueil
-        setTimeout(() => this.go('home'), 1000);
+    showRankings() {
+        this.notify("🏆 Classement complet des animés", "info");
     }
 };
 
-// GESTION DES GESTES POUR RSSHORT
-let startY = 0;
-document.addEventListener('touchstart', (e) => {
-    if(App.state.activeSection === 'rsshort') {
-        startY = e.touches[0].clientY;
-    }
-});
-
-document.addEventListener('touchend', (e) => {
-    if(App.state.activeSection === 'rsshort') {
-        const endY = e.changedTouches[0].clientY;
-        const diff = startY - endY;
-        
-        if(Math.abs(diff) > 50) {
-            if(diff > 0) {
-                App.nextRshort(); // Glisser vers le haut
-            } else {
-                // Glisser vers le bas - revenir au précédent
-                const rshorts = App.state.posts.filter(p => p.type === 'rshort');
-                App.state.currentRshort = (App.state.currentRshort - 1 + rshorts.length) % rshorts.length;
-                App.renderRshorts();
-            }
+// INITIALISATION AUTOMATIQUE DU BOT
+setInterval(() => {
+    if(AnimeSama.state.session) {
+        // 20% de chance que le bot ajoute un anime toutes les 2 minutes
+        if(Math.random() < 0.2) {
+            AnimeSama.autoAddNewAnime();
         }
     }
-});
+}, 120000); // 2 minutes
 
 // INITIALISATION
-window.onload = () => App.init();
+window.onload = () => AnimeSama.init();
 </script>
 </body>
 </html>
