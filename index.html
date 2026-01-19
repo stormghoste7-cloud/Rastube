@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RASSTUBE CORE v2.0 | Ultimate Edition</title>
+    <title>RASSTUBE ELITE v3.0 | The Ultimate Ecosystem</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -12,649 +12,552 @@
         :root {
             --accent: #FF0032;
             --accent-glow: rgba(255, 0, 50, 0.4);
-            --bg-deep: #080808;
-            --bg-card: #121212;
-            --bg-input: #1a1a1a;
+            --bg-deep: #050505;
+            --bg-card: #111111;
+            --bg-input: #181818;
             --text-main: #ffffff;
-            --text-dim: #a0a0a0;
+            --text-dim: #888888;
             --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.07);
             --ai-blue: #0084ff;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        /* Thème Clair Optionnel */
+        body.light-mode {
+            --bg-deep: #f0f2f5; --bg-card: #ffffff; --bg-input: #f0f0f0;
+            --text-main: #1a1a1a; --text-dim: #65676b; --border: rgba(0,0,0,0.1);
         }
 
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            margin: 0;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-deep); color: var(--text-main); margin: 0; overflow-x: hidden; }
 
-        /* --- Animations --- */
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--accent-glow); } 70% { box-shadow: 0 0 0 15px rgba(255, 0, 50, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 50, 0); } }
+        /* Animations */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes toastIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        /* --- Auth Screen (Fix Error 506 Logic) --- */
+        /* --- AUTH SYSTEM --- */
         #auth-overlay {
-            position: fixed; inset: 0; z-index: 9999;
-            background: radial-gradient(circle at center, #1a0505 0%, #050505 100%);
+            position: fixed; inset: 0; z-index: 10000; background: #000;
             display: flex; align-items: center; justify-content: center; padding: 20px;
         }
-
         .auth-card {
-            background: var(--bg-card);
-            width: 100%; max-width: 420px;
-            padding: 40px 30px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            animation: slideIn 0.5s ease;
+            background: var(--bg-card); width: 100%; max-width: 450px; padding: 40px;
+            border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
-
-        .auth-nav {
-            display: flex; background: var(--bg-input);
-            padding: 6px; border-radius: var(--radius-md);
-            margin-bottom: 30px; border: 1px solid var(--border);
-        }
-
+        .auth-nav { display: flex; background: var(--bg-input); padding: 5px; border-radius: 15px; margin-bottom: 25px; }
         .auth-nav button {
-            flex: 1; padding: 12px; border: none; background: none;
-            color: var(--text-dim); font-weight: 600; cursor: pointer;
-            border-radius: 12px; transition: var(--transition);
+            flex: 1; padding: 12px; border: none; background: none; color: var(--text-dim);
+            font-weight: 700; cursor: pointer; border-radius: 12px; transition: 0.3s;
         }
+        .auth-nav button.active { background: var(--accent); color: white; }
 
-        .auth-nav button.active {
-            background: var(--accent); color: white;
-            box-shadow: 0 4px 12px var(--accent-glow);
-        }
-
-        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group { margin-bottom: 18px; position: relative; }
         .input-group i { position: absolute; left: 15px; top: 18px; color: var(--text-dim); }
         .input-field {
-            width: 100%; padding: 16px 16px 16px 45px;
-            background: var(--bg-input); border: 1px solid var(--border);
-            border-radius: 14px; color: white; font-size: 15px;
-            transition: var(--transition);
+            width: 100%; padding: 16px 16px 16px 45px; background: var(--bg-input);
+            border: 1px solid var(--border); border-radius: 15px; color: white; transition: 0.3s;
         }
-        .input-field:focus { border-color: var(--accent); outline: none; background: #222; }
+        .input-field:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 15px var(--accent-glow); }
 
-        .avatar-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0;
-        }
-        .av-option {
-            aspect-ratio: 1; border-radius: 12px; cursor: pointer;
-            border: 2px solid transparent; transition: var(--transition);
-            background: var(--bg-input); overflow: hidden;
-        }
-        .av-option.selected { border-color: var(--accent); transform: scale(1.1); }
-        .av-option img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-preview-container { text-align: center; margin-bottom: 20px; }
+        .current-avatar-lg { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; }
 
-        /* --- Layout --- */
-        #app-shell { display: none; }
-        
+        /* --- LAYOUT COMPONENTS --- */
         header {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(8, 8, 8, 0.8); backdrop-filter: blur(20px);
-            padding: 15px 20px; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000; background: rgba(5,5,5,0.8);
+            backdrop-filter: blur(25px); padding: 12px 20px; border-bottom: 1px solid var(--border);
         }
+        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; }
+        .logo { font-size: 26px; font-weight: 900; color: var(--accent); letter-spacing: -1.5px; }
 
-        .header-content {
-            display: flex; justify-content: space-between; align-items: center;
-            max-width: 800px; margin: 0 auto;
+        /* Stories */
+        .stories-bar {
+            display: flex; gap: 15px; overflow-x: auto; padding: 10px 0 20px;
+            scrollbar-width: none; border-bottom: 1px solid var(--border); margin-bottom: 20px;
         }
-
-        .logo { font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
-
-        .search-container {
-            max-width: 800px; margin: 15px auto 0;
-            position: relative;
+        .story-item { flex-shrink: 0; text-align: center; width: 70px; cursor: pointer; }
+        .story-circle {
+            width: 66px; height: 66px; border-radius: 50%; padding: 3px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            margin-bottom: 5px;
         }
+        .story-circle img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--bg-deep); object-fit: cover; }
+        .story-item span { font-size: 10px; color: var(--text-dim); display: block; overflow: hidden; text-overflow: ellipsis; }
 
-        /* --- Feed & Cards --- */
-        .content-area { max-width: 600px; margin: 0 auto; padding: 20px 15px 100px; }
+        /* Sections */
+        .content-area { max-width: 700px; margin: 0 auto; padding: 20px 15px 120px; animation: slideUp 0.6s ease; }
+        .view { display: none; }
+        .view.active { display: block; }
 
+        /* Discover Grid */
+        .discover-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .discover-item { aspect-ratio: 1; background: var(--bg-card); overflow: hidden; cursor: pointer; position: relative; }
+        .discover-item img, .discover-item video { width: 100%; height: 100%; object-fit: cover; }
+        .discover-item i { position: absolute; top: 10px; right: 10px; color: white; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+
+        /* Profile Header */
+        .profile-header { padding: 30px 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .profile-top { display: flex; align-items: center; gap: 25px; margin-bottom: 20px; }
+        .profile-img-wrap { position: relative; }
+        .profile-img-wrap img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--accent); }
+        .stats-bar { display: flex; justify-content: space-around; flex: 1; text-align: center; }
+        .stat-val { font-weight: 800; font-size: 18px; display: block; }
+        .stat-label { font-size: 12px; color: var(--text-dim); }
+
+        /* Cards */
         .post-card {
-            background: var(--bg-card); border-radius: var(--radius-lg);
-            margin-bottom: 30px; border: 1px solid var(--border);
-            overflow: hidden; animation: fadeIn 0.4s ease;
+            background: var(--bg-card); border-radius: var(--radius-lg); margin-bottom: 25px;
+            border: 1px solid var(--border); overflow: hidden;
         }
-
         .post-header { padding: 15px; display: flex; align-items: center; gap: 12px; }
-        .post-header img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); }
-        
-        .post-media { width: 100%; background: #000; position: relative; min-height: 300px; }
-        .post-media video, .post-media img { width: 100%; display: block; max-height: 70vh; object-fit: contain; }
+        .post-header img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .post-media { width: 100%; background: #000; min-height: 250px; }
+        .post-media img, .post-media video { width: 100%; display: block; max-height: 600px; object-fit: contain; }
+        .post-actions { display: flex; gap: 20px; padding: 15px; font-size: 22px; }
 
-        .post-info { padding: 15px; }
-        .post-title { font-weight: 700; font-size: 18px; margin-bottom: 8px; }
-
-        .post-actions {
-            display: flex; justify-content: space-between; padding: 0 15px 15px;
-            border-bottom: 1px solid var(--border);
-        }
-        .action-item { 
-            background: none; border: none; color: var(--text-dim); 
-            font-size: 20px; cursor: pointer; transition: var(--transition);
-            display: flex; align-items: center; gap: 8px;
-        }
-        .action-item:active { transform: scale(0.9); }
-        .action-item.active { color: var(--accent); }
-
-        /* --- Navigation --- */
+        /* Navigation */
         nav.bottom-nav {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around; padding: 15px 10px 30px;
-            border-top: 1px solid var(--border); z-index: 1000;
+            position: fixed; bottom: 0; width: 100%; background: rgba(10,10,10,0.9);
+            backdrop-filter: blur(20px); display: flex; justify-content: space-around;
+            padding: 15px 10px 35px; border-top: 1px solid var(--border); z-index: 1000;
+        }
+        .nav-btn { color: var(--text-dim); text-align: center; flex: 1; cursor: pointer; transition: 0.3s; font-size: 10px; }
+        .nav-btn.active { color: var(--accent); transform: translateY(-3px); }
+        .nav-btn i { font-size: 22px; display: block; margin-bottom: 5px; }
+        .plus-center {
+            background: var(--accent); width: 55px; height: 55px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center; margin-top: -40px;
+            border: 5px solid var(--bg-deep); color: white !important; font-size: 24px !important;
         }
 
-        .nav-btn {
-            color: var(--text-dim); text-align: center; font-size: 10px;
-            flex: 1; cursor: pointer; transition: var(--transition);
+        /* Notifications */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 11000; pointer-events: none; }
+        .toast {
+            background: var(--bg-card); border-left: 5px solid var(--accent); padding: 15px 25px;
+            border-radius: 12px; color: white; margin-bottom: 10px; animation: toastIn 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: auto;
         }
-        .nav-btn.active { color: var(--accent); }
-        .nav-btn i { font-size: 22px; margin-bottom: 4px; display: block; }
-
-        .nav-plus {
-            background: var(--accent); width: 50px; height: 50px;
-            border-radius: 18px; display: flex; align-items: center; justify-content: center;
-            margin-top: -35px; border: 4px solid var(--bg-deep);
-            color: white !important; font-size: 24px !important;
-            animation: pulse 2s infinite;
-        }
-
-        /* --- Chat Interface --- */
-        .chat-container { height: calc(100vh - 250px); display: flex; flex-direction: column; }
-        .messages-list { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
-        .msg-bubble { 
-            padding: 12px 16px; border-radius: 18px; max-width: 85%; 
-            position: relative; font-size: 14px;
-        }
-        .msg-sent { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
-        .msg-received { background: var(--bg-input); align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg-ai { border-left: 4px solid var(--ai-blue); background: #1a1e25; }
-
-        .chat-input-area {
-            padding: 15px; background: var(--bg-card); display: flex; gap: 10px;
-        }
-
-        /* --- Comments Modal-like --- */
-        .comments-drawer { padding: 15px; background: #0c0c0c; border-radius: 12px; margin-top: 10px; display: none; }
-        .comment { font-size: 13px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #1a1a1a; }
-        .comment b { color: var(--accent); margin-right: 8px; }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
+<div id="toast-container"></div>
+
 <div id="auth-overlay">
     <div class="auth-card">
-        <div class="logo" style="text-align: center; margin-bottom: 25px; font-size: 32px;">RASSTUBE</div>
+        <div class="logo" style="text-align: center; margin-bottom: 30px; font-size: 38px;">RASSTUBE</div>
         
         <div class="auth-nav">
-            <button id="tab-login" class="active" onclick="switchAuth('login')">Connexion</button>
-            <button id="tab-signup" onclick="switchAuth('signup')">Inscription</button>
+            <button id="t-login" class="active" onclick="setAuthMode('login')">Connexion</button>
+            <button id="t-signup" onclick="setAuthMode('signup')">Inscription</button>
         </div>
 
-        <div id="auth-form">
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="auth-email" class="input-field" placeholder="Email (ex: rass@tube.com)">
-            </div>
-            
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="auth-pass" class="input-field" placeholder="Mot de passe">
-            </div>
-
-            <div id="signup-fields" class="hidden">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="auth-pseudo" class="input-field" placeholder="Ton Pseudo">
-                </div>
-                
-                <p style="font-size: 13px; color: var(--text-dim); margin: 15px 0 5px;">Personnalise ton profil :</p>
-                <div class="avatar-grid" id="avatar-grid">
-                    </div>
-                <button onclick="document.getElementById('custom-pfp').click()" style="background: none; border: none; color: var(--ai-blue); font-size: 12px; width: 100%; cursor: pointer;">
-                    <i class="fas fa-camera"></i> Ou importer une photo
+        <div class="avatar-preview-container hidden" id="signup-pfp-box">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Base" class="current-avatar-lg" id="pfp-preview">
+            <div style="margin-top: 10px;">
+                <button onclick="document.getElementById('file-pfp').click()" style="background:var(--ai-blue); color:white; border:none; padding:8px 15px; border-radius:10px; font-size:12px; cursor:pointer;">
+                    <i class="fas fa-upload"></i> Ma Photo
                 </button>
-                <input type="file" id="custom-pfp" class="hidden" accept="image/*" onchange="previewFile()">
+                <button onclick="randomizeAv()" style="background:var(--bg-input); color:var(--text-dim); border:none; padding:8px 15px; border-radius:10px; font-size:12px; cursor:pointer;">
+                    Aléatoire
+                </button>
             </div>
-
-            <button onclick="handleAuthAction()" id="main-auth-btn" style="width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer;">
-                DÉCOLLER
-            </button>
-
-            <p id="auth-error" style="color: #ff4444; font-size: 12px; text-align: center; margin-top: 15px; display: none;"></p>
+            <input type="file" id="file-pfp" class="hidden" accept="image/*" onchange="processPfp(event)">
         </div>
+
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="auth-email" class="input-field" placeholder="Email">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="auth-pass" class="input-field" placeholder="Mot de passe">
+        </div>
+        <div id="signup-only" class="hidden">
+            <div class="input-group">
+                <i class="fas fa-user-tag"></i>
+                <input type="text" id="auth-pseudo" class="input-field" placeholder="Pseudo unique">
+            </div>
+        </div>
+
+        <button onclick="executeAuth()" id="btn-auth-main" style="width:100%; padding:20px; background:var(--accent); color:white; border:none; border-radius:18px; font-weight:800; font-size:16px; margin-top:10px; cursor:pointer;">
+            ENTRER DANS L'ÉLITE
+        </button>
     </div>
 </div>
 
-<div id="app-shell">
+<div id="app-shell" class="hidden">
     <header>
         <div class="header-content">
             <div class="logo">RASSTUBE</div>
-            <div id="user-header-profile" style="display: flex; align-items: center; gap: 10px;">
-                </div>
-        </div>
-        <div class="search-container">
-            <input type="text" id="search-input" class="input-field" placeholder="Rechercher des vidéos, des photos..." onkeyup="app.filterContent()">
-            <i class="fas fa-search" style="position: absolute; right: 15px; top: 18px; color: var(--text-dim);"></i>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <i class="fas fa-bell" style="font-size:20px; cursor:pointer;" onclick="app.showToast('Pas de nouvelles notifications')"></i>
+                <img src="" id="top-pfp" style="width:34px; height:34px; border-radius:50%; border:2px solid var(--accent); cursor:pointer;" onclick="app.nav('profile')">
+            </div>
         </div>
     </header>
 
     <main class="content-area">
-        <section id="view-home" class="view">
-            <div id="main-feed"></div>
-        </section>
+        
+        <div id="view-home" class="view active">
+            <div class="stories-bar" id="stories-list"></div>
+            <div id="home-feed"></div>
+        </div>
 
-        <section id="view-upload" class="view hidden">
-            <h2 style="margin-top: 0;">Créer un Post</h2>
-            <div class="auth-card" style="max-width: 100%; background: var(--bg-card);">
-                <div class="input-group">
-                    <label style="display:block; margin-bottom:10px; color:var(--text-dim); font-size:12px;">FICHIER SOURCE (MP4, JPG, PNG)</label>
-                    <input type="file" id="up-file" class="input-field" accept="video/*,image/*" onchange="app.handleUploadType()">
-                </div>
-                
-                <div id="thumb-selection" class="input-group hidden">
-                    <label style="display:block; margin-bottom:10px; color:var(--text-dim); font-size:12px;">MINIATURE PERSONNALISÉE</label>
-                    <input type="file" id="up-thumb" class="input-field" accept="image/*">
-                </div>
+        <div id="view-discover" class="view">
+            <h2 style="margin:0 0 20px;">Explorer</h2>
+            <div class="discover-grid" id="explore-grid"></div>
+        </div>
 
+        <div id="view-upload" class="view">
+            <div class="auth-card" style="max-width:100%; background:var(--bg-card); padding:30px;">
+                <h3 style="margin-top:0;">Nouvelle Publication</h3>
                 <div class="input-group">
-                    <input type="text" id="up-title" class="input-field" placeholder="Donne un titre à ta création..." style="padding-left:15px;">
+                    <input type="file" id="up-file" class="input-field" accept="video/*,image/*" onchange="app.checkUploadType()">
                 </div>
-
                 <div class="input-group">
-                    <select id="up-category" class="input-field" style="padding-left:15px; appearance: none;">
-                        <option value="video">Vidéo Standard</option>
-                        <option value="photo">Photo / Galerie</option>
-                        <option value="rshot">⚡ RShot (Format vertical)</option>
+                    <input type="text" id="up-title" class="input-field" placeholder="Titre de la vidéo ou photo..." style="padding-left:15px;">
+                </div>
+                <div class="input-group">
+                    <select id="up-cat" class="input-field" style="padding-left:15px; appearance:none;">
+                        <option value="video">Vidéo Longue</option>
+                        <option value="photo">Image / Art</option>
+                        <option value="rshot">⚡ RShot (Format Court)</option>
                     </select>
                 </div>
-
-                <button onclick="app.publishPost()" style="width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: 15px; font-weight: 800; cursor:pointer;">
-                    LANCER LA PUBLICATION
-                </button>
+                <button onclick="app.publish()" style="width:100%; padding:18px; background:var(--accent); color:white; border:none; border-radius:15px; font-weight:800; cursor:pointer;">PUBLIER MAINTENANT</button>
             </div>
-        </section>
+        </div>
 
-        <section id="view-chat" class="view hidden">
+        <div id="view-chat" class="view">
             <div class="auth-nav">
-                <button id="chat-tab-global" class="active" onclick="app.switchChatMode('global')">Global</button>
-                <button id="chat-tab-ai" onclick="app.switchChatMode('ai')">Gemini Core</button>
+                <button id="c-global" class="active" onclick="app.setChat('global')">Global Chat</button>
+                <button id="c-ai" onclick="app.setChat('ai')">Gemini Intelligence</button>
             </div>
-            <div class="chat-container">
-                <div id="messages-list" class="messages-list"></div>
-                <div class="chat-input-area">
-                    <input type="text" id="chat-input" class="input-field" placeholder="Tape ton message..." style="margin:0;">
-                    <button onclick="app.sendMessage()" style="background: var(--accent); border:none; width:55px; border-radius:15px; color:white;">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
+            <div id="chat-box" style="height:450px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:10px;"></div>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <input type="text" id="chat-in" class="input-field" placeholder="Votre message..." style="margin:0;">
+                <button onclick="app.sendMsg()" style="background:var(--accent); border:none; width:60px; border-radius:15px; color:white;"><i class="fas fa-paper-plane"></i></button>
             </div>
-        </section>
+        </div>
 
-        <section id="view-favs" class="view hidden">
-            <h2>Mes Favoris</h2>
-            <div id="favs-feed"></div>
-        </section>
+        <div id="view-profile" class="view">
+            <div class="profile-header">
+                <div class="profile-top">
+                    <div class="profile-img-wrap">
+                        <img src="" id="prof-img">
+                    </div>
+                    <div class="stats-bar">
+                        <div><span class="stat-val" id="stat-posts">0</span><span class="stat-label">Posts</span></div>
+                        <div><span class="stat-val">1.2k</span><span class="stat-label">Abonnés</span></div>
+                        <div><span class="stat-val">450</span><span class="stat-label">Suivis</span></div>
+                    </div>
+                </div>
+                <h2 id="prof-pseudo" style="margin:0;">Pseudo</h2>
+                <p id="prof-email" style="color:var(--text-dim); font-size:14px; margin:5px 0;">email@exemple.com</p>
+                <button onclick="app.nav('settings')" style="width:100%; padding:10px; background:var(--bg-input); border:1px solid var(--border); border-radius:10px; color:white; font-weight:600; margin-top:10px;">Modifier le Profil</button>
+            </div>
+            <div class="discover-grid" id="user-posts-grid"></div>
+        </div>
+
+        <div id="view-settings" class="view">
+            <h2>Paramètres</h2>
+            <div class="post-card" style="padding:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <span>Mode Sombre / Clair</span>
+                    <button onclick="document.body.classList.toggle('light-mode')" style="padding:8px 15px; border-radius:10px; border:none; background:var(--ai-blue); color:white;">Basculer</button>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <span>Vider le Cache</span>
+                    <button onclick="if(confirm('Tout supprimer ?')){localStorage.clear(); location.reload();}" style="padding:8px 15px; border-radius:10px; border:none; background:var(--accent); color:white;">Réinitialiser</button>
+                </div>
+                <p style="font-size:11px; color:var(--text-dim);">RASSTUBE ELITE V3.0.1 - Build 2026_X01</p>
+            </div>
+        </div>
+
     </main>
 
     <nav class="bottom-nav">
         <div class="nav-btn active" onclick="app.nav('home')"><i class="fas fa-home"></i>Accueil</div>
-        <div class="nav-btn" onclick="app.nav('chat')"><i class="fas fa-comment-alt"></i>Chat</div>
-        <div class="nav-btn" onclick="app.nav('upload')"><i class="fas fa-plus nav-plus"></i></div>
-        <div class="nav-btn" onclick="app.nav('favs')"><i class="fas fa-heart"></i>Favoris</div>
-        <div class="nav-btn" onclick="app.logout()"><i class="fas fa-user-astronaut"></i>Sortir</div>
+        <div class="nav-btn" onclick="app.nav('discover')"><i class="fas fa-compass"></i>Découvrir</div>
+        <div class="nav-btn" onclick="app.nav('upload')"><i class="fas fa-plus plus-center"></i></div>
+        <div class="nav-btn" onclick="app.nav('chat')"><i class="fas fa-comment-dots"></i>Chat</div>
+        <div class="nav-btn" onclick="app.nav('profile')"><i class="fas fa-user-circle"></i>Profil</div>
     </nav>
 </div>
 
 <script>
-/**
- * RASSTUBE CORE ENGINE
- * Complexité optimisée - Gestion d'état centralisée
+/** * RASSTUBE CORE LOGIC 
+ * Architecture robuste à 2000 lignes potentielles
  */
 
-const Store = {
-    users: JSON.parse(localStorage.getItem('rt_users') || '[]'),
-    posts: JSON.parse(localStorage.getItem('rt_posts') || '[]'),
-    session: JSON.parse(localStorage.getItem('rt_session') || 'null'),
-    chats: JSON.parse(localStorage.getItem('rt_chats') || '[]'),
-    favs: JSON.parse(localStorage.getItem('rt_favs') || '[]'),
-    
-    save() {
-        localStorage.setItem('rt_users', JSON.stringify(this.users));
-        localStorage.setItem('rt_posts', JSON.stringify(this.posts));
-        localStorage.setItem('rt_session', JSON.stringify(this.session));
-        localStorage.setItem('rt_chats', JSON.stringify(this.chats));
-        localStorage.setItem('rt_favs', JSON.stringify(this.favs));
+const Database = {
+    users: JSON.parse(localStorage.getItem('rt_users_v3') || '[]'),
+    posts: JSON.parse(localStorage.getItem('rt_posts_v3') || '[]'),
+    chats: JSON.parse(localStorage.getItem('rt_chats_v3') || '[]'),
+    session: JSON.parse(localStorage.getItem('rt_session_v3') || 'null'),
+
+    sync() {
+        localStorage.setItem('rt_users_v3', JSON.stringify(this.users));
+        localStorage.setItem('rt_posts_v3', JSON.stringify(this.posts));
+        localStorage.setItem('rt_chats_v3', JSON.stringify(this.chats));
+        localStorage.setItem('rt_session_v3', JSON.stringify(this.session));
     }
 };
 
-let currentAuthMode = 'login';
-let selectedAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=Rass1";
-let chatMode = 'global';
+let authMode = 'login';
+let currentChat = 'global';
+let tempAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}`;
 
-// --- AUTH LOGIC ---
-function switchAuth(mode) {
-    currentAuthMode = mode;
-    document.getElementById('tab-login').classList.toggle('active', mode === 'login');
-    document.getElementById('tab-signup').classList.toggle('active', mode === 'signup');
-    document.getElementById('signup-fields').classList.toggle('hidden', mode === 'login');
-    document.getElementById('main-auth-btn').innerText = mode === 'login' ? 'SE CONNECTER' : 'CRÉER MON COMPTE';
+// --- AUTH FUNCTIONS ---
+function setAuthMode(m) {
+    authMode = m;
+    document.getElementById('t-login').classList.toggle('active', m === 'login');
+    document.getElementById('t-signup').classList.toggle('active', m === 'signup');
+    document.getElementById('signup-only').classList.toggle('hidden', m === 'login');
+    document.getElementById('signup-pfp-box').classList.toggle('hidden', m === 'login');
+    document.getElementById('btn-auth-main').innerText = m === 'login' ? "SE CONNECTER" : "CRÉER MON COMPTE";
 }
 
-function handleAuthAction() {
-    const email = document.getElementById('auth-email').value.trim().toLowerCase();
+function randomizeAv() {
+    tempAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}`;
+    document.getElementById('pfp-preview').src = tempAvatar;
+}
+
+function processPfp(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        tempAvatar = ev.target.result;
+        document.getElementById('pfp-preview').src = tempAvatar;
+    };
+    reader.readAsDataURL(file);
+}
+
+function executeAuth() {
+    const email = document.getElementById('auth-email').value.trim();
     const pass = document.getElementById('auth-pass').value;
-    const err = document.getElementById('auth-error');
-    err.style.display = 'none';
 
-    if(!email || !pass) return showError("Veuillez remplir tous les champs.");
+    if(!email || !pass) return alert("Champs manquants");
 
-    if(currentAuthMode === 'signup') {
+    if(authMode === 'signup') {
         const pseudo = document.getElementById('auth-pseudo').value.trim();
-        if(!pseudo) return showError("Le pseudo est obligatoire.");
-        if(Store.users.find(u => u.email === email)) {
-            return showError("Cet e-mail est déjà utilisé. Essaie de te connecter !");
-        }
+        if(!pseudo) return alert("Choisissez un pseudo");
+        if(Database.users.find(u => u.email === email)) return alert("Compte déjà existant ! Connectez-vous.");
 
-        const newUser = { email, pass, pseudo, avatar: selectedAvatar, joined: Date.now() };
-        Store.users.push(newUser);
-        Store.session = newUser;
-        Store.save();
-        location.reload();
+        const newUser = { email, pass, pseudo, avatar: tempAvatar, id: Date.now() };
+        Database.users.push(newUser);
+        Database.session = newUser;
+        Database.sync();
+        app.showToast(`Bienvenue, ${pseudo} !`);
     } else {
-        const user = Store.users.find(u => u.email === email && u.pass === pass);
-        if(!user) return showError("Email ou mot de passe incorrect.");
-        Store.session = user;
-        Store.save();
-        location.reload();
+        const user = Database.users.find(u => u.email === email && u.pass === pass);
+        if(!user) return alert("Identifiants incorrects.");
+        Database.session = user;
+        Database.sync();
+        app.showToast("Heureux de vous revoir !");
     }
+    location.reload();
 }
 
-function showError(txt) {
-    const err = document.getElementById('auth-error');
-    err.innerText = txt;
-    err.style.display = 'block';
-}
-
-// --- CORE APP OBJECT ---
+// --- APP CORE ---
 const app = {
     init() {
-        if(!Store.session) return;
-        
+        if(!Database.session) return;
         document.getElementById('auth-overlay').classList.add('hidden');
-        document.getElementById('app-shell').style.display = 'block';
+        document.getElementById('app-shell').classList.remove('hidden');
         
-        document.getElementById('user-header-profile').innerHTML = `
-            <span style="font-size:12px; font-weight:700;">${Store.session.pseudo}</span>
-            <img src="${Store.session.avatar}" style="width:32px; height:32px; border-radius:50%; border:1px solid var(--accent);">
-        `;
+        // Setup UI User
+        document.getElementById('top-pfp').src = Database.session.avatar;
+        document.getElementById('prof-img').src = Database.session.avatar;
+        document.getElementById('prof-pseudo').innerText = Database.session.pseudo;
+        document.getElementById('prof-email').innerText = Database.session.email;
 
-        this.renderFeed();
-        this.renderAvatars();
+        this.renderHome();
+        this.renderStories();
     },
 
-    nav(viewId) {
-        document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-' + viewId).classList.remove('hidden');
+    nav(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('view-' + id).classList.add('active');
         
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        // Détection auto du bouton
+        const btns = document.querySelectorAll('.nav-btn');
+        if(id === 'home') btns[0].classList.add('active');
+        if(id === 'discover') btns[1].classList.add('active');
+        if(id === 'upload') btns[2].classList.add('active');
+        if(id === 'chat') btns[3].classList.add('active');
+        if(id === 'profile') btns[4].classList.add('active');
 
-        if(viewId === 'chat') this.renderChat();
-        if(viewId === 'favs') this.renderFavs();
+        if(id === 'profile') this.renderProfile();
+        if(id === 'discover') this.renderDiscover();
+        if(id === 'chat') this.renderChat();
     },
 
-    handleUploadType() {
-        const type = document.getElementById('up-category').value;
-        const file = document.getElementById('up-file').files[0];
-        if(file && file.type.includes('video')) {
-            document.getElementById('thumb-selection').classList.remove('hidden');
-        } else {
-            document.getElementById('thumb-selection').classList.add('hidden');
-        }
+    showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerText = msg;
+        container.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
     },
 
-    async publishPost() {
-        const file = document.getElementById('up-file').files[0];
-        const title = document.getElementById('up-title').value;
-        const type = document.getElementById('up-category').value;
-        const thumb = document.getElementById('up-thumb').files[0];
-
-        if(!file || !title) return alert("Fichier et titre requis !");
-
-        const toBase64 = f => new Promise(res => {
-            const r = new FileReader();
-            r.onload = e => res(e.target.result);
-            r.readAsDataURL(f);
-        });
-
-        const postObj = {
-            id: Date.now(),
-            author: Store.session.pseudo,
-            authorAv: Store.session.avatar,
-            title: title,
-            type: type,
-            content: await toBase64(file),
-            thumb: thumb ? await toBase64(thumb) : null,
-            likes: [],
-            comments: []
-        };
-
-        Store.posts.unshift(postObj);
-        Store.save();
-        alert("Publication réussie !");
-        this.nav('home');
-        this.renderFeed();
+    // --- RENDERING ---
+    renderStories() {
+        const bar = document.getElementById('stories-list');
+        const mockStories = [
+            {n: "Toi", a: Database.session.avatar},
+            {n: "Milo", a: "https://i.pravatar.cc/150?u=1"},
+            {n: "Sarah", a: "https://i.pravatar.cc/150?u=2"},
+            {n: "Rass_Bot", a: "https://i.pravatar.cc/150?u=3"},
+            {n: "Elite_G", a: "https://i.pravatar.cc/150?u=4"}
+        ];
+        bar.innerHTML = mockStories.map(s => `
+            <div class="story-item">
+                <div class="story-circle"><img src="${s.a}"></div>
+                <span>${s.n}</span>
+            </div>
+        `).join('');
     },
 
-    renderFeed(query = "") {
-        const container = document.getElementById('main-feed');
-        const data = Store.posts.filter(p => p.title.toLowerCase().includes(query.toLowerCase()));
-
-        if(data.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding:50px; color:var(--text-dim);">Aucun contenu pour le moment...</div>`;
+    renderHome() {
+        const feed = document.getElementById('home-feed');
+        if(Database.posts.length === 0) {
+            feed.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-dim);">Rejoignez l'élite en publiant votre première vidéo !</div>`;
             return;
         }
-
-        container.innerHTML = data.map(p => this.templatePost(p)).join('');
+        feed.innerHTML = Database.posts.slice().reverse().map(p => this.templatePost(p)).join('');
     },
 
     templatePost(p) {
-        const isLiked = p.likes.includes(Store.session.pseudo);
-        const isFav = Store.favs.includes(p.id);
-        
         return `
             <div class="post-card">
                 <div class="post-header">
                     <img src="${p.authorAv}">
                     <div style="flex:1">
                         <div style="font-weight:800; font-size:14px;">${p.author}</div>
-                        <div style="font-size:10px; color:var(--text-dim);">Il y a quelques instants</div>
+                        <div style="font-size:10px; color:var(--text-dim);">Elite Member • Il y a peu</div>
                     </div>
-                    <button class="action-item" onclick="app.toggleFav(${p.id}, this)">
-                        <i class="${isFav ? 'fas' : 'far'} fa-bookmark" style="${isFav?'color:var(--accent)':''}"></i>
-                    </button>
+                    <i class="fas fa-ellipsis-h" style="color:var(--text-dim)"></i>
                 </div>
-                
                 <div class="post-media">
-                    ${p.type === 'video' || p.type === 'rshot' 
-                        ? `<video src="${p.content}" controls poster="${p.thumb}" style="${p.type === 'rshot' ? 'aspect-ratio:9/16; object-fit:cover;' : ''}"></video>`
-                        : `<img src="${p.content}" loading="lazy">`
-                    }
+                    ${p.type === 'photo' ? `<img src="${p.content}">` : `<video src="${p.content}" controls></video>`}
                 </div>
-
-                <div class="post-info">
-                    <div class="post-title">${p.title}</div>
-                    <div class="post-actions">
-                        <div style="display:flex; gap:20px;">
-                            <button class="action-item ${isLiked?'active':''}" onclick="app.like(${p.id})">
-                                <i class="fas fa-heart"></i> <span style="font-size:12px;">${p.likes.length}</span>
-                            </button>
-                            <button class="action-item" onclick="app.toggleCommentsView(${p.id})">
-                                <i class="fas fa-comment"></i> <span style="font-size:12px;">${p.comments.length}</span>
-                            </button>
-                            <button class="action-item"><i class="fas fa-share-alt"></i></button>
-                        </div>
-                    </div>
-
-                    <div id="drawer-${p.id}" class="comments-drawer">
-                        <div id="list-${p.id}">
-                            ${p.comments.map(c => `<div class="comment"><b>${c.user}</b> ${c.text}</div>`).join('')}
-                        </div>
-                        <div style="display:flex; gap:10px; margin-top:10px;">
-                            <input type="text" id="in-${p.id}" class="input-field" placeholder="Ton commentaire..." style="padding:10px; font-size:12px;">
-                            <button onclick="app.addComment(${p.id})" style="background:var(--accent); border:none; border-radius:10px; color:white; padding:0 15px;">OK</button>
-                        </div>
-                    </div>
+                <div class="post-actions">
+                    <i class="far fa-heart" onclick="app.showToast('Aimé !')"></i>
+                    <i class="far fa-comment" onclick="app.nav('chat')"></i>
+                    <i class="far fa-paper-plane"></i>
+                </div>
+                <div style="padding:0 15px 15px;">
+                    <span style="font-weight:800; margin-right:8px;">${p.author}</span>
+                    <span style="font-size:14px;">${p.title}</span>
                 </div>
             </div>
         `;
     },
 
-    like(id) {
-        const post = Store.posts.find(p => p.id === id);
-        const index = post.likes.indexOf(Store.session.pseudo);
-        if(index === -1) post.likes.push(Store.session.pseudo);
-        else post.likes.splice(index, 1);
-        Store.save();
-        this.renderFeed();
+    renderDiscover() {
+        const grid = document.getElementById('explore-grid');
+        const items = [...Database.posts].sort(() => 0.5 - Math.random());
+        grid.innerHTML = items.map(p => `
+            <div class="discover-item">
+                ${p.type === 'photo' ? `<img src="${p.content}">` : `<video src="${p.content}"></video><i class="fas fa-play"></i>`}
+            </div>
+        `).join('');
     },
 
-    toggleFav(id, btn) {
-        const index = Store.favs.indexOf(id);
-        if(index === -1) Store.favs.push(id);
-        else Store.favs.splice(index, 1);
-        Store.save();
-        this.renderFeed();
+    renderProfile() {
+        const grid = document.getElementById('user-posts-grid');
+        const myPosts = Database.posts.filter(p => p.author === Database.session.pseudo);
+        document.getElementById('stat-posts').innerText = myPosts.length;
+        grid.innerHTML = myPosts.map(p => `
+            <div class="discover-item">
+                <img src="${p.type === 'photo' ? p.content : 'https://via.placeholder.com/300/000?text=VIDEO'}">
+            </div>
+        `).join('');
     },
 
-    toggleCommentsView(id) {
-        const d = document.getElementById('drawer-' + id);
-        d.style.display = d.style.display === 'block' ? 'none' : 'block';
+    // --- FEATURES ---
+    async publish() {
+        const file = document.getElementById('up-file').files[0];
+        const title = document.getElementById('up-title').value;
+        const cat = document.getElementById('up-cat').value;
+
+        if(!file || !title) return alert("Fichier et titre obligatoires");
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const newPost = {
+                id: Date.now(),
+                author: Database.session.pseudo,
+                authorAv: Database.session.avatar,
+                title: title,
+                type: cat === 'photo' ? 'photo' : 'video',
+                content: e.target.result
+            };
+            Database.posts.push(newPost);
+            Database.sync();
+            app.showToast("Publication envoyée !");
+            app.nav('home');
+            app.renderHome();
+        };
+        reader.readAsDataURL(file);
     },
 
-    addComment(id) {
-        const input = document.getElementById('in-' + id);
-        if(!input.value) return;
-        const post = Store.posts.find(p => p.id === id);
-        post.comments.push({ user: Store.session.pseudo, text: input.value });
-        Store.save();
-        input.value = "";
-        this.renderFeed();
-        document.getElementById('drawer-' + id).style.display = 'block';
-    },
-
-    switchChatMode(mode) {
-        chatMode = mode;
-        document.getElementById('chat-tab-global').classList.toggle('active', mode === 'global');
-        document.getElementById('chat-tab-ai').classList.toggle('active', mode === 'ai');
+    setChat(m) {
+        currentChat = m;
+        document.getElementById('c-global').classList.toggle('active', m === 'global');
+        document.getElementById('c-ai').classList.toggle('active', m === 'ai');
         this.renderChat();
     },
 
-    sendMessage() {
-        const input = document.getElementById('chat-input');
-        if(!input.value) return;
+    sendMsg() {
+        const inp = document.getElementById('chat-in');
+        if(!inp.value) return;
 
         const msg = {
-            id: Date.now(),
-            user: Store.session.pseudo,
-            text: input.value,
-            mode: chatMode,
-            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            user: Database.session.pseudo,
+            text: inp.value,
+            mode: currentChat,
+            time: Date.now()
         };
-
-        Store.chats.push(msg);
+        Database.chats.push(msg);
         
-        if(chatMode === 'ai') {
+        if(currentChat === 'ai') {
             setTimeout(() => {
-                Store.chats.push({
-                    id: Date.now() + 1,
-                    user: "Gemini Core",
-                    text: `Salut ${Store.session.pseudo}, je suis l'IA de RASSTUBE. Je vois que tu as rejoint la plateforme via ${Store.session.email}. Comment puis-je t'aider ?`,
-                    mode: 'ai',
-                    isAI: true
+                Database.chats.push({
+                    user: "Gemini", text: "Je suis en train d'analyser votre demande sur Rasstube...", mode: 'ai', time: Date.now()
                 });
                 this.renderChat();
-                Store.save();
             }, 1000);
         }
 
-        input.value = "";
-        Store.save();
+        inp.value = "";
+        Database.sync();
         this.renderChat();
     },
 
     renderChat() {
-        const list = document.getElementById('messages-list');
-        const data = Store.chats.filter(c => c.mode === chatMode);
-        
-        list.innerHTML = data.map(m => `
-            <div class="msg-bubble ${m.user === Store.session.pseudo ? 'msg-sent' : (m.isAI ? 'msg-received msg-ai' : 'msg-received')}">
-                <div style="font-size:9px; opacity:0.7; margin-bottom:4px;">${m.user}</div>
-                ${m.text}
+        const box = document.getElementById('chat-box');
+        const msgs = Database.chats.filter(m => m.mode === currentChat);
+        box.innerHTML = msgs.map(m => `
+            <div style="align-self: ${m.user === Database.session.pseudo ? 'flex-end' : 'flex-start'}; background:${m.user === Database.session.pseudo ? 'var(--accent)' : 'var(--bg-input)'}; padding:10px 15px; border-radius:15px; max-width:80%;">
+                <div style="font-size:10px; opacity:0.6; margin-bottom:3px;">${m.user}</div>
+                <div style="font-size:14px;">${m.text}</div>
             </div>
         `).join('');
-        list.scrollTop = list.scrollHeight;
-    },
-
-    renderFavs() {
-        const container = document.getElementById('favs-feed');
-        const data = Store.posts.filter(p => Store.favs.includes(p.id));
-        container.innerHTML = data.length ? data.map(p => this.templatePost(p)).join('') : `<p style="color:var(--text-dim)">Rien ici...</p>`;
-    },
-
-    renderAvatars() {
-        const grid = document.getElementById('avatar-grid');
-        const seeds = ["Rass1", "Shadow", "Neon", "Core", "Zen", "Blaze", "Nova", "Pulse"];
-        grid.innerHTML = seeds.map(s => {
-            const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${s}`;
-            return `<div class="av-option ${selectedAvatar === url ? 'selected' : ''}" onclick="selectAv('${url}')">
-                <img src="${url}">
-            </div>`;
-        }).join('');
-    },
-
-    logout() {
-        if(confirm("Se déconnecter ?")) {
-            Store.session = null;
-            Store.save();
-            location.reload();
-        }
+        box.scrollTop = box.scrollHeight;
     }
 };
 
-function selectAv(url) {
-    selectedAvatar = url;
-    app.renderAvatars();
-}
-
-function previewFile() {
-    const file = document.getElementById('custom-pfp').files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        selectedAvatar = e.target.result;
-        alert("Photo de profil personnalisée chargée !");
-    };
-    reader.readAsDataURL(file);
-}
-
-// Lancement
 window.onload = () => app.init();
 </script>
 </body>
