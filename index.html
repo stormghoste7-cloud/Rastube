@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE ELITE v9 | Jumeau YouTube</title>
+    <title>RASSTUBE ELITE v10 | YouTube Clone Premium</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -12,181 +12,1110 @@
             --accent: #FF0000;
             --card: #1e1e1e;
             --text: #ffffff;
+            --hover: #272727;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg); color: var(--text);
-            font-family: 'Roboto', Arial, sans-serif; margin: 0;
-            display: grid; grid-template-columns: 240px 1fr 300px;
-            height: 100vh; overflow: hidden;
+            background: var(--bg); 
+            color: var(--text);
+            font-family: 'Roboto', Arial, sans-serif; 
+            display: grid; 
+            grid-template-columns: 240px 1fr 350px;
+            height: 100vh; 
+            overflow: hidden;
         }
 
-        /* --- SIDEBAR GAUCHE (Navigation) --- */
+        /* --- SIDEBAR GAUCHE --- */
         .sidebar {
-            background: var(--side); padding: 20px;
-            border-right: 1px solid #222; display: flex; flex-direction: column; gap: 15px;
+            background: var(--side); 
+            padding: 20px 10px;
+            border-right: 1px solid #222; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px;
+            overflow-y: auto;
         }
-        .logo { font-size: 22px; font-weight: 900; color: var(--accent); margin-bottom: 30px; }
-        .nav-item { padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 15px; }
-        .nav-item:hover, .nav-item.active { background: #222; color: var(--accent); }
+        
+        .logo { 
+            font-size: 22px; 
+            font-weight: 900; 
+            color: var(--accent); 
+            margin-bottom: 20px; 
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-item { 
+            padding: 10px 15px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px;
+            font-size: 14px;
+        }
+        
+        .nav-item:hover, .nav-item.active { 
+            background: var(--hover); 
+        }
+        
+        .section-title {
+            color: #aaa;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 15px 15px 5px;
+            margin-top: 10px;
+        }
 
-        /* --- ZONE CENTRALE (Vidéos) --- */
-        main { overflow-y: auto; padding: 20px; }
-        .header-search {
-            position: sticky; top: 0; background: var(--bg); padding-bottom: 20px;
-            display: flex; gap: 10px; z-index: 10;
+        /* --- HEADER --- */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+            padding: 15px 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid #333;
         }
+
+        .search-container {
+            flex: 1;
+            max-width: 600px;
+            display: flex;
+            gap: 0;
+        }
+
         .search-input {
-            flex: 1; background: #121212; border: 1px solid #333;
-            padding: 12px 20px; border-radius: 25px; color: white; outline: none;
+            flex: 1;
+            background: #121212;
+            border: 1px solid #333;
+            border-right: none;
+            padding: 10px 20px;
+            border-radius: 25px 0 0 25px;
+            color: white;
+            outline: none;
+            font-size: 16px;
         }
+
         .search-btn {
-            background: #333; border: none; color: white;
-            padding: 0 20px; border-radius: 25px; cursor: pointer;
+            background: #222;
+            border: 1px solid #333;
+            border-left: none;
+            color: #fff;
+            padding: 0 20px;
+            border-radius: 0 25px 25px 0;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .video-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
+        .search-btn:hover {
+            background: #333;
         }
-        .video-card { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; }
-        .thumb { width: 100%; aspect-ratio: 16/9; background: #333; position: relative; }
-        .thumb iframe { width: 100%; height: 100%; border: none; }
-        .v-info { padding: 12px; }
-        .v-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; }
-        .v-meta { font-size: 12px; color: #aaa; }
 
-        /* --- SIDEBAR DROITE (Chats) --- */
-        .chat-section {
-            background: var(--side); border-left: 1px solid #222;
-            display: flex; flex-direction: column;
+        .user-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
-        .chat-tabs { display: flex; border-bottom: 1px solid #222; }
-        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-size: 12px; font-weight: bold; }
-        .tab.active { border-bottom: 2px solid var(--accent); color: var(--accent); }
 
-        .chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { background: #222; padding: 8px 12px; border-radius: 10px; font-size: 13px; max-width: 85%; }
-        .msg.bot { background: var(--accent); align-self: flex-start; }
-        .msg.user { align-self: flex-end; background: #444; }
+        .user-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-        .chat-input-area { padding: 15px; border-top: 1px solid #222; display: flex; gap: 5px; }
-        .chat-input-area input { flex: 1; background: #111; border: 1px solid #333; padding: 8px; color: white; border-radius: 5px; }
+        .login-btn {
+            background: var(--accent);
+            color: white;
+        }
 
-        /* --- MOBILE RESPONSIVE --- */
-        @media (max-width: 1000px) {
-            .sidebar, .chat-section { display: none; }
-            body { grid-template-columns: 1fr; }
+        .user-btn:hover {
+            background: var(--hover);
+        }
+
+        /* --- CONTENU PRINCIPAL --- */
+        main {
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .videos-container {
+            padding: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-title {
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .channel-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .channel-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .channel-name {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .video-stats {
+            font-size: 13px;
+            color: #aaa;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* --- PANEL DROITE (Chat/Comptes) --- */
+        .right-panel {
+            background: var(--side);
+            border-left: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .panel-tabs {
+            display: flex;
+            background: var(--side);
+            border-bottom: 1px solid #222;
+        }
+
+        .panel-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .panel-tab:hover {
+            background: var(--hover);
+        }
+
+        .panel-tab.active {
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* --- FORMULAIRE COMPTE --- */
+        .account-form {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .account-form.active {
+            display: flex;
+        }
+
+        .form-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .form-input {
+            background: #111;
+            border: 1px solid #333;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .form-btn:hover {
+            opacity: 0.9;
+        }
+
+        .form-switch {
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .form-switch span {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        /* --- CHAT --- */
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 100%;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.bot {
+            background: var(--card);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user {
+            background: var(--accent);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.system {
+            background: #1a5fb4;
+            align-self: center;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid #222;
+            display: flex;
+            gap: 10px;
+            background: var(--side);
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #111;
+            border: 1px solid #333;
+            padding: 10px 15px;
+            border-radius: 25px;
+            color: white;
+            outline: none;
+        }
+
+        .send-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- MODAL VIDEO --- */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-player {
+            width: 90%;
+            max-width: 1200px;
+            background: var(--bg);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-frame {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* --- COMPTE UTILISATEUR --- */
+        .user-profile {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .user-name {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .user-email {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) {
+            body {
+                grid-template-columns: 70px 1fr 300px;
+            }
+            
+            .sidebar {
+                padding: 20px 5px;
+            }
+            
+            .nav-item span, .logo span, .section-title {
+                display: none;
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: 15px 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .right-panel {
+                display: none;
+            }
+            
+            body {
+                grid-template-columns: 70px 1fr;
+            }
+            
+            .videos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #aaa;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
 
+    <!-- SIDEBAR -->
     <div class="sidebar">
-        <div class="logo"><i class="fab fa-youtube"></i> RASSTUBE</div>
-        <div class="nav-item active"><i class="fas fa-home"></i> Accueil</div>
-        <div class="nav-item"><i class="fas fa-bolt"></i> AIR SHORT</div>
-        <div class="nav-item"><i class="fas fa-history"></i> Historique</div>
-        <div class="nav-item"><i class="fas fa-cog"></i> Paramètres</div>
+        <div class="logo">
+            <i class="fab fa-youtube"></i>
+            <span>RASSTUBE</span>
+        </div>
+        
+        <div class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-bolt"></i>
+            <span>Shorts</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explorer</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-history"></i>
+            <span>Historique</span>
+        </div>
+        
+        <div class="section-title">Abonnements</div>
+        
+        <div class="nav-item">
+            <i class="fas fa-user-circle"></i>
+            <span>MrBeast</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Squeezie</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Paramètres</span>
+        </div>
     </div>
 
+    <!-- CONTENU PRINCIPAL -->
     <main>
-        <div class="header-search">
-            <input type="text" id="masterSearch" class="search-input" placeholder="Rechercher une vidéo sur YouTube...">
-            <button class="search-btn" onclick="runSearch()"><i class="fas fa-search"></i></button>
+        <div class="header">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Rechercher des vidéos...">
+                <button class="search-btn" onclick="searchVideos()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div class="user-menu">
+                <button class="user-btn" onclick="showAccountPanel()">
+                    <i class="fas fa-user"></i>
+                </button>
+                <button class="user-btn login-btn" onclick="showLoginForm()">
+                    Connexion
+                </button>
+            </div>
         </div>
 
-        <h2 id="sectionTitle">Recommandations</h2>
-        <div class="video-grid" id="mainGrid">
+        <div class="videos-container">
+            <div class="section-header">
+                <h2 id="sectionTitle">Vidéos tendances</h2>
             </div>
+            
+            <div class="videos-grid" id="videosGrid">
+                <!-- Les vidéos seront chargées ici -->
+            </div>
+        </div>
     </main>
 
-    <div class="chat-section">
-        <div class="chat-tabs">
-            <div class="tab active" onclick="switchChat('community')">COMMUNAUTÉ</div>
-            <div class="tab" onclick="switchChat('ai')">IA RASSTUBE</div>
+    <!-- PANEL DROITE -->
+    <div class="right-panel">
+        <div class="panel-tabs">
+            <div class="panel-tab active" onclick="showTab('chat')">
+                <i class="fas fa-comments"></i>
+                <span>Chat IA</span>
+            </div>
+            <div class="panel-tab" onclick="showTab('account')">
+                <i class="fas fa-user"></i>
+                <span>Compte</span>
+            </div>
         </div>
-        <div class="chat-window" id="chatWindow">
-            <div class="msg bot">Bienvenue sur le chat Élite !</div>
+
+        <!-- CONTENU CHAT -->
+        <div class="panel-content" id="chatTab">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    👋 Salut ! Je suis l'IA Rasstube. Je peux t'aider à trouver des vidéos, te recommander du contenu ou juste discuter !
+                </div>
+                <div class="message bot">
+                    Essaie de me demander : "Montre-moi des vidéos de musique" ou "Je veux regarder des animés"
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Message à l'IA Rasstube...">
+                <button class="send-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
-        <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Écrire...">
-            <button class="search-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+
+        <!-- CONTENU COMPTE -->
+        <div class="panel-content" id="accountTab" style="display: none;">
+            <!-- Formulaire Connexion -->
+            <div class="account-form" id="loginForm">
+                <div class="form-title">Connexion</div>
+                <input type="email" id="loginEmail" class="form-input" placeholder="Email">
+                <input type="password" id="loginPassword" class="form-input" placeholder="Mot de passe">
+                <button class="form-btn" onclick="login()">Se connecter</button>
+                
+                <div class="form-switch">
+                    Pas de compte ? <span onclick="showRegisterForm()">S'inscrire</span>
+                </div>
+            </div>
+
+            <!-- Formulaire Inscription -->
+            <div class="account-form" id="registerForm" style="display: none;">
+                <div class="form-title">Inscription</div>
+                <input type="text" id="registerName" class="form-input" placeholder="Nom d'utilisateur">
+                <input type="email" id="registerEmail" class="form-input" placeholder="Email">
+                <input type="password" id="registerPassword" class="form-input" placeholder="Mot de passe">
+                <input type="password" id="registerConfirm" class="form-input" placeholder="Confirmer le mot de passe">
+                <button class="form-btn" onclick="register()">Créer un compte</button>
+                
+                <div class="form-switch">
+                    Déjà un compte ? <span onclick="showLoginForm()">Se connecter</span>
+                </div>
+            </div>
+
+            <!-- Profil Utilisateur -->
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName"></div>
+                <div class="user-email" id="userEmail"></div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VIDEO -->
+    <div class="video-modal" id="videoModal">
+        <button class="close-modal" onclick="closeVideo()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="video-player">
+            <iframe class="video-frame" id="videoFrame" allowfullscreen></iframe>
         </div>
     </div>
 
     <script>
-        let currentMode = 'community';
+        // Variables globales
+        let currentUser = null;
+        let currentVideoId = null;
+        const API_KEY = 'AIzaSyBya-33Mgb3qAvO2q9wQRldlfxGel-t1yU'; // Clé API YouTube
+        const YOUTUBE_API = 'https://www.googleapis.com/youtube/v3';
 
-        // --- MOTEUR DE RECHERCHE & VIDÉOS ---
+        // Données des vidéos par défaut (tendances)
         const defaultVideos = [
-            { id: 'HCsp_dthaqY', title: 'Airsoft World Cup 2026' },
-            { id: '42jNrBlz6tU', title: 'Tactical Gear Review' },
-            { id: 'pJrjoizQ1R0', title: 'M416 Full Auto Test' },
-            { id: 'LfVnPo0uDmw', title: 'Sniper Gameplay Elite' }
+            { id: 'HCsp_dthaqY', title: 'Airsoft World Cup 2026', channel: 'Airsoft Pro', views: '2.3M' },
+            { id: 'dQw4w9WgXcQ', title: 'Musique Populaire 2024', channel: 'Music Hits', views: '1.5B' },
+            { id: 'zSM4ZyVe8xs', title: 'Mr Bean - Compilation', channel: 'Mr Bean Officiel', views: '850M' },
+            { id: 'H5v3kku4y6Q', title: 'Attack on Titan AMV', channel: 'Anime World', views: '15M' },
+            { id: '9bZkp7q19f0', title: 'Gangnam Style', channel: 'PSY', views: '4.7B' },
+            { id: 'kJQP7kiw5Fk', title: 'Luis Fonsi - Despacito', channel: 'LuisFonsiVEVO', views: '8.1B' },
+            { id: 'JGwWNGJdvx8', title: 'Ed Sheeran - Shape of You', channel: 'Ed Sheeran', views: '5.8B' },
+            { id: 'IOu0DuxFAT0', title: 'Tutorial Python Débutant', channel: 'Dev Pro', views: '450K' },
+            { id: 'CduA0TULnow', title: 'Fortnite Gameplay Épique', channel: 'Ninja', views: '120M' }
         ];
 
-        function loadVideos(list) {
-            const grid = document.getElementById('mainGrid');
-            grid.innerHTML = list.map(v => `
-                <div class="video-card">
-                    <div class="thumb">
-                        <iframe src="https://www.youtube.com/embed/${v.id}"></iframe>
-                    </div>
-                    <div class="v-info">
-                        <div class="v-title">${v.title}</div>
-                        <div class="v-meta">1M de vues • il y a 2h</div>
-                    </div>
-                </div>
-            `).join('');
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTrendingVideos();
+            checkLoggedIn();
+            setupEventListeners();
+        });
+
+        // Configuration des événements
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchVideos();
+            });
+            
+            document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
         }
 
-        function runSearch() {
-            const q = document.getElementById('masterSearch').value;
-            if(!q) return;
-            document.getElementById('sectionTitle').innerText = "Résultats pour : " + q;
-            // On simule une recherche en changeant les titres
-            const searchResults = defaultVideos.map(v => ({...v, title: q + " - Version Elite"}));
-            loadVideos(searchResults);
+        // Charger les vidéos tendances
+        async function loadTrendingVideos() {
+            const grid = document.getElementById('videosGrid');
+            grid.innerHTML = '<div class="loading">Chargement des vidéos...</div>';
+            
+            try {
+                // En production, utiliser l'API YouTube pour les tendances
+                // const response = await fetch(`${YOUTUBE_API}/videos?part=snippet&chart=mostPopular&maxResults=20&key=${API_KEY}`);
+                // const data = await response.json();
+                
+                // Simuler un appel API
+                setTimeout(() => {
+                    displayVideos(defaultVideos);
+                }, 500);
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                displayVideos(defaultVideos); // Fallback
+            }
         }
 
-        // --- SYSTÈME DE CHAT ---
-        function switchChat(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // Afficher les vidéos
+        function displayVideos(videos) {
+            const grid = document.getElementById('videosGrid');
+            grid.innerHTML = '';
+            
+            videos.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                videoCard.onclick = () => playVideo(video.id);
+                
+                videoCard.innerHTML = `
+                    <div class="thumbnail">
+                        <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}">
+                        <div class="video-duration">5:30</div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                        <div class="channel-info">
+                            <div class="channel-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="channel-name">${video.channel}</div>
+                        </div>
+                        <div class="video-stats">
+                            <span>${video.views} vues</span>
+                            <span>• il y a 2 mois</span>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(videoCard);
+            });
+        }
+
+        // Rechercher des vidéos
+        async function searchVideos() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            
+            document.getElementById('sectionTitle').textContent = `Résultats pour : ${query}`;
+            
+            const grid = document.getElementById('videosGrid');
+            grid.innerHTML = '<div class="loading">Recherche en cours...</div>';
+            
+            try {
+                // En production, utiliser l'API YouTube
+                // const response = await fetch(`${YOUTUBE_API}/search?part=snippet&q=${encodeURIComponent(query)}&maxResults=20&key=${API_KEY}`);
+                // const data = await response.json();
+                
+                // Simuler la recherche avec des résultats pertinents
+                setTimeout(() => {
+                    let searchResults = [...defaultVideos];
+                    
+                    // Filtrer en fonction de la recherche
+                    if (query.toLowerCase().includes('mr bean') || query.toLowerCase().includes('mrbean')) {
+                        searchResults = [
+                            { id: 'zSM4ZyVe8xs', title: 'Mr Bean - Compilation Drôle', channel: 'Mr Bean Officiel', views: '850M' },
+                            { id: 'tPmBkHhOqWo', title: 'Mr Bean - Les Meilleurs Moments', channel: 'Bean Comedy', views: '320M' },
+                            { id: 'V8JsR7rETn8', title: 'Mr Bean au Restaurant', channel: 'Mr Bean Clips', views: '180M' }
+                        ];
+                    } else if (query.toLowerCase().includes('anime') || query.toLowerCase().includes('animé')) {
+                        searchResults = [
+                            { id: 'H5v3kku4y6Q', title: 'Attack on Titan - Opening', channel: 'Anime World', views: '15M' },
+                            { id: 'pManp2CoycY', title: 'Demon Slayer AMV', channel: 'Anime Music', views: '8M' },
+                            { id: '8QPy2D8Vhjk', title: 'Naruto vs Sasuke Final Fight', channel: 'Anime Battles', views: '45M' }
+                        ];
+                    } else if (query.toLowerCase().includes('musique') || query.toLowerCase().includes('music')) {
+                        searchResults = [
+                            { id: 'dQw4w9WgXcQ', title: 'Musique Populaire 2024', channel: 'Music Hits', views: '1.5B' },
+                            { id: 'kJQP7kiw5Fk', title: 'Luis Fonsi - Despacito', channel: 'LuisFonsiVEVO', views: '8.1B' },
+                            { id: 'JGwWNGJdvx8', title: 'Ed Sheeran - Shape of You', channel: 'Ed Sheeran', views: '5.8B' }
+                        ];
+                    } else {
+                        searchResults = defaultVideos.filter(v => 
+                            v.title.toLowerCase().includes(query.toLowerCase()) ||
+                            v.channel.toLowerCase().includes(query.toLowerCase())
+                        );
+                        
+                        if (searchResults.length === 0) {
+                            searchResults = defaultVideos;
+                        }
+                    }
+                    
+                    displayVideos(searchResults);
+                    
+                    // Ajouter un message dans le chat IA
+                    addChatMessage('bot', `J'ai trouvé des vidéos pour "${query}" ! Clique sur une vidéo pour la regarder directement.`);
+                }, 800);
+                
+            } catch (error) {
+                console.error('Erreur recherche:', error);
+                grid.innerHTML = '<div class="loading">Erreur de recherche. Réessayez.</div>';
+            }
+        }
+
+        // Jouer une vidéo
+        function playVideo(videoId) {
+            currentVideoId = videoId;
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoFrame');
+            
+            frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            modal.style.display = 'flex';
+            
+            // Bloquer le défilement du body
+            document.body.style.overflow = 'hidden';
+            
+            // Ajouter à l'historique si connecté
+            if (currentUser) {
+                addToHistory(videoId);
+            }
+        }
+
+        // Fermer la vidéo
+        function closeVideo() {
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoFrame');
+            
+            frame.src = '';
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Gestion des onglets
+        function showTab(tabName) {
+            // Mettre à jour les onglets actifs
+            document.querySelectorAll('.panel-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
             event.target.classList.add('active');
-            document.getElementById('chatWindow').innerHTML = `<div class="msg bot">Mode ${mode === 'ai' ? 'IA Rasstube' : 'Communautaire'} activé.</div>`;
+            
+            // Afficher le bon contenu
+            document.getElementById('chatTab').style.display = 'none';
+            document.getElementById('accountTab').style.display = 'none';
+            
+            if (tabName === 'chat') {
+                document.getElementById('chatTab').style.display = 'flex';
+                document.getElementById('chatTab').style.flexDirection = 'column';
+            } else {
+                document.getElementById('accountTab').style.display = 'block';
+            }
         }
 
+        // Système de chat IA
         function sendMessage() {
             const input = document.getElementById('chatInput');
-            const win = document.getElementById('chatWindow');
-            if(!input.value) return;
-
-            // Message Utilisateur
-            win.innerHTML += `<div class="msg user">${input.value}</div>`;
+            const message = input.value.trim();
             
-            const userMsg = input.value.toLowerCase();
+            if (!message) return;
+            
+            // Afficher le message de l'utilisateur
+            addChatMessage('user', message);
             input.value = '';
-
-            // Réponse automatique
+            
+            // Réponse de l'IA
             setTimeout(() => {
-                if(currentMode === 'ai') {
-                    let response = "Je suis l'IA Rasstube. Je peux t'aider à trouver des vidéos d'Airsoft !";
-                    if(userMsg.includes("salut")) response = "Salut chef ! Prêt pour une partie d'Airsoft ?";
-                    if(userMsg.includes("airsoft")) response = "L'Airsoft est ma passion. Regarde la vidéo #pJrjoizQ1R0 !";
-                    win.innerHTML += `<div class="msg bot">${response}</div>`;
-                } else {
-                    win.innerHTML += `<div class="msg bot"><b>Membre_Elite:</b> C'est vrai, superbe vidéo !</div>`;
-                }
-                win.scrollTop = win.scrollHeight;
-            }, 600);
+                let response = getAIResponse(message);
+                addChatMessage('bot', response);
+            }, 1000);
         }
 
-        // Initialisation
-        window.onload = () => loadVideos(defaultVideos);
-        document.getElementById('masterSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') runSearch() });
-        document.getElementById('chatInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage() });
+        function addChatMessage(sender, text) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = text;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
 
+        function getAIResponse(message) {
+            const msg = message.toLowerCase();
+            
+            // Réponses prédéfinies
+            if (msg.includes('bonjour') || msg.includes('salut') || msg.includes('coucou')) {
+                return `👋 Salut${currentUser ? ' ' + currentUser.name : ''} ! Comment puis-je t'aider aujourd'hui ?`;
+            }
+            
+            if (msg.includes('vidéo') && (msg.includes('mr bean') || msg.includes('mrbean'))) {
+                return "Je connais bien Mr Bean ! Tape 'Mr Bean' dans la barre de recherche et appuie sur Entrée. Tu verras toutes ses vidéos drôles !";
+            }
+            
+            if (msg.includes('anime') || msg.includes('animé')) {
+                return "🎌 Pour les animés, cherche 'anime' dans la barre de recherche ! Je vais te montrer les meilleures AMV et openings.";
+            }
+            
+            if (msg.includes('musique') || msg.includes('music')) {
+                return "🎵 La musique ? Pas de problème ! Cherche 'musique' pour découvrir les clips tendances.";
+            }
+            
+            if (msg.includes('aide') || msg.includes('aide-moi')) {
+                return "Je peux t'aider à :\n1. Trouver des vidéos (dis-moi ce que tu cherches)\n2. Te recommander du contenu\n3. Gérer ton compte\nQue veux-tu faire ?";
+            }
+            
+            if (msg.includes('merci')) {
+                return "De rien ! N'hésite pas si tu as besoin d'autre chose. 😊";
+            }
+            
+            // Réponses générales
+            const responses = [
+                "Intéressant ! Tu veux que je te trouve des vidéos sur ce sujet ?",
+                "Je comprends. Essaie de rechercher directement dans la barre en haut !",
+                "En tant qu'IA Rasstube, je peux t'aider à découvrir plein de contenu YouTube.",
+                `Essaie de me demander quelque chose comme : "Montre-moi des vidéos de ${getRandomTopic()}"`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function getRandomTopic() {
+            const topics = ['jeux vidéo', 'cuisine', 'sport', 'science', 'voyage', 'comédie'];
+            return topics[Math.floor(Math.random() * topics.length)];
+        }
+
+        // Gestion des comptes
+        function showAccountPanel() {
+            showTab('account');
+        }
+
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'flex';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'none';
+        }
+
+        function showRegisterForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'flex';
+            document.getElementById('userProfile').style.display = 'none';
+        }
+
+        function showUserProfile() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'block';
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('userAvatar').innerHTML = `<i class="fas fa-user"></i>`;
+        }
+
+        function checkLoggedIn() {
+            const userData = localStorage.getItem('rasstube_user');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                showUserProfile();
+                
+                // Mettre à jour le bouton de connexion
+                document.querySelector('.login-btn').textContent = currentUser.name;
+                document.querySelector('.login-btn').classList.remove('login-btn');
+            }
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            // En production, faire une vraie vérification
+            currentUser = {
+                name: email.split('@')[0],
+                email: email,
+                joined: new Date().toISOString()
+            };
+            
+            localStorage.setItem('rasstube_user', JSON.stringify(currentUser));
+            showUserProfile();
+            
+            // Mettre à jour l'UI
+            document.querySelector('.login-btn').textContent = currentUser.name;
+            document.querySelector('.login-btn').classList.remove('login-btn');
+            
+            addChatMessage('system', `🎉 Bienvenue ${currentUser.name} ! Tu es maintenant connecté.`);
+        }
+
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+            
+            if (!name || !email || !password || !confirm) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            if (password !== confirm) {
+                alert('Les mots de passe ne correspondent pas');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('Le mot de passe doit faire au moins 6 caractères');
+                return;
+            }
+            
+            currentUser = {
+                name: name,
+                email: email,
+                joined: new Date().toISOString()
+            };
+            
+            localStorage.setItem('rasstube_user', JSON.stringify(currentUser));
+            showUserProfile();
+            
+            // Mettre à jour l'UI
+            document.querySelector('.login-btn').textContent = currentUser.name;
+            document.querySelector('.login-btn').classList.remove('login-btn');
+            
+            addChatMessage('system', `🎉 Félicitations ${name} ! Ton compte a été créé avec succès.`);
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('rasstube_user');
+            
+            showLoginForm();
+            
+            // Mettre à jour l'UI
+            const loginBtn = document.querySelector('.user-btn:last-child');
+            loginBtn.textContent = 'Connexion';
+            loginBtn.classList.add('login-btn');
+            
+            addChatMessage('system', 'Vous avez été déconnecté. À bientôt !');
+        }
+
+        function addToHistory(videoId) {
+            if (!currentUser) return;
+            
+            let history = JSON.parse(localStorage.getItem('rasstube_history') || '[]');
+            history.unshift({
+                videoId: videoId,
+                watchedAt: new Date().toISOString()
+            });
+            
+            // Garder seulement les 50 dernières vidéos
+            history = history.slice(0, 50);
+            
+            localStorage.setItem('rasstube_history', JSON.stringify(history));
+        }
+
+        // Gestion de la fermeture avec Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+
+        // Fermer la vidéo en cliquant en dehors
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideo();
+            }
+        });
     </script>
 </body>
 </html>
