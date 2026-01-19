@@ -44,23 +44,35 @@
         @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- AUTHENTIFICATION ENGINE --- */
+        /* --- AUTHENTIFICATION ENGINE --- CORRIGÉ POUR DÉFILEMENT --- */
         #auth-portal {
-            position: fixed; inset: 0; z-index: 9999; 
+            position: fixed; 
+            inset: 0; 
+            z-index: 9999; 
             background: radial-gradient(circle at top right, #1a0505, #000);
-            display: flex; align-items: center; justify-content: center; padding: 25px;
+            display: flex; 
+            align-items: flex-start; /* Changé de center à flex-start pour permettre le défilement */
+            justify-content: center; 
+            padding: 20px;
+            overflow-y: auto; /* Permet le défilement vertical */
+            -webkit-overflow-scrolling: touch; /* Défilement fluide sur mobile */
         }
 
         .auth-container {
-            width: 100%; max-width: 440px; background: var(--bg-card);
-            border-radius: var(--radius-xl); border: 1px solid var(--border);
-            padding: 45px 35px; box-shadow: var(--shadow-lg);
+            width: 100%; 
+            max-width: 440px; 
+            background: var(--bg-card);
+            border-radius: var(--radius-xl); 
+            border: 1px solid var(--border);
+            padding: 40px 35px; 
+            box-shadow: var(--shadow-lg);
             animation: fadeIn 0.8s ease;
+            margin: 20px 0; /* Marge pour le défilement */
         }
 
         .auth-tabs {
             display: flex; background: var(--bg-input); padding: 6px;
-            border-radius: 18px; margin-bottom: 35px; border: 1px solid var(--border);
+            border-radius: 18px; margin-bottom: 30px; border: 1px solid var(--border);
         }
 
         .auth-tabs button {
@@ -71,7 +83,7 @@
 
         .auth-tabs button.active { background: var(--accent); color: white; box-shadow: 0 4px 15px var(--accent-glow); }
 
-        .input-box { margin-bottom: 22px; position: relative; }
+        .input-box { margin-bottom: 20px; position: relative; }
         .input-box i { position: absolute; left: 18px; top: 18px; color: var(--text-dim); font-size: 18px; }
         .input-control {
             width: 100%; padding: 18px 18px 18px 52px; background: var(--bg-input);
@@ -258,7 +270,14 @@
             .nav-wrapper { flex-wrap: wrap; gap: 15px; }
             .search-bar { width: 100%; order: 3; }
             .content-container { padding: 15px; }
-            .auth-container { padding: 35px 25px; }
+            .auth-container { 
+                padding: 30px 25px; 
+                margin: 10px 0; /* Réduit la marge sur mobile */
+            }
+            #auth-portal {
+                padding: 15px; /* Réduit le padding sur mobile */
+                align-items: flex-start; /* Assure l'alignement en haut */
+            }
             .pfp-grid { grid-template-columns: repeat(3, 1fr); }
             .bottom-bar { padding: 12px 5px 32px; }
             .nav-item i { font-size: 22px; }
@@ -271,6 +290,24 @@
             .post-actions { font-size: 22px; gap: 20px; }
             .story-card { width: 70px; }
             .story-ring { width: 65px; height: 65px; }
+            .auth-container {
+                padding: 25px 20px;
+                border-radius: 25px;
+            }
+            .auth-tabs { margin-bottom: 25px; }
+            .input-box { margin-bottom: 18px; }
+        }
+
+        /* Styles spécifiques pour le défilement dans l'inscription */
+        #signup-profile-setup {
+            max-height: none; /* Supprime toute limite de hauteur */
+            overflow: visible; /* Permet le contenu de déborder si nécessaire */
+        }
+        
+        /* Assure que les éléments internes peuvent s'afficher correctement */
+        .pfp-grid {
+            max-height: none;
+            overflow: visible;
         }
     </style>
 </head>
@@ -280,7 +317,7 @@
 
 <div id="auth-portal">
     <div class="auth-container">
-        <div class="brand text-center" style="margin-bottom: 35px; font-size: 42px;">RASSTUBE</div>
+        <div class="brand text-center" style="margin-bottom: 30px; font-size: 42px;">RASSTUBE</div>
         
         <div class="auth-tabs">
             <button id="tab-login" class="active" onclick="App.toggleAuth('login')">CONNEXION</button>
@@ -291,7 +328,7 @@
             <div class="pfp-selector">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Rass" class="pfp-main-preview" id="auth-pfp-preview">
                 <div class="mt-20">
-                    <button onclick="App.triggerPfpUpload()" style="background:var(--accent-soft); color:var(--accent); border:none; padding:10px 20px; border-radius:12px; font-weight:700; cursor:pointer;">
+                    <button onclick="App.triggerPfpUpload()" style="background:var(--accent-soft); color:var(--accent); border:none; padding:10px 20px; border-radius:12px; font-weight:700; cursor:pointer; display: inline-flex; align-items: center; gap: 8px;">
                         <i class="fas fa-camera"></i> MA PHOTO
                     </button>
                 </div>
@@ -316,12 +353,18 @@
             <input type="password" id="auth-pass" class="input-control" placeholder="Mot de passe (6+ caractères)">
         </div>
 
-        <button onclick="App.executeAuth()" id="auth-btn" style="width: 100%; padding: 22px; background: var(--accent); color: white; border: none; border-radius: 20px; font-weight: 800; font-size: 16px; margin-top: 15px; cursor: pointer; transition: 0.3s;">
+        <button onclick="App.executeAuth()" id="auth-btn" style="width: 100%; padding: 22px; background: var(--accent); color: white; border: none; border-radius: 20px; font-weight: 800; font-size: 16px; margin-top: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
             <span id="auth-btn-text">REJOINDRE LE RÉSEAU</span>
             <div class="loader" id="auth-loader"></div>
         </button>
         
         <p id="auth-msg" style="text-align: center; color: #ff4444; font-size: 13px; margin-top: 20px; display: none;"></p>
+        
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+            <p style="color: var(--text-dim); font-size: 12px;">
+                En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
+            </p>
+        </div>
     </div>
 </div>
 
@@ -379,7 +422,7 @@
                 </div>
 
                 <div id="upload-preview" class="hidden" style="margin: 25px 0; border-radius: 15px; overflow: hidden; position: relative;">
-                    <button onclick="document.getElementById('upload-preview').classList.add('hidden'); document.getElementById('file-upload').value = '';" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;">×</button>
+                    <button onclick="document.getElementById('upload-preview').classList.add('hidden'); document.getElementById('file-upload').value = '';" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
                 </div>
 
                 <div class="input-box">
@@ -446,8 +489,7 @@
 
 <script>
 /**
- * RASSTUBE CORE ENGINE v4.0 - CORRIGÉ
- * Architecture : Gestion d'état réactive & Persistance locale
+ * RASSTUBE CORE ENGINE v4.0 - CORRIGÉ AVEC DÉFILEMENT INSCRIPTION
  */
 
 const App = {
@@ -484,6 +526,19 @@ const App = {
                 e.returnValue = 'Votre publication est en cours de téléchargement. Voulez-vous vraiment quitter ?';
             }
         });
+        
+        // Ajouter un événement pour gérer le défilement tactile
+        this.setupTouchScrolling();
+    },
+
+    // CONFIGURATION DU DÉFILEMENT TACTILE
+    setupTouchScrolling() {
+        const authPortal = document.getElementById('auth-portal');
+        if(authPortal) {
+            authPortal.addEventListener('touchmove', (e) => {
+                // Permet le défilement normal
+            }, { passive: true });
+        }
     },
 
     // VÉRIFICATION DE SESSION
@@ -520,7 +575,9 @@ const App = {
                 type: 'photo',
                 content: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 likes: 128,
-                likedBy: ['Admin']
+                likedBy: ['Admin'],
+                timestamp: new Date(Date.now() - 3600000).toISOString(),
+                views: 2540
             },
             {
                 id: 2,
@@ -530,7 +587,21 @@ const App = {
                 type: 'video',
                 content: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
                 likes: 356,
-                likedBy: ['Admin', 'Elite_Crew']
+                likedBy: ['Admin', 'Elite_Crew'],
+                timestamp: new Date(Date.now() - 7200000).toISOString(),
+                views: 5120
+            },
+            {
+                id: 3,
+                author: 'Rass',
+                authorPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rass',
+                title: 'Découvrez le nouveau format RShot ! ⚡',
+                type: 'rshot',
+                content: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                likes: 89,
+                likedBy: ['Rass'],
+                timestamp: new Date(Date.now() - 10800000).toISOString(),
+                views: 1890
             }
         ];
         
@@ -548,6 +619,9 @@ const App = {
         
         // Réinitialiser les messages d'erreur
         document.getElementById('auth-msg').style.display = 'none';
+        
+        // Scroll vers le haut quand on change d'onglet
+        document.getElementById('auth-portal').scrollTop = 0;
     },
 
     // VALIDATION EMAIL
