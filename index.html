@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASSTUBE ULTIMATE | Toutes les vidéos YouTube</title>
+    <title>RASSTUBE SOCIAL | Plateforme Vidéo Communautaire</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://www.youtube.com/iframe_api"></script>
     <style>
-        /* ===== VARIABLES & RESET ===== */
+        /* ===== VARIABLES ===== */
         :root {
             --primary: #FF2A2A;
             --secondary: #8A2BE2;
@@ -17,34 +16,28 @@
             --light: #ffffff;
             --gray: #aaaaaa;
             --success: #32CD32;
-            --warning: #FFA500;
-            --danger: #FF4444;
-            
-            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --gradient-hover: linear-gradient(135deg, var(--secondary), var(--accent));
-            
-            --sidebar-width: 280px;
-            --chat-width: 400px;
-            --header-height: 70px;
+            --card-bg: #1a1a1a;
+            --hover-bg: #252525;
         }
 
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
             background: var(--dark);
             color: var(--light);
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
         /* ===== LAYOUT ===== */
-        .app-container {
+        .app {
             display: grid;
-            grid-template-columns: var(--sidebar-width) 1fr var(--chat-width);
+            grid-template-columns: 280px 1fr;
             min-height: 100vh;
         }
 
@@ -52,10 +45,10 @@
         .sidebar {
             background: var(--darker);
             border-right: 1px solid rgba(255,255,255,0.1);
-            padding: 20px 0;
             position: fixed;
-            width: var(--sidebar-width);
+            width: 280px;
             height: 100vh;
+            padding: 20px 0;
             overflow-y: auto;
         }
 
@@ -83,22 +76,17 @@
             color: var(--gray);
             cursor: pointer;
             transition: all 0.3s;
-            border-left: 3px solid transparent;
+            text-decoration: none;
         }
 
         .nav-item:hover, .nav-item.active {
             background: rgba(138, 43, 226, 0.1);
             color: var(--light);
-            border-left-color: var(--primary);
-        }
-
-        .nav-item i {
-            width: 24px;
-            text-align: center;
+            border-left: 3px solid var(--primary);
         }
 
         .section-title {
-            padding: 15px 20px 5px;
+            padding: 20px 20px 10px;
             color: var(--gray);
             font-size: 12px;
             text-transform: uppercase;
@@ -107,17 +95,15 @@
 
         /* ===== HEADER ===== */
         .header {
-            grid-column: 2;
-            position: sticky;
-            top: 0;
             background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(20px);
             padding: 15px 30px;
             display: flex;
             align-items: center;
             gap: 20px;
-            height: var(--header-height);
-            z-index: 1000;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
@@ -135,27 +121,25 @@
             color: var(--light);
             border-radius: 25px 0 0 25px;
             outline: none;
-            font-size: 16px;
         }
 
         .search-btn {
-            background: var(--gradient);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
             color: white;
             padding: 0 25px;
             border-radius: 0 25px 25px 0;
             cursor: pointer;
-            font-weight: 500;
         }
 
-        .user-menu {
+        .user-actions {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-left: auto;
         }
 
-        .user-btn {
+        .upload-btn {
             background: var(--primary);
             color: white;
             border: none;
@@ -165,150 +149,225 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 500;
         }
 
-        /* ===== CONTENU ===== */
+        /* ===== MAIN CONTENT ===== */
         .main-content {
-            grid-column: 2;
+            margin-left: 280px;
             padding: 30px;
         }
 
-        .categories {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            overflow-x: auto;
-            padding-bottom: 10px;
+        /* ===== FEED ===== */
+        .feed {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .category {
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
+        .create-post {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .post-input {
+            width: 100%;
+            background: transparent;
+            border: none;
             color: var(--light);
+            font-size: 16px;
+            margin-bottom: 15px;
+            resize: none;
+            outline: none;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: var(--gray);
+            padding: 8px 15px;
+            border-radius: 20px;
             cursor: pointer;
-            white-space: nowrap;
             transition: all 0.3s;
         }
 
-        .category:hover, .category.active {
-            background: var(--gradient);
-            border-color: transparent;
+        .post-action:hover {
+            background: rgba(255,42,42,0.1);
+            color: var(--light);
         }
 
-        .videos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
+        /* ===== POSTS ===== */
+        .post {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
 
-        .video-card {
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            cursor: pointer;
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
-        .video-card:hover {
-            transform: translateY(-5px);
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
         }
 
-        .video-thumbnail {
-            position: relative;
+        .post-user {
+            flex: 1;
+        }
+
+        .post-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .post-time {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+        }
+
+        .post-video {
             width: 100%;
             aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 10px;
             overflow: hidden;
+            margin-bottom: 15px;
         }
 
-        .video-thumbnail img {
+        .post-video video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .video-duration {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .video-info {
-            padding: 15px;
-        }
-
-        .video-title {
-            font-weight: 500;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+        .post-image {
+            width: 100%;
+            max-height: 500px;
+            border-radius: 10px;
             overflow: hidden;
+            margin-bottom: 15px;
         }
 
-        .video-channel {
+        .post-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .post-stats {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 5px;
+            gap: 20px;
             color: var(--gray);
-            font-size: 14px;
-        }
-
-        .video-stats {
-            color: var(--gray);
-            font-size: 13px;
-        }
-
-        /* ===== CHAT ===== */
-        .chat-sidebar {
-            grid-column: 3;
-            background: var(--darker);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            right: 0;
-            width: var(--chat-width);
-            height: 100vh;
-        }
-
-        .chat-tabs {
-            display: flex;
+            padding: 10px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .chat-tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            color: var(--gray);
-            transition: all 0.3s;
-            position: relative;
+        .post-actions-bar {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
         }
 
-        .chat-tab.active {
+        .post-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .post-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--light);
+        }
+
+        .post-btn.liked {
             color: var(--primary);
         }
 
-        .chat-tab.active::after {
-            content: '';
-            position: absolute;
+        /* ===== CHAT ===== */
+        .chat-container {
+            position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--gradient);
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: var(--darker);
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .chat-content {
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .online-count {
+            background: var(--success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .chat-close {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
@@ -324,46 +383,22 @@
             position: relative;
         }
 
-        .message.user {
-            align-self: flex-end;
-            background: var(--gradient);
-            border-bottom-right-radius: 5px;
-        }
-
-        .message.community {
+        .message.received {
             align-self: flex-start;
             background: rgba(255,255,255,0.05);
             border-bottom-left-radius: 5px;
         }
 
-        .message.ai {
-            align-self: flex-start;
-            background: rgba(138, 43, 226, 0.2);
-            border-bottom-left-radius: 5px;
+        .message.sent {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-bottom-right-radius: 5px;
         }
 
-        .message-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
-        }
-
-        .message-avatar {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .message-username {
+        .message-sender {
             font-weight: 600;
-            font-size: 13px;
+            margin-bottom: 5px;
+            font-size: 14px;
         }
 
         .message-text {
@@ -378,7 +413,7 @@
         }
 
         .chat-input-area {
-            padding: 20px;
+            padding: 15px;
             border-top: 1px solid rgba(255,255,255,0.1);
             display: flex;
             gap: 10px;
@@ -395,7 +430,7 @@
         }
 
         .chat-send {
-            background: var(--gradient);
+            background: var(--primary);
             border: none;
             width: 45px;
             height: 45px;
@@ -404,96 +439,189 @@
             cursor: pointer;
         }
 
-        /* ===== MODAL VIDEO ===== */
-        .video-modal {
+        /* ===== MODALS ===== */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
         }
 
-        .video-player {
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 15px;
             width: 90%;
-            max-width: 1200px;
-            background: var(--dark);
-            border-radius: 12px;
-            overflow: hidden;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
         }
 
-        #youtube-player {
-            width: 100%;
-            aspect-ratio: 16/9;
-        }
-
-        .player-info {
-            padding: 20px;
-        }
-
-        .close-player {
+        .modal-close {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: var(--primary);
-            color: white;
+            background: transparent;
             border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            color: var(--gray);
             font-size: 20px;
             cursor: pointer;
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1200px) {
-            .chat-sidebar {
-                display: none;
-            }
-            
-            .app-container {
-                grid-template-columns: var(--sidebar-width) 1fr;
-            }
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--light);
         }
 
-        @media (max-width: 768px) {
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            color: var(--light);
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+        }
+
+        .file-upload {
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(255,42,42,0.05);
+        }
+
+        .file-upload i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255,42,42,0.2);
+        }
+
+        /* ===== PROFILE ===== */
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+            
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s;
+                z-index: 1000;
             }
             
             .sidebar.active {
                 transform: translateX(0);
             }
             
-            .app-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .header {
-                grid-column: 1;
-            }
-            
             .main-content {
-                grid-column: 1;
-                padding: 15px;
-            }
-            
-            .videos-grid {
-                grid-template-columns: 1fr;
+                margin-left: 0;
             }
             
             .menu-toggle {
                 display: block;
                 position: fixed;
-                top: 15px;
-                left: 15px;
+                top: 20px;
+                left: 20px;
                 z-index: 1001;
-                background: var(--gradient);
+                background: var(--primary);
                 color: white;
                 border: none;
                 width: 50px;
@@ -501,61 +629,147 @@
                 border-radius: 10px;
                 font-size: 20px;
             }
+            
+            .chat-container {
+                right: 20px;
+                bottom: 20px;
+                height: 400px;
+            }
         }
 
         .menu-toggle {
             display: none;
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--gray);
-        }
-
+        /* ===== NOTIFICATIONS ===== */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: var(--gradient);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 15px 25px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 3000;
+            z-index: 2000;
             animation: slideIn 0.3s;
+            display: none;
         }
 
         @keyframes slideIn {
             from { transform: translateX(100%); }
             to { transform: translateX(0); }
         }
+
+        /* ===== LOADING ===== */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <!-- MODAL VIDEO -->
-    <div class="video-modal" id="videoModal">
-        <button class="close-player" onclick="closeVideo()">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="video-player">
-            <div id="youtube-player"></div>
-            <div class="player-info">
-                <h2 id="videoTitle"></h2>
-                <div id="videoDescription"></div>
+    <!-- NOTIFICATION -->
+    <div class="notification" id="notification"></div>
+
+    <!-- MODAL LOGIN/REGISTER -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('authModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="modal-title" id="modalTitle">Connexion</h2>
+            
+            <div class="form-group">
+                <input type="text" class="form-input" id="authUsername" placeholder="Nom d'utilisateur">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" class="form-input" id="authPassword" placeholder="Mot de passe">
+            </div>
+            
+            <div class="form-group" id="confirmGroup" style="display: none;">
+                <input type="password" class="form-input" id="authConfirm" placeholder="Confirmer le mot de passe">
+            </div>
+            
+            <div class="form-group" id="emailGroup" style="display: none;">
+                <input type="email" class="form-input" id="authEmail" placeholder="Email">
+            </div>
+            
+            <button class="btn-primary" onclick="handleAuth()" id="authButton">Se connecter</button>
+            
+            <div style="text-align: center; margin-top: 20px; color: var(--gray);">
+                <span id="switchText">Pas de compte ?</span>
+                <a href="#" style="color: var(--primary);" onclick="switchAuthMode()" id="switchLink">S'inscrire</a>
             </div>
         </div>
     </div>
 
-    <!-- NOTIFICATION -->
-    <div class="notification" id="notification" style="display: none;"></div>
+    <!-- MODAL UPLOAD -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('uploadModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="modal-title">Publier une vidéo</h2>
+            
+            <div class="form-group">
+                <input type="text" class="form-input" id="postTitle" placeholder="Titre de la vidéo">
+            </div>
+            
+            <div class="form-group">
+                <textarea class="form-input" id="postDescription" placeholder="Description" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <div class="file-upload" onclick="document.getElementById('videoInput').click()">
+                    <i class="fas fa-video"></i>
+                    <p>Cliquez pour sélectionner une vidéo</p>
+                    <p style="font-size: 12px; color: var(--gray);">MP4, AVI, MOV jusqu'à 500MB</p>
+                </div>
+                <input type="file" id="videoInput" accept="video/*" style="display: none;" onchange="handleVideoUpload(event)">
+            </div>
+            
+            <div class="form-group">
+                <div class="file-upload" onclick="document.getElementById('imageInput').click()">
+                    <i class="fas fa-image"></i>
+                    <p>Cliquez pour sélectionner une miniature</p>
+                    <p style="font-size: 12px; color: var(--gray);">JPG, PNG jusqu'à 10MB</p>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+            </div>
+            
+            <div id="uploadPreview" style="display: none; margin-bottom: 20px;">
+                <video id="videoPreview" controls style="width: 100%; border-radius: 10px; display: none;"></video>
+                <img id="imagePreview" style="width: 100%; border-radius: 10px; display: none;">
+            </div>
+            
+            <button class="btn-primary" onclick="publishPost()" id="publishButton">Publier</button>
+        </div>
+    </div>
 
     <!-- BOUTON MENU MOBILE -->
     <button class="menu-toggle" onclick="toggleMenu()">
         <i class="fas fa-bars"></i>
     </button>
 
-    <div class="app-container">
+    <!-- APPLICATION -->
+    <div class="app">
         <!-- SIDEBAR -->
         <div class="sidebar" id="sidebar">
             <div class="logo">
@@ -563,129 +777,93 @@
                 <span>RASSTUBE</span>
             </div>
             
-            <div class="nav-item active" onclick="loadHome()">
+            <div class="nav-item active" onclick="loadFeed()">
                 <i class="fas fa-home"></i>
-                <span>Accueil</span>
+                <span>Fil d'actualité</span>
             </div>
             
-            <div class="nav-item" onclick="loadTrending()">
-                <i class="fas fa-fire"></i>
-                <span>Tendances</span>
+            <div class="nav-item" onclick="loadProfile()">
+                <i class="fas fa-user"></i>
+                <span>Mon profil</span>
             </div>
             
-            <div class="nav-item" onclick="loadSubscriptions()">
+            <div class="nav-item" onclick="showUploadModal()">
+                <i class="fas fa-upload"></i>
+                <span>Uploader</span>
+            </div>
+            
+            <div class="section-title">Communauté</div>
+            
+            <div class="nav-item" onclick="loadCommunity()">
                 <i class="fas fa-users"></i>
-                <span>Abonnements</span>
+                <span>Découvrir</span>
             </div>
             
-            <div class="section-title">Bibliothèque</div>
-            
-            <div class="nav-item" onclick="loadHistory()">
-                <i class="fas fa-history"></i>
-                <span>Historique</span>
+            <div class="nav-item" onclick="toggleChat()">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
             </div>
             
-            <div class="nav-item" onclick="loadLiked()">
-                <i class="fas fa-thumbs-up"></i>
-                <span>Vidéos aimées</span>
+            <div class="section-title">Paramètres</div>
+            
+            <div class="nav-item" onclick="showSettings()">
+                <i class="fas fa-cog"></i>
+                <span>Paramètres</span>
             </div>
             
-            <div class="section-title">Explorer</div>
-            
-            <div class="nav-item" onclick="searchCategory('musique')">
-                <i class="fas fa-music"></i>
-                <span>Musique</span>
-            </div>
-            
-            <div class="nav-item" onclick="searchCategory('jeux vidéo')">
-                <i class="fas fa-gamepad"></i>
-                <span>Jeux vidéo</span>
-            </div>
-            
-            <div class="nav-item" onclick="searchCategory('sport')">
-                <i class="fas fa-futbol"></i>
-                <span>Sport</span>
-            </div>
-            
-            <div class="nav-item" onclick="searchCategory('actualités')">
-                <i class="fas fa-newspaper"></i>
-                <span>Actualités</span>
-            </div>
-            
-            <div class="nav-item" onclick="searchCategory('films')">
-                <i class="fas fa-film"></i>
-                <span>Films</span>
+            <div class="nav-item" onclick="logout()" style="color: var(--primary);">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Déconnexion</span>
             </div>
         </div>
 
         <!-- HEADER -->
         <div class="header">
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Rechercher sur YouTube...">
-                <button class="search-btn" onclick="searchVideos()">
+                <input type="text" class="search-input" id="searchInput" placeholder="Rechercher des vidéos, amis...">
+                <button class="search-btn" onclick="searchContent()">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
             
-            <div class="user-menu">
-                <button class="user-btn" onclick="toggleChat()">
-                    <i class="fas fa-comments"></i>
-                    <span>Chat</span>
+            <div class="user-actions">
+                <button class="upload-btn" onclick="showUploadModal()">
+                    <i class="fas fa-plus"></i>
+                    <span>Uploader</span>
                 </button>
-                <button class="user-btn" onclick="showLogin()">
-                    <i class="fas fa-user"></i>
-                    <span>Connexion</span>
-                </button>
+                <div id="userAvatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; cursor: pointer;" onclick="loadProfile()">
+                    ?
+                </div>
             </div>
         </div>
 
-        <!-- CONTENU PRINCIPAL -->
-        <main class="main-content">
-            <h1 style="margin-bottom: 20px;" id="pageTitle">Vidéos tendances</h1>
-            
-            <div class="categories" id="categories">
-                <button class="category active" onclick="searchCategory('tendances')">Tendances</button>
-                <button class="category" onclick="searchCategory('musique')">Musique</button>
-                <button class="category" onclick="searchCategory('jeux vidéo')">Jeux vidéo</button>
-                <button class="category" onclick="searchCategory('sport')">Sport</button>
-                <button class="category" onclick="searchCategory('films')">Films</button>
-                <button class="category" onclick="searchCategory('actualités')">Actualités</button>
-                <button class="category" onclick="searchCategory('comédie')">Comédie</button>
-                <button class="category" onclick="searchCategory('apprendre')">Apprendre</button>
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="feed" id="mainContent">
+                <!-- Contenu dynamique -->
             </div>
-            
-            <div class="videos-grid" id="videosGrid">
-                <!-- Les vidéos seront chargées ici -->
-            </div>
-            
-            <div class="loading" id="loading">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Chargement des vidéos...</p>
-            </div>
-        </main>
+        </div>
 
         <!-- CHAT -->
-        <div class="chat-sidebar" id="chatSidebar">
-            <div class="chat-tabs">
-                <div class="chat-tab active" onclick="switchChat('community')">
-                    Communauté
+        <div class="chat-container" id="chatContainer" style="display: none;">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat Communauté</span>
+                    <span class="online-count" id="onlineCount">0 en ligne</span>
                 </div>
-                <div class="chat-tab" onclick="switchChat('ai')">
-                    IA Rasstube
-                </div>
+                <button class="chat-close" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             
-            <div class="chat-content" id="communityChat">
-                <!-- Messages de communauté -->
-            </div>
-            
-            <div class="chat-content" id="aiChat" style="display: none;">
-                <!-- Messages IA -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages de chat -->
             </div>
             
             <div class="chat-input-area">
                 <input type="text" class="chat-input" id="chatInput" placeholder="Écrire un message...">
-                <button class="chat-send" onclick="sendMessage()">
+                <button class="chat-send" onclick="sendChatMessage()">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
@@ -693,573 +871,781 @@
     </div>
 
     <script>
-        // ===== CONFIGURATION =====
-        const YOUTUBE_API_KEY = 'AIzaSyBya-33Mgb3qAvO2q9wQRldlfxGel-t1yU'; // Clé API YouTube
-        const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3';
-        
-        // Communauté simulée
-        const COMMUNITY_USERS = [
-            { id: 1, name: 'Alex', avatar: 'A', color: '#FF6B6B' },
-            { id: 2, name: 'Sarah', avatar: 'S', color: '#4ECDC4' },
-            { id: 3, name: 'Max', avatar: 'M', color: '#FFD166' },
-            { id: 4, name: 'Emma', avatar: 'E', color: '#EF476F' },
-            { id: 5, name: 'Tom', avatar: 'T', color: '#118AB2' },
-            { id: 6, name: 'Léa', avatar: 'L', color: '#8A2BE2' }
-        ];
-        
-        const COMMUNITY_MESSAGES = [
-            { userId: 1, text: "Salut tout le monde ! Des nouvelles vidéos intéressantes ?", time: "14:30" },
-            { userId: 2, text: "Je viens de découvrir une super chaîne de science !", time: "14:32" },
-            { userId: 3, text: "Quelqu'un a vu le dernier match hier soir ? Incroyable !", time: "14:35" },
-            { userId: 4, text: "Je cherche des tutoriels de programmation en Python, des suggestions ?", time: "14:40" },
-            { userId: 5, text: "Le nouvel album de ce rappeur est juste incroyable 🔥", time: "14:45" },
-            { userId: 6, text: "Qui regarde des animés ici ? J'ai besoin de recommandations !", time: "14:50" }
-        ];
-        
-        // ===== ÉTAT DE L'APPLICATION =====
-        let state = {
-            currentUser: { id: 0, name: 'Vous', avatar: 'V', color: '#FF2A2A' },
-            videos: [],
-            currentVideo: null,
-            searchQuery: '',
-            currentCategory: 'tendances',
-            nextPageToken: null,
-            isLoading: false,
-            chatMode: 'community',
-            player: null,
-            communityMessages: [...COMMUNITY_MESSAGES],
-            aiMessages: [
-                { type: 'ai', text: "👋 Bonjour ! Je suis l'IA Rasstube. Je peux vous aider à trouver n'importe quelle vidéo YouTube !", time: "14:00" },
-                { type: 'ai', text: "Demandez-moi par exemple : 'Montre-moi des vidéos de Mr Bean' ou 'Trouve des tutoriels de programmation'", time: "14:01" }
-            ]
+        // ===== BASE DE DONNÉES SIMULÉE =====
+        let database = {
+            users: [],
+            posts: [],
+            messages: [],
+            currentUser: null
         };
-        
+
+        // ===== UTILISATEURS PAR DÉFAUT =====
+        const defaultUsers = [
+            {
+                id: 1,
+                username: "AlexGamer",
+                avatar: "A",
+                color: "#FF6B6B",
+                followers: 1250,
+                following: 342,
+                posts: 45,
+                isOnline: true
+            },
+            {
+                id: 2,
+                username: "SarahMusic",
+                avatar: "S",
+                color: "#4ECDC4",
+                followers: 890,
+                following: 215,
+                posts: 32,
+                isOnline: true
+            },
+            {
+                id: 3,
+                username: "MaxTech",
+                avatar: "M",
+                color: "#FFD166",
+                followers: 2100,
+                following: 421,
+                posts: 78,
+                isOnline: false
+            },
+            {
+                id: 4,
+                username: "EmmaStyle",
+                avatar: "E",
+                color: "#EF476F",
+                followers: 1560,
+                following: 289,
+                posts: 56,
+                isOnline: true
+            },
+            {
+                id: 5,
+                username: "TomSports",
+                avatar: "T",
+                color: "#118AB2",
+                followers: 950,
+                following: 178,
+                posts: 29,
+                isOnline: true
+            }
+        ];
+
+        // ===== POSTS PAR DÉFAUT =====
+        const defaultPosts = [
+            {
+                id: 1,
+                userId: 1,
+                username: "AlexGamer",
+                userAvatar: "A",
+                userColor: "#FF6B6B",
+                title: "Gameplay Fortnite - Victoire Royale !",
+                content: "Nouveau record personnel avec 18 éliminations ! 🔥",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                thumbnail: "",
+                likes: 245,
+                comments: 32,
+                shares: 15,
+                timestamp: "Il y a 2 heures",
+                type: "video"
+            },
+            {
+                id: 2,
+                userId: 2,
+                username: "SarahMusic",
+                userAvatar: "S",
+                userColor: "#4ECDC4",
+                title: "Cover - Shape of You",
+                content: "J'ai essayé de faire ma version de cette chanson iconique ! 🎵",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                thumbnail: "",
+                likes: 189,
+                comments: 24,
+                shares: 8,
+                timestamp: "Il y a 5 heures",
+                type: "video"
+            },
+            {
+                id: 3,
+                userId: 4,
+                username: "EmmaStyle",
+                userAvatar: "E",
+                userColor: "#EF476F",
+                title: "Nouvelle collection printemps",
+                content: "Découvrez mes dernières créations fashion ! 👗✨",
+                videoUrl: "",
+                thumbnail: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&auto=format&fit=crop",
+                likes: 312,
+                comments: 45,
+                shares: 21,
+                timestamp: "Il y a 1 jour",
+                type: "image"
+            },
+            {
+                id: 4,
+                userId: 5,
+                username: "TomSports",
+                userAvatar: "T",
+                userColor: "#118AB2",
+                title: "Entraînement matinal",
+                content: "Routine sportive pour commencer la journée en forme ! 💪",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                thumbnail: "",
+                likes: 167,
+                comments: 19,
+                shares: 12,
+                timestamp: "Il y a 2 jours",
+                type: "video"
+            }
+        ];
+
+        // ===== MESSAGES DE CHAT PAR DÉFAUT =====
+        const defaultMessages = [
+            { userId: 1, username: "AlexGamer", text: "Salut tout le monde ! Qui est là ?", time: "14:30" },
+            { userId: 2, username: "SarahMusic", text: "Coucou Alex ! Je viens de poster une nouvelle vidéo", time: "14:32" },
+            { userId: 4, username: "EmmaStyle", text: "Moi aussi j'ai uploadé ma nouvelle collection", time: "14:35" },
+            { userId: 5, username: "TomSports", text: "Super ! Je vais regarder ça tout de suite", time: "14:40" },
+            { userId: 1, username: "AlexGamer", text: "Quelqu'un veut faire une partie de Fortnite ?", time: "14:45" }
+        ];
+
         // ===== INITIALISATION =====
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
-            loadYouTubeVideos('tendances');
-            initializeChat();
-            setupEventListeners();
-        });
-        
-        function initializeApp() {
-            // Charger l'utilisateur depuis localStorage
-            const savedUser = localStorage.getItem('rasstube_user');
-            if (savedUser) {
-                state.currentUser = JSON.parse(savedUser);
-            }
+        function initApp() {
+            loadDatabase();
             
-            // Initialiser le player YouTube
-            if (window.YT) {
-                state.player = new YT.Player('youtube-player', {
-                    height: '100%',
-                    width: '100%',
-                    videoId: '',
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
+            if (database.currentUser) {
+                showApp();
+            } else {
+                showLoginModal();
             }
         }
-        
-        function setupEventListeners() {
-            // Recherche avec Enter
-            document.getElementById('searchInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') searchVideos();
-            });
+
+        function loadDatabase() {
+            const savedData = localStorage.getItem('rasstube_db');
             
-            // Chat avec Enter
-            document.getElementById('chatInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') sendMessage();
-            });
-            
-            // Infinite scroll
-            window.addEventListener('scroll', handleScroll);
-        }
-        
-        // ===== YOUTUBE INTEGRATION =====
-        async function loadYouTubeVideos(category = 'tendances', searchQuery = '', pageToken = '') {
-            showLoading(true);
-            state.isLoading = true;
-            
-            try {
-                let url;
-                
-                if (category === 'tendances') {
-                    url = `${YOUTUBE_API_URL}/videos?part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=20&regionCode=FR&key=${YOUTUBE_API_KEY}`;
-                } else if (searchQuery) {
-                    url = `${YOUTUBE_API_URL}/search?part=snippet&maxResults=20&q=${encodeURIComponent(searchQuery)}&type=video&key=${YOUTUBE_API_KEY}`;
-                } else {
-                    url = `${YOUTUBE_API_URL}/search?part=snippet&maxResults=20&q=${encodeURIComponent(category)}&type=video&key=${YOUTUBE_API_KEY}`;
-                }
-                
-                if (pageToken) {
-                    url += `&pageToken=${pageToken}`;
-                }
-                
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                let videos = [];
-                
-                if (category === 'tendances') {
-                    videos = data.items.map(item => ({
-                        id: item.id,
-                        title: item.snippet.title,
-                        description: item.snippet.description,
-                        channel: item.snippet.channelTitle,
-                        thumbnail: item.snippet.thumbnails.high.url,
-                        duration: formatDuration(item.contentDetails?.duration),
-                        views: formatViews(item.statistics?.viewCount),
-                        publishedAt: formatDate(item.snippet.publishedAt)
-                    }));
-                } else {
-                    // Pour les recherches, on a besoin de récupérer les détails des vidéos
-                    const videoIds = data.items.map(item => item.id.videoId).join(',');
-                    const detailsUrl = `${YOUTUBE_API_URL}/videos?part=snippet,statistics,contentDetails&id=${videoIds}&key=${YOUTUBE_API_KEY}`;
-                    
-                    const detailsResponse = await fetch(detailsUrl);
-                    const detailsData = await detailsResponse.json();
-                    
-                    videos = detailsData.items.map(item => ({
-                        id: item.id,
-                        title: item.snippet.title,
-                        description: item.snippet.description,
-                        channel: item.snippet.channelTitle,
-                        thumbnail: item.snippet.thumbnails.high.url,
-                        duration: formatDuration(item.contentDetails?.duration),
-                        views: formatViews(item.statistics?.viewCount),
-                        publishedAt: formatDate(item.snippet.publishedAt)
-                    }));
-                }
-                
-                if (pageToken) {
-                    state.videos = [...state.videos, ...videos];
-                } else {
-                    state.videos = videos;
-                }
-                
-                state.nextPageToken = data.nextPageToken;
-                renderVideos();
-                
-            } catch (error) {
-                console.error('Erreur YouTube API:', error);
-                showNotification('Erreur de chargement des vidéos');
-                
-                // Fallback avec des vidéos statiques
-                loadFallbackVideos(category);
-            } finally {
-                showLoading(false);
-                state.isLoading = false;
+            if (savedData) {
+                database = JSON.parse(savedData);
+            } else {
+                // Initialiser avec les données par défaut
+                database.users = defaultUsers;
+                database.posts = defaultPosts;
+                database.messages = defaultMessages;
+                saveDatabase();
             }
         }
-        
-        function loadFallbackVideos(category) {
-            // Vidéos de fallback par catégorie
-            const fallbackVideos = {
-                'tendances': [
-                    { id: 'dQw4w9WgXcQ', title: 'Musique Pop 2024 - Hits du moment', channel: 'Music Channel', views: '2.3M', publishedAt: 'il y a 2 jours' },
-                    { id: 'kJQP7kiw5Fk', title: 'Luis Fonsi - Despacito ft. Daddy Yankee', channel: 'LuisFonsiVEVO', views: '8.1B', publishedAt: 'il y a 6 ans' },
-                    { id: 'JGwWNGJdvx8', title: 'Ed Sheeran - Shape of You', channel: 'Ed Sheeran', views: '5.8B', publishedAt: 'il y a 7 ans' },
-                    { id: '9bZkp7q19f0', title: 'PSY - GANGNAM STYLE', channel: 'officialpsy', views: '4.7B', publishedAt: 'il y a 11 ans' }
-                ],
-                'mr bean': [
-                    { id: 'zSM4ZyVe8xs', title: 'Mr Bean - Compilation des meilleurs moments', channel: 'Mr Bean Officiel', views: '850M', publishedAt: 'il y a 3 ans' },
-                    { id: 'tPmBkHhOqWo', title: 'Mr Bean à la plage', channel: 'Bean World', views: '150M', publishedAt: 'il y a 5 ans' },
-                    { id: 'V8JsR7rETn8', title: 'Mr Bean au restaurant', channel: 'Mr Bean Comedy', views: '280M', publishedAt: 'il y a 4 ans' }
-                ],
-                'anime': [
-                    { id: 'pManp2CoycY', title: 'Demon Slayer: Kimetsu no Yaiba Opening', channel: 'Anime World', views: '85M', publishedAt: 'il y a 2 ans' },
-                    { id: '8QPy2D8Vhjk', title: 'Naruto vs Sasuke - Combat Final', channel: 'Anime Battles', views: '145M', publishedAt: 'il y a 3 ans' },
-                    { id: 'H5v3kku4y6Q', title: 'Attack on Titan Opening 1', channel: 'Anime Music', views: '250M', publishedAt: 'il y a 8 ans' }
-                ],
-                'musique': [
-                    { id: 'dQw4w9WgXcQ', title: 'Musique Pop 2024 - Hits du moment', channel: 'Music Channel', views: '2.3M', publishedAt: 'il y a 2 jours' },
-                    { id: 'kJQP7kiw5Fk', title: 'Luis Fonsi - Despacito ft. Daddy Yankee', channel: 'LuisFonsiVEVO', views: '8.1B', publishedAt: 'il y a 6 ans' },
-                    { id: 'JGwWNGJdvx8', title: 'Ed Sheeran - Shape of You', channel: 'Ed Sheeran', views: '5.8B', publishedAt: 'il y a 7 ans' }
-                ]
-            };
-            
-            state.videos = fallbackVideos[category] || fallbackVideos['tendances'];
-            renderVideos();
+
+        function saveDatabase() {
+            localStorage.setItem('rasstube_db', JSON.stringify(database));
         }
-        
-        function searchVideos() {
-            const query = document.getElementById('searchInput').value.trim();
-            if (!query) return;
-            
-            state.searchQuery = query;
-            document.getElementById('pageTitle').textContent = `Résultats pour : ${query}`;
-            
-            // Mettre à jour les catégories
-            document.querySelectorAll('.category').forEach(btn => btn.classList.remove('active'));
-            
-            loadYouTubeVideos('', query);
-            
-            // Ajouter un message dans le chat
-            addCommunityMessage(state.currentUser.name, `Je recherche : ${query}`);
+
+        // ===== AUTHENTIFICATION =====
+        function showLoginModal() {
+            document.getElementById('authModal').classList.add('active');
         }
-        
-        function searchCategory(category) {
-            state.currentCategory = category;
-            state.searchQuery = '';
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        let isLoginMode = true;
+
+        function switchAuthMode() {
+            isLoginMode = !isLoginMode;
             
-            // Mettre à jour l'interface
-            document.getElementById('pageTitle').textContent = `Catégorie : ${category}`;
-            document.getElementById('searchInput').value = '';
+            const title = document.getElementById('modalTitle');
+            const button = document.getElementById('authButton');
+            const switchText = document.getElementById('switchText');
+            const switchLink = document.getElementById('switchLink');
+            const confirmGroup = document.getElementById('confirmGroup');
+            const emailGroup = document.getElementById('emailGroup');
             
-            // Mettre à jour les boutons de catégorie
-            document.querySelectorAll('.category').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent.toLowerCase() === category.toLowerCase()) {
-                    btn.classList.add('active');
-                }
-            });
+            if (isLoginMode) {
+                title.textContent = "Connexion";
+                button.textContent = "Se connecter";
+                switchText.textContent = "Pas de compte ?";
+                switchLink.textContent = "S'inscrire";
+                confirmGroup.style.display = "none";
+                emailGroup.style.display = "none";
+            } else {
+                title.textContent = "Inscription";
+                button.textContent = "Créer un compte";
+                switchText.textContent = "Déjà un compte ?";
+                switchLink.textContent = "Se connecter";
+                confirmGroup.style.display = "block";
+                emailGroup.style.display = "block";
+            }
+        }
+
+        function handleAuth() {
+            const username = document.getElementById('authUsername').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
             
-            // Recherche intelligente selon la catégorie
-            let searchTerm = category;
-            if (category === 'tendances') {
-                loadYouTubeVideos('tendances');
+            if (!username || !password) {
+                showNotification("Veuillez remplir tous les champs");
                 return;
-            } else if (category === 'mr bean') {
-                searchTerm = 'mr bean funny moments';
-            } else if (category === 'anime') {
-                searchTerm = 'anime opening 2024';
-            } else if (category === 'jeux vidéo') {
-                searchTerm = 'gameplay 2024';
             }
             
-            loadYouTubeVideos('', searchTerm);
-            
-            // Message dans le chat
-            addCommunityMessage(state.currentUser.name, `Je regarde la catégorie ${category}`);
+            if (isLoginMode) {
+                // Connexion
+                const user = database.users.find(u => u.username === username);
+                
+                if (user) {
+                    database.currentUser = user;
+                    saveDatabase();
+                    showApp();
+                    closeModal('authModal');
+                    showNotification(`Bienvenue ${username} !`);
+                } else {
+                    showNotification("Utilisateur non trouvé");
+                }
+            } else {
+                // Inscription
+                const confirm = document.getElementById('authConfirm').value.trim();
+                const email = document.getElementById('authEmail').value.trim();
+                
+                if (password !== confirm) {
+                    showNotification("Les mots de passe ne correspondent pas");
+                    return;
+                }
+                
+                if (database.users.find(u => u.username === username)) {
+                    showNotification("Ce nom d'utilisateur existe déjà");
+                    return;
+                }
+                
+                const newUser = {
+                    id: Date.now(),
+                    username: username,
+                    avatar: username.charAt(0).toUpperCase(),
+                    color: getRandomColor(),
+                    followers: 0,
+                    following: 0,
+                    posts: 0,
+                    isOnline: true
+                };
+                
+                database.users.push(newUser);
+                database.currentUser = newUser;
+                saveDatabase();
+                
+                showApp();
+                closeModal('authModal');
+                showNotification(`Compte créé avec succès, ${username} !`);
+                
+                // Ajouter un message de bienvenue dans le chat
+                const welcomeMessage = {
+                    userId: newUser.id,
+                    username: "Système",
+                    text: `Bienvenue ${username} dans la communauté Rasstube ! 🎉`,
+                    time: getCurrentTime()
+                };
+                database.messages.push(welcomeMessage);
+                saveDatabase();
+                updateChat();
+            }
         }
-        
-        // ===== RENDER VIDEOS =====
-        function renderVideos() {
-            const grid = document.getElementById('videosGrid');
+
+        function logout() {
+            database.currentUser = null;
+            saveDatabase();
+            showLoginModal();
+        }
+
+        // ===== AFFICHAGE PRINCIPAL =====
+        function showApp() {
+            updateUserAvatar();
+            loadFeed();
+        }
+
+        function updateUserAvatar() {
+            if (database.currentUser) {
+                const avatar = document.getElementById('userAvatar');
+                avatar.textContent = database.currentUser.avatar;
+                avatar.style.background = `linear-gradient(135deg, ${database.currentUser.color}, var(--secondary))`;
+            }
+        }
+
+        function loadFeed() {
+            const content = document.getElementById('mainContent');
             
-            if (state.videos.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-                        <i class="fas fa-video-slash" style="font-size: 48px; color: var(--gray); margin-bottom: 20px;"></i>
-                        <h3 style="color: var(--light); margin-bottom: 10px;">Aucune vidéo trouvée</h3>
-                        <p style="color: var(--gray);">Essayez une autre recherche</p>
+            let html = `
+                <div class="create-post">
+                    <textarea class="post-input" id="newPostText" placeholder="Partagez quelque chose avec la communauté..."></textarea>
+                    <div class="post-actions">
+                        <button class="post-action" onclick="showUploadModal()">
+                            <i class="fas fa-video"></i>
+                            <span>Vidéo</span>
+                        </button>
+                        <button class="post-action" onclick="uploadImage()">
+                            <i class="fas fa-image"></i>
+                            <span>Photo</span>
+                        </button>
+                        <button class="post-action" onclick="createTextPost()">
+                            <i class="fas fa-edit"></i>
+                            <span>Texte</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Afficher les posts
+            database.posts.forEach(post => {
+                html += createPostHtml(post);
+            });
+            
+            content.innerHTML = html;
+        }
+
+        function createPostHtml(post) {
+            const isLiked = post.likedBy ? post.likedBy.includes(database.currentUser.id) : false;
+            
+            let mediaHtml = '';
+            
+            if (post.type === 'video' && post.videoUrl) {
+                mediaHtml = `
+                    <div class="post-video">
+                        <video controls>
+                            <source src="${post.videoUrl}" type="video/mp4">
+                            Votre navigateur ne supporte pas les vidéos.
+                        </video>
                     </div>
                 `;
+            } else if (post.type === 'image' && post.thumbnail) {
+                mediaHtml = `
+                    <div class="post-image">
+                        <img src="${post.thumbnail}" alt="${post.title}">
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="post" id="post-${post.id}">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background: ${post.userColor}">${post.userAvatar}</div>
+                        <div class="post-user">
+                            <div class="post-name">${post.username}</div>
+                            <div class="post-time">${post.timestamp}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <h3>${post.title}</h3>
+                        <p>${post.content}</p>
+                    </div>
+                    ${mediaHtml}
+                    <div class="post-stats">
+                        <span>${post.likes} J'aime</span>
+                        <span>${post.comments} Commentaires</span>
+                        <span>${post.shares} Partages</span>
+                    </div>
+                    <div class="post-actions-bar">
+                        <button class="post-btn ${isLiked ? 'liked' : ''}" onclick="likePost(${post.id})">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>J'aime</span>
+                        </button>
+                        <button class="post-btn" onclick="commentOnPost(${post.id})">
+                            <i class="fas fa-comment"></i>
+                            <span>Commenter</span>
+                        </button>
+                        <button class="post-btn" onclick="sharePost(${post.id})">
+                            <i class="fas fa-share"></i>
+                            <span>Partager</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== UPLOAD DE VIDÉOS =====
+        function showUploadModal() {
+            if (!database.currentUser) {
+                showLoginModal();
                 return;
             }
             
-            grid.innerHTML = state.videos.map(video => `
-                <div class="video-card" onclick="playVideo('${video.id}')">
-                    <div class="video-thumbnail">
-                        <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
-                        <div class="video-duration">${video.duration || '5:30'}</div>
-                    </div>
-                    <div class="video-info">
-                        <h3 class="video-title">${video.title}</h3>
-                        <div class="video-channel">
-                            <i class="fas fa-user-circle"></i>
-                            <span>${video.channel}</span>
-                        </div>
-                        <div class="video-stats">
-                            <span>${video.views || '1M'} vues</span>
-                            <span> • ${video.publishedAt || 'il y a 2 mois'}</span>
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        let selectedVideo = null;
+        let selectedImage = null;
+
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 500 * 1024 * 1024) { // 500MB
+                showNotification("La vidéo est trop volumineuse (max 500MB)");
+                return;
+            }
+            
+            const url = URL.createObjectURL(file);
+            selectedVideo = url;
+            
+            document.getElementById('uploadPreview').style.display = 'block';
+            document.getElementById('videoPreview').style.display = 'block';
+            document.getElementById('videoPreview').src = url;
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 10 * 1024 * 1024) { // 10MB
+                showNotification("L'image est trop volumineuse (max 10MB)");
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedImage = e.target.result;
+                
+                document.getElementById('uploadPreview').style.display = 'block';
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('videoPreview').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function publishPost() {
+            if (!database.currentUser) return;
+            
+            const title = document.getElementById('postTitle').value.trim();
+            const description = document.getElementById('postDescription').value.trim();
+            
+            if (!title) {
+                showNotification("Veuillez entrer un titre");
+                return;
+            }
+            
+            let mediaUrl = selectedVideo || selectedImage;
+            if (!mediaUrl) {
+                showNotification("Veuillez sélectionner une vidéo ou une image");
+                return;
+            }
+            
+            const newPost = {
+                id: Date.now(),
+                userId: database.currentUser.id,
+                username: database.currentUser.username,
+                userAvatar: database.currentUser.avatar,
+                userColor: database.currentUser.color,
+                title: title,
+                content: description,
+                videoUrl: selectedVideo ? selectedVideo : "",
+                thumbnail: selectedImage ? selectedImage : "",
+                likes: 0,
+                comments: 0,
+                shares: 0,
+                timestamp: "À l'instant",
+                type: selectedVideo ? "video" : "image",
+                likedBy: []
+            };
+            
+            database.posts.unshift(newPost);
+            saveDatabase();
+            
+            // Mettre à jour le compte de posts de l'utilisateur
+            const user = database.users.find(u => u.id === database.currentUser.id);
+            if (user) {
+                user.posts++;
+                saveDatabase();
+            }
+            
+            closeModal('uploadModal');
+            showNotification("Votre vidéo a été publiée !");
+            loadFeed();
+            
+            // Réinitialiser
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postDescription').value = '';
+            selectedVideo = null;
+            selectedImage = null;
+            document.getElementById('uploadPreview').style.display = 'none';
+        }
+
+        function uploadImage() {
+            document.getElementById('imageInput').click();
+        }
+
+        function createTextPost() {
+            const text = document.getElementById('newPostText').value.trim();
+            if (!text) {
+                showNotification("Veuillez écrire quelque chose");
+                return;
+            }
+            
+            const newPost = {
+                id: Date.now(),
+                userId: database.currentUser.id,
+                username: database.currentUser.username,
+                userAvatar: database.currentUser.avatar,
+                userColor: database.currentUser.color,
+                title: "Nouveau post",
+                content: text,
+                videoUrl: "",
+                thumbnail: "",
+                likes: 0,
+                comments: 0,
+                shares: 0,
+                timestamp: "À l'instant",
+                type: "text",
+                likedBy: []
+            };
+            
+            database.posts.unshift(newPost);
+            saveDatabase();
+            
+            document.getElementById('newPostText').value = '';
+            showNotification("Post publié !");
+            loadFeed();
+        }
+
+        // ===== INTERACTIONS =====
+        function likePost(postId) {
+            const post = database.posts.find(p => p.id === postId);
+            if (!post) return;
+            
+            if (!post.likedBy) {
+                post.likedBy = [];
+            }
+            
+            const userId = database.currentUser.id;
+            const index = post.likedBy.indexOf(userId);
+            
+            if (index === -1) {
+                // Ajouter le like
+                post.likedBy.push(userId);
+                post.likes++;
+            } else {
+                // Retirer le like
+                post.likedBy.splice(index, 1);
+                post.likes--;
+            }
+            
+            saveDatabase();
+            
+            // Mettre à jour l'affichage
+            const postElement = document.getElementById(`post-${postId}`);
+            if (postElement) {
+                const likeBtn = postElement.querySelector('.post-btn');
+                const stats = postElement.querySelector('.post-stats span:first-child');
+                
+                if (likeBtn && stats) {
+                    likeBtn.classList.toggle('liked');
+                    stats.textContent = `${post.likes} J'aime`;
+                }
+            }
+        }
+
+        function commentOnPost(postId) {
+            const comment = prompt("Écrivez votre commentaire :");
+            if (comment && comment.trim()) {
+                const post = database.posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments++;
+                    saveDatabase();
+                    
+                    showNotification("Commentaire ajouté !");
+                    
+                    // Mettre à jour l'affichage
+                    const postElement = document.getElementById(`post-${postId}`);
+                    if (postElement) {
+                        const stats = postElement.querySelectorAll('.post-stats span')[1];
+                        if (stats) {
+                            stats.textContent = `${post.comments} Commentaires`;
+                        }
+                    }
+                }
+            }
+        }
+
+        function sharePost(postId) {
+            const post = database.posts.find(p => p.id === postId);
+            if (post) {
+                post.shares++;
+                saveDatabase();
+                
+                showNotification("Post partagé !");
+                
+                // Mettre à jour l'affichage
+                const postElement = document.getElementById(`post-${postId}`);
+                if (postElement) {
+                    const stats = postElement.querySelectorAll('.post-stats span')[2];
+                    if (stats) {
+                        stats.textContent = `${post.shares} Partages`;
+                    }
+                }
+            }
+        }
+
+        // ===== PROFIL =====
+        function loadProfile() {
+            if (!database.currentUser) return;
+            
+            const content = document.getElementById('mainContent');
+            const user = database.currentUser;
+            const userPosts = database.posts.filter(p => p.userId === user.id);
+            
+            let html = `
+                <div class="profile-header">
+                    <div class="profile-avatar" style="background: ${user.color}">${user.avatar}</div>
+                    <div class="profile-info">
+                        <h1 class="profile-name">${user.username}</h1>
+                        <p style="color: var(--gray);">Membre depuis aujourd'hui</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-value">${userPosts.length}</span>
+                                <span class="stat-label">Publications</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">${user.followers}</span>
+                                <span class="stat-label">Abonnés</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">${user.following}</span>
+                                <span class="stat-label">Abonnements</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
-        
-        // ===== VIDEO PLAYER =====
-        function playVideo(videoId) {
-            const modal = document.getElementById('videoModal');
-            const video = state.videos.find(v => v.id === videoId);
+            `;
             
-            if (video) {
-                document.getElementById('videoTitle').textContent = video.title;
-                document.getElementById('videoDescription').textContent = video.description || 'Pas de description disponible';
-                state.currentVideo = video;
-            }
-            
-            if (state.player) {
-                state.player.loadVideoById(videoId);
-            }
-            
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            
-            // Ajouter à l'historique
-            addToHistory(videoId, video.title);
-            
-            // Message dans le chat
-            addCommunityMessage(state.currentUser.name, `Je regarde : ${video.title}`);
-        }
-        
-        function closeVideo() {
-            const modal = document.getElementById('videoModal');
-            
-            if (state.player) {
-                state.player.stopVideo();
-            }
-            
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function onPlayerReady(event) {
-            console.log('Player YouTube prêt');
-        }
-        
-        function onPlayerStateChange(event) {
-            // Gérer les changements d'état du player
-        }
-        
-        // ===== CHAT SYSTEM =====
-        function initializeChat() {
-            renderCommunityChat();
-            renderAiChat();
-        }
-        
-        function switchChat(mode) {
-            state.chatMode = mode;
-            
-            // Mettre à jour les onglets
-            document.querySelectorAll('.chat-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.chat-content').forEach(content => content.style.display = 'none');
-            
-            if (mode === 'community') {
-                document.querySelector('.chat-tab[onclick*="community"]').classList.add('active');
-                document.getElementById('communityChat').style.display = 'flex';
+            if (userPosts.length === 0) {
+                html += `
+                    <div style="text-align: center; padding: 40px; color: var(--gray);">
+                        <i class="fas fa-video-slash" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <h3>Aucune publication</h3>
+                        <p>Commencez par uploader votre première vidéo !</p>
+                        <button class="upload-btn" style="margin-top: 20px;" onclick="showUploadModal()">
+                            <i class="fas fa-plus"></i>
+                            <span>Uploader une vidéo</span>
+                        </button>
+                    </div>
+                `;
             } else {
-                document.querySelector('.chat-tab[onclick*="ai"]').classList.add('active');
-                document.getElementById('aiChat').style.display = 'flex';
+                userPosts.forEach(post => {
+                    html += createPostHtml(post);
+                });
             }
             
-            // Ajuster la hauteur du chat
-            adjustChatHeight();
+            content.innerHTML = html;
         }
-        
-        function sendMessage() {
+
+        // ===== CHAT =====
+        let isChatOpen = false;
+
+        function toggleChat() {
+            isChatOpen = !isChatOpen;
+            const chat = document.getElementById('chatContainer');
+            
+            if (isChatOpen) {
+                chat.style.display = 'flex';
+                updateChat();
+                updateOnlineCount();
+            } else {
+                chat.style.display = 'none';
+            }
+        }
+
+        function updateOnlineCount() {
+            const onlineUsers = database.users.filter(u => u.isOnline).length;
+            document.getElementById('onlineCount').textContent = `${onlineUsers} en ligne`;
+        }
+
+        function updateChat() {
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            let html = '';
+            
+            database.messages.forEach(msg => {
+                const user = database.users.find(u => u.id === msg.userId) || 
+                           { username: msg.username, avatar: "?", color: "#666" };
+                
+                const isCurrentUser = msg.userId === database.currentUser?.id;
+                
+                html += `
+                    <div class="message ${isCurrentUser ? 'sent' : 'received'}">
+                        <div class="message-sender">${user.username}</div>
+                        <div class="message-text">${msg.text}</div>
+                        <div class="message-time">${msg.time}</div>
+                    </div>
+                `;
+            });
+            
+            messagesContainer.innerHTML = html;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             
-            if (!text) return;
+            if (!text || !database.currentUser) return;
             
-            if (state.chatMode === 'community') {
-                addCommunityMessage(state.currentUser.name, text);
-            } else {
-                addAiMessage(text, 'user');
-                generateAiResponse(text);
-            }
+            const newMessage = {
+                userId: database.currentUser.id,
+                username: database.currentUser.username,
+                text: text,
+                time: getCurrentTime()
+            };
+            
+            database.messages.push(newMessage);
+            saveDatabase();
             
             input.value = '';
+            updateChat();
+            
+            // Simuler des réponses automatiques
+            setTimeout(() => generateAutoResponse(text), 1000 + Math.random() * 2000);
         }
-        
-        function addCommunityMessage(username, text) {
-            const message = {
-                userId: state.currentUser.id,
-                name: username,
-                text: text,
-                time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-            };
+
+        function generateAutoResponse(userMessage) {
+            const onlineUsers = database.users.filter(u => u.isOnline && u.id !== database.currentUser.id);
             
-            state.communityMessages.push(message);
-            renderCommunityChat();
+            if (onlineUsers.length === 0) return;
             
-            // Si ce n'est pas l'utilisateur actuel, générer une réponse automatique
-            if (username !== state.currentUser.name) {
-                setTimeout(() => generateCommunityResponse(text), 1000 + Math.random() * 2000);
-            }
-        }
-        
-        function addAiMessage(text, type = 'ai') {
-            const message = {
-                type: type,
-                text: text,
-                time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-            };
-            
-            if (type === 'user') {
-                message.name = state.currentUser.name;
-            }
-            
-            state.aiMessages.push(message);
-            renderAiChat();
-        }
-        
-        function renderCommunityChat() {
-            const container = document.getElementById('communityChat');
-            container.innerHTML = '';
-            
-            state.communityMessages.forEach(msg => {
-                const user = msg.userId === 0 ? state.currentUser : 
-                            COMMUNITY_USERS.find(u => u.id === msg.userId) || 
-                            { name: 'Utilisateur', avatar: 'U', color: '#666' };
-                
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${msg.userId === 0 ? 'user' : 'community'}`;
-                messageDiv.innerHTML = `
-                    <div class="message-header">
-                        <div class="message-avatar" style="background: ${user.color}">${user.avatar}</div>
-                        <div class="message-username">${msg.name}</div>
-                    </div>
-                    <div class="message-text">${msg.text}</div>
-                    <div class="message-time">${msg.time}</div>
-                `;
-                
-                container.appendChild(messageDiv);
-            });
-            
-            container.scrollTop = container.scrollHeight;
-        }
-        
-        function renderAiChat() {
-            const container = document.getElementById('aiChat');
-            container.innerHTML = '';
-            
-            state.aiMessages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${msg.type === 'user' ? 'user' : 'ai'}`;
-                
-                if (msg.type === 'user') {
-                    messageDiv.innerHTML = `
-                        <div class="message-header">
-                            <div class="message-avatar" style="background: ${state.currentUser.color}">${state.currentUser.avatar}</div>
-                            <div class="message-username">${msg.name}</div>
-                        </div>
-                        <div class="message-text">${msg.text}</div>
-                        <div class="message-time">${msg.time}</div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="message-header">
-                            <div class="message-avatar" style="background: #8A2BE2">AI</div>
-                            <div class="message-username">IA Rasstube</div>
-                        </div>
-                        <div class="message-text">${msg.text}</div>
-                        <div class="message-time">${msg.time}</div>
-                    `;
-                }
-                
-                container.appendChild(messageDiv);
-            });
-            
-            container.scrollTop = container.scrollHeight;
-        }
-        
-        function generateCommunityResponse(userMessage) {
+            const randomUser = onlineUsers[Math.floor(Math.random() * onlineUsers.length)];
             const responses = [
-                "Intéressant ! J'adore cette vidéo aussi.",
-                "Je viens juste de la regarder, c'est génial !",
-                "Tu as vu les autres vidéos de cette chaîne ?",
-                "Je te recommande aussi la chaîne suivante...",
-                "C'est mon créateur préféré sur YouTube !",
-                "As-tu d'autres recommandations ?",
-                "Je vais regarder ça tout de suite !",
-                "Merci pour le partage !"
+                "Intéressant ! J'aime beaucoup cette idée.",
+                "Je viens de regarder ta dernière vidéo, c'était génial !",
+                "Tu devrais voir ma nouvelle publication aussi.",
+                "On pourrait collaborer sur une vidéo ensemble ?",
+                "C'est exactement ce que je pensais !",
+                "J'ai une question sur ton dernier upload...",
+                "Super discussion !"
             ];
             
-            const randomUser = COMMUNITY_USERS[Math.floor(Math.random() * COMMUNITY_USERS.length)];
             const randomResponse = responses[Math.floor(Math.random() * responses.length)];
             
-            addCommunityMessage(randomUser.name, randomResponse);
-        }
-        
-        function generateAiResponse(userMessage) {
-            const msg = userMessage.toLowerCase();
-            let response = '';
+            const autoMessage = {
+                userId: randomUser.id,
+                username: randomUser.username,
+                text: randomResponse,
+                time: getCurrentTime()
+            };
             
-            if (msg.includes('bonjour') || msg.includes('salut') || msg.includes('coucou')) {
-                response = `Bonjour ${state.currentUser.name} ! Comment puis-je vous aider aujourd'hui ?`;
-            } else if (msg.includes('mr bean') || msg.includes('mrbean')) {
-                response = "Mr Bean ! J'adore ses vidéos. Je peux vous montrer toutes ses vidéos. Tapez 'Mr Bean' dans la barre de recherche !";
-                setTimeout(() => {
-                    document.getElementById('searchInput').value = 'Mr Bean';
-                    searchVideos();
-                }, 1000);
-            } else if (msg.includes('anime') || msg.includes('animé')) {
-                response = "Pour les animés, cherchez 'anime' dans la barre de recherche. Je vais vous montrer les meilleures ouvertures et AMV !";
-            } else if (msg.includes('musique') || msg.includes('music')) {
-                response = "La musique ? Parfait ! Cherchez 'musique' ou le nom de votre artiste préféré.";
-            } else if (msg.includes('cherche') || msg.includes('trouve') || msg.includes('vidéo')) {
-                const searchTerm = extractSearchTerm(userMessage);
-                response = `Je vais chercher des vidéos sur "${searchTerm}" pour vous...`;
-                setTimeout(() => {
-                    document.getElementById('searchInput').value = searchTerm;
-                    searchVideos();
-                }, 1000);
-            } else if (msg.includes('aide') || msg.includes('aide-moi')) {
-                response = "Je peux vous aider à :\n1. Trouver n'importe quelle vidéo YouTube\n2. Recommander du contenu\n3. Discuter avec la communauté\nQue souhaitez-vous faire ?";
-            } else if (msg.includes('merci')) {
-                response = "De rien ! N'hésitez pas si vous avez besoin d'autre chose. 😊";
-            } else {
-                response = "Je peux vous aider à trouver des vidéos sur YouTube ! Demandez-moi par exemple : 'Montre-moi des vidéos de cuisine' ou 'Trouve des tutoriels de programmation'";
-            }
-            
-            setTimeout(() => {
-                addAiMessage(response);
-            }, 500);
+            database.messages.push(autoMessage);
+            saveDatabase();
+            updateChat();
         }
-        
-        function extractSearchTerm(message) {
-            const searchWords = message.split(' ').filter(word => 
-                !['cherche', 'trouve', 'montre', 'vidéo', 'vidéos', 'de', 'des', 'sur'].includes(word.toLowerCase())
-            );
-            return searchWords.join(' ') || 'YouTube';
-        }
-        
+
         // ===== FONCTIONS UTILITAIRES =====
-        function formatDuration(duration) {
-            if (!duration) return '5:30';
-            
-            const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-            if (!match) return '5:30';
-            
-            const hours = (match[1] || '').replace('H', '');
-            const minutes = (match[2] || '').replace('M', '');
-            const seconds = (match[3] || '').replace('S', '');
-            
-            let result = '';
-            if (hours) result += hours + ':';
-            result += (minutes || '0').padStart(2, '0') + ':';
-            result += (seconds || '0').padStart(2, '0');
-            
-            return result;
+        function getRandomColor() {
+            const colors = [
+                "#FF6B6B", "#4ECDC4", "#FFD166", "#EF476F", "#118AB2",
+                "#8A2BE2", "#32CD32", "#FFA500", "#FF1493", "#00CED1"
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
-        
-        function formatViews(views) {
-            if (!views) return '1M';
-            
-            const num = parseInt(views);
-            if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
-            }
-            return num.toString();
-        }
-        
-        function formatDate(dateString) {
-            const date = new Date(dateString);
+
+        function getCurrentTime() {
             const now = new Date();
-            const diff = now - date;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            
-            if (days === 0) return "Aujourd'hui";
-            if (days === 1) return "Hier";
-            if (days < 7) return `Il y a ${days} jours`;
-            if (days < 30) return `Il y a ${Math.floor(days / 7)} semaines`;
-            if (days < 365) return `Il y a ${Math.floor(days / 30)} mois`;
-            return `Il y a ${Math.floor(days / 365)} ans`;
+            return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         }
-        
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-        }
-        
-        function showNotification(message, type = 'info') {
+
+        function showNotification(message) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.style.display = 'block';
@@ -1268,128 +1654,88 @@
                 notification.style.display = 'none';
             }, 3000);
         }
-        
+
         function toggleMenu() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('active');
         }
-        
-        function toggleChat() {
-            const chat = document.getElementById('chatSidebar');
-            chat.style.display = chat.style.display === 'none' ? 'flex' : 'none';
-        }
-        
-        function showLogin() {
-            const name = prompt("Entrez votre nom d'utilisateur :");
-            if (name) {
-                state.currentUser = {
-                    id: 0,
-                    name: name,
-                    avatar: name.charAt(0).toUpperCase(),
-                    color: '#FF2A2A'
-                };
-                
-                localStorage.setItem('rasstube_user', JSON.stringify(state.currentUser));
-                showNotification(`Bienvenue ${name} !`);
-                
-                // Ajouter un message de bienvenue dans le chat
-                addCommunityMessage('Système', `${name} a rejoint le chat !`);
-            }
-        }
-        
-        function adjustChatHeight() {
-            const chatContents = document.querySelectorAll('.chat-content');
-            chatContents.forEach(content => {
-                content.style.maxHeight = (window.innerHeight - 150) + 'px';
-            });
-        }
-        
-        function handleScroll() {
-            if (state.isLoading || !state.nextPageToken) return;
+
+        function searchContent() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
             
-            const scrollTop = window.pageYOffset;
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            
-            if (scrollTop + windowHeight >= documentHeight - 100) {
-                loadYouTubeVideos(state.currentCategory, state.searchQuery, state.nextPageToken);
-            }
-        }
-        
-        function addToHistory(videoId, title) {
-            if (!state.currentUser.name) return;
-            
-            let history = JSON.parse(localStorage.getItem('rasstube_history') || '[]');
-            history.unshift({
-                id: videoId,
-                title: title,
-                watchedAt: new Date().toISOString()
-            });
-            
-            // Garder seulement 50 vidéos
-            history = history.slice(0, 50);
-            localStorage.setItem('rasstube_history', JSON.stringify(history));
-        }
-        
-        function loadHome() {
-            document.getElementById('pageTitle').textContent = 'Accueil - Vidéos tendances';
-            loadYouTubeVideos('tendances');
-        }
-        
-        function loadTrending() {
-            document.getElementById('pageTitle').textContent = 'Tendances';
-            searchCategory('tendances');
-        }
-        
-        function loadSubscriptions() {
-            showNotification('Fonctionnalité abonnements à venir !');
-        }
-        
-        function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('rasstube_history') || '[]');
-            if (history.length === 0) {
-                showNotification('Aucun historique de visionnage');
+            if (!query) {
+                loadFeed();
                 return;
             }
             
-            // Simuler des vidéos depuis l'historique
-            state.videos = history.map(item => ({
-                id: item.id,
-                title: item.title,
-                channel: 'Historique',
-                views: 'Vu récemment',
-                publishedAt: 'Regardé récemment'
-            }));
+            const results = database.posts.filter(post => 
+                post.title.toLowerCase().includes(query) || 
+                post.content.toLowerCase().includes(query) ||
+                post.username.toLowerCase().includes(query)
+            );
             
-            document.getElementById('pageTitle').textContent = 'Historique';
-            renderVideos();
+            const content = document.getElementById('mainContent');
+            
+            if (results.length === 0) {
+                content.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-search" style="font-size: 48px; color: var(--gray); margin-bottom: 20px;"></i>
+                        <h3>Aucun résultat trouvé</h3>
+                        <p style="color: var(--gray);">Essayez d'autres mots-clés</p>
+                    </div>
+                `;
+            } else {
+                let html = `<h2 style="margin-bottom: 20px;">Résultats pour "${query}"</h2>`;
+                results.forEach(post => {
+                    html += createPostHtml(post);
+                });
+                content.innerHTML = html;
+            }
         }
-        
-        function loadLiked() {
-            showNotification('Fonctionnalité vidéos aimées à venir !');
+
+        function loadCommunity() {
+            const content = document.getElementById('mainContent');
+            
+            let html = '<h2 style="margin-bottom: 20px;">Découvrir la communauté</h2>';
+            
+            database.users.forEach(user => {
+                if (user.id !== database.currentUser.id) {
+                    html += `
+                        <div style="background: var(--card-bg); border-radius: 15px; padding: 20px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px;">
+                            <div class="post-avatar" style="background: ${user.color}">${user.avatar}</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">${user.username}</div>
+                                <div style="color: var(--gray); font-size: 14px;">${user.posts} publications • ${user.followers} abonnés</div>
+                            </div>
+                            <button style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer;">
+                                Suivre
+                            </button>
+                        </div>
+                    `;
+                }
+            });
+            
+            content.innerHTML = html;
         }
-        
-        // ===== EXPOSER LES FONCTIONS =====
-        window.searchVideos = searchVideos;
-        window.searchCategory = searchCategory;
-        window.playVideo = playVideo;
-        window.closeVideo = closeVideo;
-        window.sendMessage = sendMessage;
-        window.switchChat = switchChat;
-        window.toggleMenu = toggleMenu;
-        window.toggleChat = toggleChat;
-        window.showLogin = showLogin;
-        window.loadHome = loadHome;
-        window.loadTrending = loadTrending;
-        window.loadSubscriptions = loadSubscriptions;
-        window.loadHistory = loadHistory;
-        window.loadLiked = loadLiked;
-        
-        // Ajuster la hauteur du chat au redimensionnement
-        window.addEventListener('resize', adjustChatHeight);
-        window.addEventListener('load', adjustChatHeight);
-        
-        console.log('RASSTUBE ULTIMATE - Application chargée avec succès !');
+
+        function showSettings() {
+            showNotification("Paramètres - Fonctionnalité à venir !");
+        }
+
+        // ===== INITIALISER L'APPLICATION =====
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Simuler des utilisateurs en ligne
+        setInterval(() => {
+            database.users.forEach(user => {
+                if (Math.random() > 0.3) { // 70% de chance d'être en ligne
+                    user.isOnline = true;
+                }
+            });
+            if (isChatOpen) {
+                updateOnlineCount();
+            }
+        }, 30000); // Toutes les 30 secondes
     </script>
 </body>
 </html>
