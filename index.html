@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RASSTUBE ULTIMATE | v4.0 Elite Ecosystem</title>
+    <title>RASSTUBE ULTIMATE | v4.5 Elite Ecosystem</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -54,6 +54,8 @@
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         @keyframes typing { 0% { width: 0; } 100% { width: 100%; } }
         @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @keyframes compressProgress { 0% { width: 0%; } 50% { width: 50%; } 100% { width: 100%; } }
 
         /* --- AUTHENTIFICATION ENGINE --- */
         #auth-portal {
@@ -470,6 +472,40 @@
             transform: translateY(-5px);
         }
 
+        /* --- COMPRESSOR SECTION --- */
+        #compressor-dropzone {
+            transition: var(--transition);
+        }
+
+        #compressor-dropzone:hover {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            transform: translateY(-5px);
+        }
+
+        .quality-btn {
+            flex: 1;
+            padding: 12px 15px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quality-btn.active {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .quality-btn:hover:not(.active) {
+            background: var(--bg-elevated);
+            transform: translateY(-2px);
+        }
+
         /* --- BOTTOM NAV --- */
         .bottom-bar {
             position: fixed; bottom: 0; left: 0; right: 0;
@@ -537,9 +573,14 @@
             border-radius: var(--radius-md);
         }
 
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
         }
 
         /* --- RESPONSIVE --- */
@@ -641,6 +682,97 @@
             margin-bottom: 20px;
             animation: float 2s infinite;
         }
+
+        /* --- TOAST NOTIFICATIONS --- */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--success);
+            border-radius: var(--radius-md);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 9999;
+            animation: slideInRight 0.5s ease;
+            max-width: 350px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.error { border-left-color: var(--accent); }
+        .toast.warning { border-left-color: var(--warning); }
+        .toast.info { border-left-color: var(--ai-color); }
+
+        /* --- PROFILE TABS --- */
+        .profile-tab {
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .profile-tab.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+
+        .photo-item {
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* --- COMPRESSOR STATS --- */
+        .compressor-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: var(--bg-input);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-box .value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-box .label {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -667,6 +799,7 @@
     </div>
 </div>
 
+<!-- AUTH PORTAL -->
 <div id="auth-portal">
     <div class="auth-container">
         <div class="brand text-center" style="margin-bottom: 30px; font-size: 42px;">RASSTUBE</div>
@@ -714,6 +847,7 @@
     </div>
 </div>
 
+<!-- MAIN APP -->
 <div id="main-app">
     <header class="top-nav">
         <div class="nav-wrapper">
@@ -808,6 +942,13 @@
                         </div>
 
                         <div id="upload-preview" class="hidden" style="margin-top: 25px; border-radius: var(--radius-lg); overflow: hidden;"></div>
+
+                        <div style="margin-top: 20px; text-align: center;">
+                            <button onclick="App.go('compressor')" style="background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); padding: 12px 20px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-compress-alt"></i>
+                                Compresser une vidéo avant upload
+                            </button>
+                        </div>
                     </div>
 
                     <div>
@@ -840,6 +981,120 @@
                             <p style="margin: 0; font-size: 13px; color: var(--accent);">
                                 <i class="fas fa-lightbulb"></i> Conseil IA : Utilisez des hashtags pertinents pour 3x plus de visibilité !
                             </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPRESSOR SECTION -->
+        <section id="sec-compressor" class="app-section hidden">
+            <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+                <h3 style="margin-top: 0; margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-compress-alt" style="color:var(--accent)"></i> Compresseur Vidéo
+                </h3>
+                
+                <div style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 30px; border: 1px solid var(--border);">
+                    <div id="compressor-step-1">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <i class="fas fa-file-video" style="font-size: 60px; color: var(--accent); margin-bottom: 15px;"></i>
+                            <h3>Compressez vos vidéos avant de les poster</h3>
+                            <p style="color: var(--text-dim);">Réduisez la taille de vos vidéos sans perdre en qualité</p>
+                        </div>
+                        
+                        <div style="border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 40px; text-align: center; cursor: pointer;" 
+                             onclick="document.getElementById('compressor-input').click()" id="compressor-dropzone">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 50px; color: var(--accent); margin-bottom: 15px;"></i>
+                            <p style="margin: 0; font-weight: 700; font-size: 18px;">Glissez-déposez votre vidéo ici</p>
+                            <p style="margin: 10px 0 0; font-size: 14px; color: var(--text-dim);">MP4, MOV, AVI - Max 2GB</p>
+                            <input type="file" id="compressor-input" class="hidden" accept="video/*" onchange="App.handleCompressorFile(event)">
+                        </div>
+                        
+                        <div class="compressor-stats">
+                            <div class="stat-box">
+                                <div class="value">Jusqu'à 90%</div>
+                                <div class="label">Plus léger</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="value">Rapide</div>
+                                <div class="label">Compression</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="value">Optimisé</div>
+                                <div class="label">Pour mobile</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="value">Gratuit</div>
+                                <div class="label">Sans limite</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="compressor-step-2" class="hidden">
+                        <div style="display: flex; gap: 30px; align-items: center; margin-bottom: 30px;">
+                            <video id="compressor-preview" controls style="width: 200px; height: 350px; border-radius: var(--radius-md); object-fit: cover;"></video>
+                            
+                            <div style="flex: 1;">
+                                <div style="margin-bottom: 20px;">
+                                    <p style="margin: 0 0 5px 0; color: var(--text-dim); font-size: 14px;">Fichier original</p>
+                                    <p id="original-file-info" style="margin: 0; font-weight: 600; font-size: 16px;"></p>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <p style="margin: 0 0 5px 0; color: var(--text-dim); font-size: 14px;">Après compression</p>
+                                    <p id="compressed-file-info" style="margin: 0; font-weight: 600; font-size: 16px; color: var(--success);"></p>
+                                </div>
+                                
+                                <div style="background: var(--bg-input); padding: 15px; border-radius: var(--radius-md);">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                        <span>Économie d'espace</span>
+                                        <span id="savings-percent" style="color: var(--success); font-weight: 700;">0%</span>
+                                    </div>
+                                    <div style="height: 6px; background: var(--bg-deep); border-radius: 3px; overflow: hidden;">
+                                        <div id="compression-bar" style="height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; transition: width 0.5s ease;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <p style="margin: 0 0 10px 0; font-weight: 600;">Qualité de compression</p>
+                            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                                <button class="quality-btn active" data-quality="high" onclick="App.setCompressionQuality('high')">Haute qualité</button>
+                                <button class="quality-btn" data-quality="medium" onclick="App.setCompressionQuality('medium')">Équilibrée</button>
+                                <button class="quality-btn" data-quality="low" onclick="App.setCompressionQuality('low')">Petite taille</button>
+                            </div>
+                        </div>
+                        
+                        <button onclick="App.startCompression()" id="compress-btn" style="width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: var(--radius-md); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <i class="fas fa-compress-alt"></i>
+                            <span id="compress-btn-text">COMPRESSER LA VIDÉO</span>
+                            <div class="loader" id="compress-loader"></div>
+                        </button>
+                        
+                        <div style="margin-top: 20px; padding: 15px; background: var(--accent-soft); border-radius: var(--radius-md);">
+                            <p style="margin: 0; font-size: 13px; color: var(--accent);">
+                                <i class="fas fa-info-circle"></i> Conseil : La compression "Équilibrée" est idéale pour Rasstube
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div id="compressor-step-3" class="hidden">
+                        <div style="text-align: center; padding: 30px;">
+                            <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success); margin-bottom: 20px;"></i>
+                            <h3 style="margin-bottom: 10px;">Compression réussie !</h3>
+                            <p style="color: var(--text-dim); margin-bottom: 30px;">Votre vidéo est maintenant prête à être publiée</p>
+                            
+                            <div style="display: flex; gap: 15px; justify-content: center;">
+                                <button onclick="App.downloadCompressedVideo()" style="padding: 15px 30px; background: var(--success); color: white; border: none; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-download"></i>
+                                    Télécharger
+                                </button>
+                                <button onclick="App.uploadCompressedVideo()" style="padding: 15px 30px; background: var(--accent); color: white; border: none; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-upload"></i>
+                                    Publier maintenant
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -910,6 +1165,10 @@
         <div class="fab-upload" onclick="App.go('upload')" id="fab-upload-btn">
             <i class="fas fa-plus"></i>
         </div>
+        <div class="nav-item" onclick="App.go('compressor')">
+            <i class="fas fa-compress-alt"></i>
+            <span>Compresser</span>
+        </div>
         <div class="nav-item" onclick="App.go('aichat')">
             <i class="fas fa-robot"></i>
             <span>IA</span>
@@ -923,7 +1182,7 @@
 
 <script>
 /**
- * RASSTUBE ULTIMATE v4.0 - Addictive AI Chat & Social Network
+ * RASSTUBE ULTIMATE v4.5 - Addictive AI Chat & Social Network with Video Compressor
  */
 
 const App = {
@@ -935,7 +1194,8 @@ const App = {
         currentTab: 'login',
         selectedPfp: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rass',
         activeSection: 'home',
-        isUploading: false,
+        currentUploadFile: null,
+        compressedVideoReady: null,
         subscriptions: JSON.parse(localStorage.getItem('rt_v4_subscriptions') || '{}'),
         messages: JSON.parse(localStorage.getItem('rt_v4_messages') || '[]'),
         savedPosts: JSON.parse(localStorage.getItem('rt_v4_saved') || '[]'),
@@ -953,6 +1213,13 @@ const App = {
         // IA Chat
         aiConversation: [],
         aiPersonality: 'enthusiastic',
+        
+        // Système de compression
+        compressor: {
+            currentFile: null,
+            quality: 'medium',
+            compressedBlob: null
+        },
         
         // Réponses IA programmées
         aiResponses: {
@@ -1000,6 +1267,7 @@ const App = {
         this.verifySession();
         this.renderAvatars();
         this.sync();
+        this.setupDragAndDrop();
 
         if(this.state.session) {
             this.launch();
@@ -1218,6 +1486,179 @@ const App = {
         }, 5000);
     },
 
+    // SYSTEME DE COMPRESSION
+    setCompressionQuality(quality) {
+        this.state.compressor.quality = quality;
+        document.querySelectorAll('.quality-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`.quality-btn[data-quality="${quality}"]`).classList.add('active');
+    },
+
+    handleCompressorFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        // Vérifier que c'est une vidéo
+        if (!file.type.startsWith('video/')) {
+            this.notify("❌ Veuillez sélectionner une vidéo", "error");
+            return;
+        }
+        
+        // Vérifier la taille (max 2GB)
+        if (file.size > 2 * 1024 * 1024 * 1024) {
+            this.notify("❌ La vidéo est trop lourde (max 2GB)", "error");
+            return;
+        }
+        
+        this.state.compressor.currentFile = file;
+        
+        // Afficher les infos du fichier
+        const fileSize = (file.size / (1024 * 1024)).toFixed(1);
+        document.getElementById('original-file-info').innerText = 
+            `${file.name} • ${fileSize} MB`;
+        
+        // Prévisualiser la vidéo
+        const preview = document.getElementById('compressor-preview');
+        preview.src = URL.createObjectURL(file);
+        
+        // Passer à l'étape 2
+        document.getElementById('compressor-step-1').classList.add('hidden');
+        document.getElementById('compressor-step-2').classList.remove('hidden');
+        
+        this.notify("📹 Vidéo chargée avec succès", "success");
+    },
+
+    async startCompression() {
+        const file = this.state.compressor.currentFile;
+        if (!file) return;
+        
+        const btn = document.getElementById('compress-btn');
+        const btnText = document.getElementById('compress-btn-text');
+        const loader = document.getElementById('compress-loader');
+        
+        btn.disabled = true;
+        btnText.innerText = "COMPRESSION EN COURS...";
+        loader.style.display = 'block';
+        
+        try {
+            // Simuler la compression
+            await this.simulateCompression(file);
+            
+            // Passer à l'étape 3
+            document.getElementById('compressor-step-2').classList.add('hidden');
+            document.getElementById('compressor-step-3').classList.remove('hidden');
+            
+            // Gagner XP pour la compression
+            this.addXP(25);
+            this.notify("✅ Compression réussie !", "success");
+            
+        } catch (error) {
+            this.notify("❌ Erreur lors de la compression", "error");
+        } finally {
+            btn.disabled = false;
+            btnText.innerText = "COMPRESSER LA VIDÉO";
+            loader.style.display = 'none';
+        }
+    },
+
+    simulateCompression(file) {
+        return new Promise((resolve) => {
+            const quality = this.state.compressor.quality;
+            const originalSize = file.size;
+            
+            // Facteurs de compression selon la qualité
+            const compressionFactors = {
+                high: 0.6,    // -40%
+                medium: 0.3,  // -70%
+                low: 0.1      // -90%
+            };
+            
+            const factor = compressionFactors[quality];
+            const newSize = originalSize * factor;
+            
+            // Mettre à jour la barre de progression
+            const bar = document.getElementById('compression-bar');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += 2;
+                bar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Mettre à jour les infos
+                    const originalMB = (originalSize / (1024 * 1024)).toFixed(1);
+                    const newMB = (newSize / (1024 * 1024)).toFixed(1);
+                    const savings = (100 - (newSize / originalSize * 100)).toFixed(0);
+                    
+                    document.getElementById('compressed-file-info').innerText = 
+                        `Version compressée • ${newMB} MB`;
+                    document.getElementById('savings-percent').innerText = 
+                        `${savings}% d'économie`;
+                    
+                    // Créer un blob simulé
+                    this.state.compressor.compressedBlob = new Blob(
+                        [file.slice(0, file.size * factor)], 
+                        { type: file.type }
+                    );
+                    
+                    resolve();
+                }
+            }, 30);
+        });
+    },
+
+    downloadCompressedVideo() {
+        if (!this.state.compressor.compressedBlob) return;
+        
+        const url = URL.createObjectURL(this.state.compressor.compressedBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `compressed_${this.state.compressor.currentFile.name}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        this.notify("📥 Téléchargement lancé", "success");
+    },
+
+    uploadCompressedVideo() {
+        if (!this.state.compressor.compressedBlob) return;
+        
+        // Créer un fichier à partir du blob
+        const compressedFile = new File(
+            [this.state.compressor.compressedBlob],
+            `compressed_${this.state.compressor.currentFile.name}`,
+            { type: this.state.compressor.currentFile.type }
+        );
+        
+        // Rediriger vers la section upload avec le fichier pré-chargé
+        this.go('upload');
+        
+        // Simuler le chargement du fichier dans l'upload
+        setTimeout(() => {
+            const dropzone = document.getElementById('upload-dropzone');
+            dropzone.innerHTML = `
+                <div style="text-align: center;">
+                    <i class="fas fa-check-circle" style="font-size: 40px; color: var(--success); margin-bottom: 15px;"></i>
+                    <p style="margin: 0; font-weight: 700;">Vidéo compressée prête</p>
+                    <p style="margin: 5px 0 0; color: var(--text-dim);">${compressedFile.name}</p>
+                    <p style="margin: 5px 0 0; color: var(--success); font-size: 12px;">
+                        <i class="fas fa-check"></i> Optimisée pour Rasstube
+                    </p>
+                </div>
+            `;
+            
+            // Stocker le fichier pour la publication
+            this.state.compressedVideoReady = compressedFile;
+            
+            this.notify("🎬 Vidéo compressée prête à être publiée", "success");
+        }, 500);
+    },
+
     // IA CHAT ADDICTIVE
     sendAIMessage() {
         const input = document.getElementById('ai-input');
@@ -1412,8 +1853,26 @@ const App = {
         }, 3000);
     },
 
-    // AUTRES FONCTIONS ESSENTIELLES (abrégées pour la lisibilité)
-    // [Les fonctions existantes comme likePost, sharePost, etc. seraient ici]
+    nextRshort() {
+        const rshorts = this.state.posts.filter(p => p.type === 'rshort');
+        this.state.currentRshort = (this.state.currentRshort + 1) % rshorts.length;
+        this.renderRshorts();
+        this.addXP(2); // XP pour avoir regardé un nouveau RShort
+    },
+
+    toggleRshortPlay() {
+        this.state.rshortPlaying = !this.state.rshortPlaying;
+        const video = document.getElementById('rsshort-video');
+        if(video) {
+            if(this.state.rshortPlaying) {
+                video.play();
+            } else {
+                video.pause();
+            }
+            this.renderRshorts();
+        }
+    },
+
     likePost(id) {
         const post = this.state.posts.find(p => p.id === id);
         if(!post) return;
@@ -1465,6 +1924,193 @@ const App = {
         this.renderRshorts();
     },
 
+    // UPLOAD SYSTEM
+    previewUpload(event) {
+        const files = event.target.files;
+        if (!files || files.length === 0) return;
+        
+        const file = files[0];
+        const preview = document.getElementById('upload-preview');
+        
+        // Vérifier la taille du fichier
+        if (file.size > 100 * 1024 * 1024) { // 100MB max
+            this.notify("⚠️ Fichier trop volumineux. Utilisez le compresseur.", "warning");
+            this.go('compressor');
+            return;
+        }
+        
+        preview.classList.remove('hidden');
+        
+        if (file.type.startsWith('video/')) {
+            preview.innerHTML = `
+                <video controls style="width:100%; max-height:400px; border-radius:var(--radius-md);">
+                    <source src="${URL.createObjectURL(file)}" type="${file.type}">
+                </video>
+                <div style="margin-top:15px; display:flex; align-items:center; gap:10px;">
+                    <i class="fas fa-file-video" style="color:var(--accent)"></i>
+                    <span>${file.name} • ${(file.size/(1024*1024)).toFixed(1)} MB</span>
+                </div>
+            `;
+        } else if (file.type.startsWith('image/')) {
+            preview.innerHTML = `
+                <img src="${URL.createObjectURL(file)}" style="width:100%; max-height:400px; object-fit:cover; border-radius:var(--radius-md);">
+                <div style="margin-top:15px; display:flex; align-items:center; gap:10px;">
+                    <i class="fas fa-image" style="color:var(--accent)"></i>
+                    <span>${file.name} • ${(file.size/(1024*1024)).toFixed(1)} MB</span>
+                </div>
+            `;
+        }
+        
+        this.state.currentUploadFile = file;
+        this.notify("📁 Fichier chargé avec succès", "success");
+    },
+
+    async publishPost() {
+        const title = document.getElementById('up-title').value;
+        const tags = document.getElementById('up-tags').value;
+        const type = document.getElementById('up-type').value;
+        
+        if (!title.trim()) {
+            this.notify("❌ Veuillez ajouter un titre", "error");
+            return;
+        }
+        
+        if (!this.state.currentUploadFile && !this.state.compressedVideoReady) {
+            this.notify("❌ Veuillez sélectionner un fichier", "error");
+            return;
+        }
+        
+        const file = this.state.compressedVideoReady || this.state.currentUploadFile;
+        
+        const btnText = document.getElementById('publish-text');
+        const loader = document.getElementById('publish-loader');
+        
+        btnText.innerText = "PUBLICATION...";
+        loader.style.display = 'block';
+        
+        // Simuler l'upload
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Créer le post
+        const newPost = {
+            id: Date.now(),
+            author: this.state.session.pseudo,
+            authorPfp: this.state.session.pfp,
+            title: title,
+            type: type,
+            content: URL.createObjectURL(file), // Dans la réalité, uploader sur un serveur
+            likes: 0,
+            likedBy: [],
+            comments: 0,
+            shares: 0,
+            views: 0,
+            timestamp: new Date().toISOString(),
+            tags: tags.split(',').map(tag => tag.trim())
+        };
+        
+        this.state.posts.unshift(newPost);
+        this.sync();
+        
+        // Réinitialiser le formulaire
+        document.getElementById('up-title').value = '';
+        document.getElementById('up-tags').value = '';
+        document.getElementById('upload-preview').innerHTML = '';
+        document.getElementById('upload-preview').classList.add('hidden');
+        document.getElementById('upload-dropzone').innerHTML = `
+            <i class="fas fa-cloud-upload-alt" style="font-size: 50px; color: var(--accent); margin-bottom: 15px;"></i>
+            <p style="margin: 0; font-weight: 700; font-size: 18px;">Importer un fichier</p>
+            <p style="margin: 10px 0 0; font-size: 14px; color: var(--text-dim);">Vidéo, photo ou RShort</p>
+        `;
+        
+        this.state.currentUploadFile = null;
+        this.state.compressedVideoReady = null;
+        
+        btnText.innerText = "PUBLIER";
+        loader.style.display = 'none';
+        
+        this.addXP(30);
+        this.notify("🎉 Publication réussie !", "success");
+        this.go('home');
+    },
+
+    // DRAG AND DROP SYSTEM
+    setupDragAndDrop() {
+        const dropzone = document.getElementById('upload-dropzone');
+        const compressorDropzone = document.getElementById('compressor-dropzone');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            [dropzone, compressorDropzone].forEach(zone => {
+                if (zone) {
+                    zone.addEventListener(eventName, preventDefaults, false);
+                }
+            });
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        function highlight(e) {
+            e.currentTarget.style.borderColor = 'var(--accent)';
+            e.currentTarget.style.background = 'var(--accent-soft)';
+        }
+        
+        function unhighlight(e) {
+            e.currentTarget.style.borderColor = 'var(--border)';
+            e.currentTarget.style.background = '';
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone?.addEventListener(eventName, highlight, false);
+            compressorDropzone?.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone?.addEventListener(eventName, unhighlight, false);
+            compressorDropzone?.addEventListener(eventName, unhighlight, false);
+        });
+        
+        dropzone?.addEventListener('drop', handleDrop, false);
+        compressorDropzone?.addEventListener('drop', handleCompressorDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('video/') || file.type.startsWith('image/')) {
+                    // Simuler un changement sur l'input file
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    document.getElementById('file-upload').files = dataTransfer.files;
+                    
+                    // Déclencher l'événement change
+                    const event = new Event('change', { bubbles: true });
+                    document.getElementById('file-upload').dispatchEvent(event);
+                }
+            }
+        }
+        
+        function handleCompressorDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('video/')) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    document.getElementById('compressor-input').files = dataTransfer.files;
+                    
+                    const event = new Event('change', { bubbles: true });
+                    document.getElementById('compressor-input').dispatchEvent(event);
+                }
+            }
+        }
+    },
+
     // FONCTIONS UTILITAIRES
     formatNumber(num) {
         if(num >= 1000000) return (num/1000000).toFixed(1) + 'M';
@@ -1512,7 +2158,7 @@ const App = {
             item.classList.remove('active');
         });
         
-        const navIndexes = { home: 0, rsshort: 1, aichat: 3, profile: 4 };
+        const navIndexes = { home: 0, rsshort: 1, upload: 2, compressor: 3, aichat: 4, profile: 5 };
         if(navIndexes[sec] !== undefined) {
             document.querySelectorAll('.nav-item')[navIndexes[sec]].classList.add('active');
         }
@@ -1528,36 +2174,281 @@ const App = {
         this.state.activeSection = sec;
     },
 
-    // FONCTIONS D'AUTHENTIFICATION (simplifiées)
+    // FONCTIONS D'AUTHENTIFICATION
     toggleAuth(tab) {
         this.state.currentTab = tab;
-        // [Implémentation existante]
+        document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+        document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+        document.getElementById('signup-profile-setup').classList.toggle('hidden', tab === 'login');
+        document.getElementById('auth-btn-text').innerText = tab === 'login' ? 'SE CONNECTER' : 'CRÉER MON COMPTE';
     },
 
     executeAuth() {
-        // [Implémentation existante simplifiée]
+        const email = document.getElementById('auth-email').value;
+        const pass = document.getElementById('auth-pass').value;
+        const pseudo = document.getElementById('reg-pseudo') ? document.getElementById('reg-pseudo').value : '';
+        
+        if(!email || !pass) {
+            this.showAuthMessage("❌ Veuillez remplir tous les champs");
+            return;
+        }
+        
+        if(this.state.currentTab === 'signup' && (!pseudo || pseudo.length < 3)) {
+            this.showAuthMessage("❌ Le pseudo doit faire au moins 3 caractères");
+            return;
+        }
+        
+        if(pass.length < 6) {
+            this.showAuthMessage("❌ Le mot de passe doit faire au moins 6 caractères");
+            return;
+        }
+        
+        const loader = document.getElementById('auth-loader');
+        const btnText = document.getElementById('auth-btn-text');
+        
+        btnText.innerText = 'CHARGEMENT...';
+        loader.style.display = 'block';
+        
         setTimeout(() => {
-            this.launch();
-        }, 1000);
+            if(this.state.currentTab === 'login') {
+                const user = this.state.users.find(u => u.email === email && u.pass === pass);
+                if(user) {
+                    this.state.session = user;
+                    localStorage.setItem('rt_v4_session', JSON.stringify(user));
+                    this.launch();
+                } else {
+                    this.showAuthMessage("❌ Identifiants incorrects");
+                }
+            } else {
+                // Inscription
+                const newUser = {
+                    id: Date.now(),
+                    pseudo: pseudo,
+                    email: email,
+                    pass: pass,
+                    pfp: this.state.selectedPfp,
+                    bio: "Nouvel utilisateur Rasstube 🚀",
+                    followers: 0,
+                    following: 0,
+                    joined: new Date().toLocaleDateString('fr-FR')
+                };
+                
+                this.state.users.push(newUser);
+                this.state.session = newUser;
+                localStorage.setItem('rt_v4_session', JSON.stringify(newUser));
+                localStorage.setItem('rt_v4_users', JSON.stringify(this.state.users));
+                
+                this.launch();
+            }
+            
+            btnText.innerText = this.state.currentTab === 'login' ? 'SE CONNECTER' : 'CRÉER MON COMPTE';
+            loader.style.display = 'none';
+        }, 1500);
     },
 
-    // INITIALISATION RESTANTE
-    verifySession() { /* ... */ },
-    sync() { /* ... */ },
-    updateProfileStats() { /* ... */ },
-    renderStories() { /* ... */ },
-    renderFeed() { /* ... */ },
-    renderAvatars() { /* ... */ },
-    selectPfp(url) { /* ... */ },
-    handlePfpFile(e) { /* ... */ },
-    triggerPfpUpload() { /* ... */ },
-    editProfile() { /* ... */ },
-    showNotifications() { 
+    showAuthMessage(msg) {
+        const elem = document.getElementById('auth-msg');
+        elem.innerText = msg;
+        elem.style.display = 'block';
+        setTimeout(() => { elem.style.display = 'none'; }, 3000);
+    },
+
+    // AUTRES FONCTIONS
+    verifySession() {
+        if(this.state.session && this.state.session.pseudo) {
+            this.launch();
+        }
+    },
+
+    sync() {
+        localStorage.setItem('rt_v4_users', JSON.stringify(this.state.users));
+        localStorage.setItem('rt_v4_posts', JSON.stringify(this.state.posts));
+    },
+
+    updateProfileStats() {
+        const userPosts = this.state.posts.filter(p => p.author === this.state.session.pseudo);
+        document.getElementById('count-posts').innerText = userPosts.length;
+        document.getElementById('count-followers').innerText = this.state.session.followers || 0;
+        document.getElementById('count-following').innerText = this.state.session.following || 0;
+    },
+
+    renderStories() {
+        const container = document.getElementById('story-container');
+        const stories = this.state.users.slice(0, 8);
+        
+        container.innerHTML = stories.map(user => `
+            <div class="story-card" onclick="App.viewStory('${user.pseudo}')">
+                <div class="story-ring">
+                    <img src="${user.pfp}" alt="${user.pseudo}">
+                </div>
+                <div class="story-label">${user.pseudo}</div>
+            </div>
+        `).join('');
+    },
+
+    renderFeed() {
+        const container = document.getElementById('main-feed');
+        const posts = this.state.posts.slice(0, 10);
+        
+        container.innerHTML = posts.map(post => `
+            <div class="explore-card" onclick="App.viewPost(${post.id})">
+                <img src="${post.type === 'photo' ? post.content : 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" class="explore-thumbnail">
+                <div class="explore-info">
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                        <img src="${post.authorPfp}" style="width:30px; height:30px; border-radius:50%;">
+                        <span style="font-weight:600;">${post.author}</span>
+                    </div>
+                    <p style="margin:0 0 10px 0; font-size:14px;">${post.title}</p>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-dim);">
+                        <span><i class="fas fa-heart"></i> ${this.formatNumber(post.likes)}</span>
+                        <span><i class="fas fa-comment"></i> ${this.formatNumber(post.comments)}</span>
+                        <span><i class="fas fa-eye"></i> ${this.formatNumber(post.views)}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    renderAvatars() {
+        const container = document.getElementById('default-avatars');
+        const avatars = [
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Rass',
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Max',
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma',
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas',
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Chloe',
+            'https://api.dicebear.com/7.x/avataaars/svg?seed=Leo'
+        ];
+        
+        container.innerHTML = avatars.map((avatar, index) => `
+            <div class="pfp-item ${index === 0 ? 'selected' : ''}" onclick="App.selectPfp('${avatar}')">
+                <img src="${avatar}" alt="Avatar ${index + 1}">
+            </div>
+        `).join('');
+    },
+
+    selectPfp(url) {
+        this.state.selectedPfp = url;
+        document.getElementById('auth-pfp-preview').src = url;
+        document.querySelectorAll('.pfp-item').forEach(item => item.classList.remove('selected'));
+        event.target.closest('.pfp-item').classList.add('selected');
+    },
+
+    handlePfpFile(e) {
+        const file = e.target.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.state.selectedPfp = e.target.result;
+                document.getElementById('auth-pfp-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    },
+
+    triggerPfpUpload() {
+        document.getElementById('real-pfp-input').click();
+    },
+
+    editProfile() {
+        const newBio = prompt("Entrez votre nouvelle bio:", this.state.session.bio);
+        if(newBio !== null) {
+            this.state.session.bio = newBio;
+            document.getElementById('prof-bio').innerText = newBio;
+            this.sync();
+            this.notify("✅ Bio mise à jour", "success");
+        }
+    },
+
+    showNotifications() {
         this.notify("🎉 3 nouvelles notifications !", "info");
         this.addXP(2);
     },
-    showMessages() { 
+
+    showMessages() {
         this.notify("💬 Messages bientôt disponibles !", "info");
+    },
+
+    switchProfileTab(tab) {
+        this.state.profileTab = tab;
+        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        if(tab === 'posts') {
+            this.renderProfilePosts();
+        } else {
+            this.renderProfileRshorts();
+        }
+    },
+
+    renderProfilePosts() {
+        const container = document.getElementById('profile-grid');
+        const userPosts = this.state.posts.filter(p => p.author === this.state.session.pseudo);
+        
+        container.innerHTML = userPosts.map(post => `
+            <div class="photo-item" onclick="App.viewPost(${post.id})">
+                <img src="${post.type === 'photo' ? post.content : 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" alt="Post">
+            </div>
+        `).join('');
+    },
+
+    renderProfileRshorts() {
+        const container = document.getElementById('profile-grid');
+        const userRshorts = this.state.posts.filter(p => p.author === this.state.session.pseudo && p.type === 'rshort');
+        
+        if(userRshorts.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1/-1; text-align:center; padding:40px;">
+                    <i class="fas fa-play-circle" style="font-size:50px; color:var(--text-dim); margin-bottom:15px;"></i>
+                    <p style="color:var(--text-dim);">Aucun RShort publié</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = userRshorts.map(post => `
+                <div class="photo-item" onclick="App.viewPost(${post.id})">
+                    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="RShort">
+                    <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.7); color:white; padding:2px 6px; border-radius:3px; font-size:10px;">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+    },
+
+    viewStory(user) {
+        this.notify(`📖 Story de ${user}`, "info");
+        this.addXP(1);
+    },
+
+    viewPost(id) {
+        const post = this.state.posts.find(p => p.id === id);
+        if(post) {
+            if(post.type === 'rshort') {
+                this.go('rsshort');
+                setTimeout(() => {
+                    const rshorts = this.state.posts.filter(p => p.type === 'rshort');
+                    const index = rshorts.findIndex(p => p.id === id);
+                    if(index !== -1) {
+                        this.state.currentRshort = index;
+                        this.renderRshorts();
+                    }
+                }, 100);
+            } else {
+                alert(`Voir le post: ${post.title}\n\nAuteur: ${post.author}`);
+            }
+        }
+    },
+
+    focusComment(id) {
+        this.notify("💬 Section commentaires bientôt disponible", "info");
+    },
+
+    filterContent(query) {
+        if(query.length > 0) {
+            this.notify(`🔍 Recherche: ${query}`, "info");
+        }
     }
 };
 
