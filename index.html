@@ -10,7 +10,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
 
-        /* --- ÉCRAN DE CRÉATION DE COMPTE --- */
+        /* --- AUTH / JOUEURS --- */
         #auth-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
         .auth-box { background: #111; padding: 25px; border-radius: 25px; width: 100%; max-width: 450px; border: 1px solid #333; text-align: center; }
         .player-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
@@ -20,69 +20,65 @@
         .auth-input { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 10px; margin-top: 15px; }
         .btn-main { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 10px; font-weight: bold; margin-top: 15px; cursor: pointer; }
 
-        /* --- HEADER --- */
+        /* --- UI COMPONENTS --- */
         header { position: sticky; top: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); padding: 10px 15px; border-bottom: 1px solid #222; z-index: 1000; }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
         .logo { color: var(--red); font-weight: 900; font-size: 22px; }
         .search-bar { display: flex; background: #1a1a1a; border-radius: 10px; padding: 8px 12px; margin-top: 10px; align-items: center; }
         .search-bar input { background: transparent; border: none; color: white; flex: 1; margin-left: 10px; outline: none; }
 
-        /* --- NAVIGATION --- */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0a0a0a; display: flex; justify-content: space-around; align-items: center; padding: 10px 0; border-top: 1px solid #222; z-index: 1000; }
         .nav-item { color: #888; text-align: center; font-size: 10px; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--red); }
         .nav-item i { font-size: 20px; margin-bottom: 3px; }
         .btn-plus { background: var(--red); color: white !important; width: 45px; height: 45px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 22px !important; margin-top: -5px; }
 
-        /* --- PAGES --- */
+        /* --- CONTENT --- */
         .page { display: none; padding: 15px; animation: fadeIn 0.3s; }
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- CARTES & RSHOT --- */
         .v-card { background: var(--card); border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
-        .v-card video { width: 100%; display: block; }
+        .v-card video { width: 100%; display: block; background: #000; }
         .v-body { padding: 12px; }
         .v-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .icon-group { display: flex; gap: 15px; font-size: 18px; }
-        .sub-btn { background: var(--red); color: white; border: none; padding: 5px 12px; border-radius: 15px; font-weight: bold; font-size: 11px; cursor: pointer; }
+        .sub-btn { background: var(--red); color: white; border: none; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 11px; cursor: pointer; }
         .sub-btn.is-sub { background: #333; }
-        
+
         .rshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .rshot-item { aspect-ratio: 9/16; background: #111; border-radius: 12px; overflow: hidden; position: relative; }
+        .rshot-item { aspect-ratio: 9/16; background: #111; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid #222; }
         .rshot-item video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- CHAT --- */
-        #chat-container { height: calc(100vh - 320px); overflow-y: auto; background: #080808; border-radius: 15px; padding: 15px; border: 1px solid #222; display: flex; flex-direction: column; }
-        .bubble { margin-bottom: 10px; padding: 10px 14px; border-radius: 15px; max-width: 80%; font-size: 14px; position: relative; }
-        .msg-me { background: var(--red); align-self: flex-end; }
-        .msg-other { background: #222; align-self: flex-start; }
-        .msg-ai { border-left: 4px solid var(--ai); background: #1a1a1a; align-self: flex-start; }
-        .chat-input-area { position: fixed; bottom: 65px; left: 0; width: 100%; background: #000; padding: 10px; display: flex; gap: 10px; border-top: 1px solid #222; }
+        /* --- CHAT DYNAMIQUE --- */
+        #chat-container { height: calc(100vh - 350px); overflow-y: auto; background: #080808; border-radius: 15px; padding: 15px; border: 1px solid #222; display: flex; flex-direction: column; }
+        .bubble { margin-bottom: 12px; padding: 12px 16px; border-radius: 18px; max-width: 85%; font-size: 14px; line-height: 1.4; }
+        .msg-me { background: var(--red); align-self: flex-end; color: white; border-bottom-right-radius: 2px; }
+        .msg-other { background: #222; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg-ai { background: #1a2a4a; border-left: 4px solid var(--ai); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .typing { font-style: italic; font-size: 12px; color: var(--ai); margin-bottom: 10px; display: none; }
+        .chat-input-area { position: fixed; bottom: 70px; left: 0; width: 100%; background: #000; padding: 10px; display: flex; gap: 10px; border-top: 1px solid #222; }
     </style>
 </head>
 <body>
 
 <div id="auth-screen">
     <div class="auth-box">
-        <h1 style="color:var(--red); margin:0;">RASSTUBE</h1>
-        <p>Choisis ton Joueur</p>
+        <h1 style="color:var(--red); margin:0; letter-spacing: 2px;">RASSTUBE</h1>
+        <p style="opacity: 0.7;">Choisis ton avatar de joueur</p>
         <div class="player-grid" id="player-grid"></div>
-        <button onclick="document.getElementById('pfp-file').click()" style="color:var(--ai); background:none; border:none; font-size:12px; cursor:pointer;">Ou importer ma photo</button>
-        <input type="file" id="pfp-file" hidden accept="image/*" onchange="handleFile(this)">
-        <input type="text" id="user-name" class="auth-input" placeholder="Ton pseudo de joueur...">
-        <button class="btn-main" onclick="saveProfile()">ENTRER DANS RASSTUBE</button>
+        <input type="text" id="user-name" class="auth-input" placeholder="Ton pseudo...">
+        <button class="btn-main" onclick="saveProfile()">LANCER L'EXPÉRIENCE</button>
     </div>
 </div>
 
 <header id="app-header" style="display:none;">
     <div class="header-top">
         <div class="logo">RASSTUBE</div>
-        <div id="user-top-badge" style="display:flex; align-items:center; gap:8px;"></div>
+        <div id="user-badge" style="display:flex; align-items:center; gap:10px;"></div>
     </div>
     <div class="search-bar">
         <i class="fas fa-search" style="color:#555"></i>
-        <input type="text" id="search-in" placeholder="Rechercher une vidéo..." onkeyup="search()">
+        <input type="text" id="search-in" placeholder="Rechercher..." onkeyup="search()">
     </div>
 </header>
 
@@ -92,30 +88,36 @@
     </div>
 
     <div id="p-rshot" class="page">
-        <h3 style="color:#ff0055;"><i class="fas fa-bolt"></i> RShots</h3>
+        <h3 style="color:#ff0055;"><i class="fas fa-bolt"></i> RShots Tendances</h3>
         <div id="feed-rshot" class="rshot-grid"></div>
     </div>
 
     <div id="p-upload" class="page">
-        <h3>Publier du contenu</h3>
-        <input type="file" id="post-file" class="auth-input" accept="video/*,image/*">
-        <input type="text" id="post-title" class="auth-input" placeholder="Titre...">
-        <select id="post-type" class="auth-input">
-            <option value="video">Vidéo Classique</option>
-            <option value="rshot">RShot (Vertical)</option>
-        </select>
-        <button class="btn-main" onclick="publish()">PUBLIER</button>
+        <h3>Créer un contenu</h3>
+        <div style="background:#111; padding:20px; border-radius:15px; border:1px dashed #444;">
+            <label>Fichier Vidéo/Image :</label>
+            <input type="file" id="post-file" class="auth-input" accept="video/*,image/*">
+            <label style="margin-top:10px; display:block;">Titre de la publication :</label>
+            <input type="text" id="post-title" class="auth-input" placeholder="Ex: Mon meilleur gameplay...">
+            <label style="margin-top:10px; display:block;">Format :</label>
+            <select id="post-type" class="auth-input">
+                <option value="video">Vidéo Classique (Horizontal)</option>
+                <option value="rshot">RShot (Vertical / TikTok style)</option>
+            </select>
+            <button class="btn-main" onclick="publish()">PUBLIER MAINTENANT</button>
+        </div>
     </div>
 
     <div id="p-chat" class="page">
         <div style="display:flex; gap:8px; margin-bottom:10px;">
-            <button onclick="setChat('global')" id="btn-g" style="flex:1; padding:10px; border-radius:10px; border:none; background:var(--red); color:white;">Global</button>
-            <button onclick="setChat('ai')" id="btn-a" style="flex:1; padding:10px; border-radius:10px; border:none; background:#222; color:white;">Gemini IA</button>
+            <button onclick="setChat('global')" id="btn-g" style="flex:1; padding:10px; border-radius:10px; border:none; background:var(--red); color:white; font-weight:bold;">Global</button>
+            <button onclick="setChat('ai')" id="btn-a" style="flex:1; padding:10px; border-radius:10px; border:none; background:#222; color:white; font-weight:bold;">Gemini IA</button>
         </div>
         <div id="chat-container"></div>
+        <div id="ai-typing" class="typing">Gemini est en train d'écrire...</div>
         <div class="chat-input-area">
-            <input type="text" id="chat-in" class="auth-input" style="margin:0;" placeholder="Message...">
-            <button onclick="sendMsg()" style="background:var(--red); border:none; color:white; width:50px; border-radius:10px;"><i class="fas fa-paper-plane"></i></button>
+            <input type="text" id="chat-in" class="auth-input" style="margin:0;" placeholder="Dis quelque chose...">
+            <button onclick="sendMsg()" style="background:var(--red); border:none; color:white; width:55px; border-radius:12px; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
@@ -134,22 +136,23 @@
 </nav>
 
 <script>
-    let user = JSON.parse(localStorage.getItem('rs_user_v5')) || null;
-    let posts = JSON.parse(localStorage.getItem('rs_posts_v5')) || [
-        {id: 1, title: 'Bienvenue sur Rasstube !', user: 'Admin', url: 'https://www.w3schools.com/html/mov_bbb.mp4', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin', type:'video'}
+    // --- DONNÉES ET ÉTAT ---
+    let user = JSON.parse(localStorage.getItem('rs_user_v6')) || null;
+    let posts = JSON.parse(localStorage.getItem('rs_posts_v6')) || [
+        {id: 1, title: 'Bienvenue sur la Ultimate Edition !', user: 'Rasstube', url: 'https://www.w3schools.com/html/mov_bbb.mp4', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Rasstube', type:'video', subs: 1200}
     ];
-    let favorites = JSON.parse(localStorage.getItem('rs_favs_v5') || '[]');
-    let messages = JSON.parse(localStorage.getItem('rs_msgs_v5') || '[]');
+    let favorites = JSON.parse(localStorage.getItem('rs_favs_v6') || '[]');
+    let messages = JSON.parse(localStorage.getItem('rs_msgs_v6') || '[]');
     let chatMode = 'global';
     let selectedAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
 
-    // --- JOUEURS ---
-    const players = ["Felix", "Aria", "Jack", "Milo", "Luna", "Zoe"];
+    // --- INITIALISATION JOUEURS ---
+    const players = ["Felix", "Jack", "Luna", "Zoe", "Milo", "Aria"];
     const grid = document.getElementById('player-grid');
-    players.forEach(p => {
+    players.forEach((p, i) => {
         const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${p}`;
         const div = document.createElement('div');
-        div.className = 'player-card';
+        div.className = `player-card ${i===0?'selected':''}`;
         div.innerHTML = `<img src="${url}">`;
         div.onclick = () => {
             document.querySelectorAll('.player-card').forEach(c => c.classList.remove('selected'));
@@ -159,19 +162,11 @@
         grid.appendChild(div);
     });
 
-    function handleFile(input) {
-        if(input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => { selectedAvatar = e.target.result; alert("Photo prête !"); };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
     function saveProfile() {
         const name = document.getElementById('user-name').value;
-        if(name.length < 2) return alert("Pseudo requis");
-        user = { name, avatar: selectedAvatar, subs: 0 };
-        localStorage.setItem('rs_user_v5', JSON.stringify(user));
+        if(name.length < 2) return alert("Choisis un pseudo !");
+        user = { name, avatar: selectedAvatar, followers: 0 };
+        localStorage.setItem('rs_user_v6', JSON.stringify(user));
         location.reload();
     }
 
@@ -181,67 +176,123 @@
         document.getElementById(id).classList.add('active-page');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         if(el) el.classList.add('active');
-        if(id === 'p-chat') renderChat();
+        if(id === 'p-chat') { renderChat(); window.scrollTo(0,0); }
         if(id === 'p-home' || id === 'p-rshot') renderHome();
     }
 
-    // --- ABONNEMENT FONCTIONNEL ---
-    function toggleSub(btn) {
-        btn.classList.toggle('is-sub');
-        if(btn.classList.contains('is-sub')) {
-            btn.innerText = "Abonné";
-            user.subs += 1;
-        } else {
-            btn.innerText = "S'abonner";
-            user.subs -= 1;
-        }
-        localStorage.setItem('rs_user_v5', JSON.stringify(user));
-        updateBadge();
-    }
-
-    function updateBadge() {
-        document.getElementById('user-top-badge').innerHTML = `
-            <div style="text-align:right">
-                <span style="font-size:12px;display:block">${user.name}</span>
-                <small style="color:var(--red);font-size:10px">${user.subs} abonnés</small>
-            </div>
-            <img src="${user.avatar}" style="width:35px;height:35px;border-radius:50%;border:2px solid red;">
-        `;
-    }
-
-    // --- PUBLICATION ---
+    // --- PUBLICATION (FIXED) ---
     function publish() {
         const title = document.getElementById('post-title').value;
         const file = document.getElementById('post-file').files[0];
         const type = document.getElementById('post-type').value;
-        if(!title || !file) return alert("Remplis tout !");
-        
+
+        if(!title || !file) return alert("Donne un titre et choisis un fichier !");
+
         const reader = new FileReader();
-        reader.onload = (e) => {
-            posts.push({ id: Date.now(), title, user: user.name, avatar: user.avatar, url: e.target.result, type: type });
-            localStorage.setItem('rs_posts_v5', JSON.stringify(posts));
-            alert("Publié !");
-            location.reload();
+        reader.onload = function(e) {
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                user: user.name,
+                avatar: user.avatar,
+                url: e.target.result,
+                type: type,
+                subs: 0
+            };
+            posts.push(newPost);
+            try {
+                localStorage.setItem('rs_posts_v6', JSON.stringify(posts));
+                alert("Contenu publié avec succès !");
+                nav('p-home');
+                renderHome();
+            } catch(err) {
+                alert("Fichier trop lourd pour la mémoire locale ! Essaie une vidéo plus courte.");
+            }
         };
         reader.readAsDataURL(file);
     }
 
-    // --- RENDU ---
-    function renderHome(f = "") {
+    // --- ABONNEMENT & COMPTEUR ---
+    function toggleSub(btn, postUser) {
+        btn.classList.toggle('is-sub');
+        if(btn.classList.contains('is-sub')) {
+            btn.innerText = "Abonné";
+            user.followers++;
+        } else {
+            btn.innerText = "S'abonner";
+            user.followers--;
+        }
+        localStorage.setItem('rs_user_v6', JSON.stringify(user));
+        updateHeader();
+    }
+
+    // --- IA CONVERSATIONNELLE (GÉMINI SIMULATION) ---
+    function getAIResponse(input) {
+        input = input.toLowerCase();
+        if(input.includes("salut") || input.includes("bonjour") || input.includes("hey")) 
+            return "Salut " + user.name + " ! Ravi de te voir sur Rasstube. Tu veux regarder quoi aujourd'hui ?";
+        if(input.includes("ça va") || input.includes("comment tu vas"))
+            return "Je vais super bien ! Je viens de finir d'analyser les dernières vidéos, il y a du lourd ! Et toi ?";
+        if(input.includes("quoi de neuf") || input.includes("nouvelle"))
+            return "On a plein de nouveaux RShots super cool ! Va checker l'onglet avec l'éclair ⚡.";
+        if(input.includes("qui es-tu") || input.includes("tu es qui"))
+            return "Je suis Gemini, l'IA officielle de Rasstube. Je suis là pour discuter avec toi et t'aider à utiliser l'appli !";
+        if(input.includes("t'aime") || input.includes("cool"))
+            return "Oh merci, c'est super gentil ! Moi aussi je t'apprécie beaucoup " + user.name + " ! 😊";
+        
+        const generic = [
+            "C'est vraiment intéressant ce que tu dis là !",
+            "Ahah, j'avoue ! D'ailleurs, tu as vu la dernière vidéo publiée ?",
+            "Je ne suis pas sûr de comprendre, mais ça a l'air génial !",
+            "Tu sais que tu peux changer ton avatar quand tu veux en te reconnectant ?",
+            "Rasstube est l'endroit parfait pour s'amuser, tu ne trouves pas ?"
+        ];
+        return generic[Math.floor(Math.random() * generic.length)];
+    }
+
+    function sendMsg() {
+        const input = document.getElementById('chat-in');
+        const val = input.value.trim();
+        if(!val) return;
+
+        messages.push({ text: val, user: user.name, mode: chatMode, me: true });
+        
+        if(chatMode === 'ai') {
+            document.getElementById('ai-typing').style.display = 'block';
+            setTimeout(() => {
+                const aiReply = getAIResponse(val);
+                messages.push({ text: aiReply, user: "Gemini", mode: "ai", me: false });
+                document.getElementById('ai-typing').style.display = 'none';
+                renderChat();
+            }, 1500);
+        }
+
+        input.value = "";
+        localStorage.setItem('rs_msgs_v6', JSON.stringify(messages));
+        renderChat();
+    }
+
+    // --- RENDU UI ---
+    function renderHome(filter = "") {
         const feed = document.getElementById('feed-home');
         const rfeed = document.getElementById('feed-rshot');
         
-        feed.innerHTML = posts.filter(p => p.type === 'video' && p.title.toLowerCase().includes(f.toLowerCase())).reverse().map(p => `
+        const filtered = posts.filter(p => p.title.toLowerCase().includes(filter.toLowerCase())).reverse();
+
+        feed.innerHTML = filtered.filter(p => p.type === 'video').map(p => `
             <div class="v-card">
                 <video src="${p.url}" controls></video>
                 <div class="v-body">
-                    <button class="sub-btn" onclick="toggleSub(this)">S'abonner</button>
-                    <b>${p.title}</b>
-                    <div style="display:flex; align-items:center; gap:5px; margin-top:5px; font-size:12px; color:#888;">
-                        <img src="${p.avatar}" style="width:20px; border-radius:50%"> @${p.user}
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <b>${p.title}</b>
+                        <button class="sub-btn" onclick="toggleSub(this, '${p.user}')">S'abonner</button>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                        <img src="${p.avatar}" style="width:24px; height:24px; border-radius:50%">
+                        <span style="font-size:13px; color:#aaa;">@${p.user}</span>
                     </div>
                     <div class="v-actions">
-                        <div class="icon-group">
+                        <div style="display:flex; gap:15px; font-size:20px;">
                             <i class="far fa-heart" onclick="this.classList.toggle('fas'); this.style.color=this.classList.contains('fas')?'red':'white'"></i>
                             <i class="fas fa-star" style="color:${favorites.includes(p.id)?'gold':'#444'}" onclick="toggleFav(${p.id})"></i>
                         </div>
@@ -253,24 +304,22 @@
         rfeed.innerHTML = posts.filter(p => p.type === 'rshot').reverse().map(p => `
             <div class="rshot-item">
                 <video src="${p.url}" loop onclick="this.paused?this.play():this.pause()"></video>
+                <div style="position:absolute; bottom:10px; left:10px; font-size:12px; text-shadow:1px 1px 2px black;">@${p.user}</div>
             </div>
         `).join('');
     }
 
-    function toggleFav(id) {
-        if(favorites.includes(id)) favorites = favorites.filter(x => x !== id);
-        else favorites.push(id);
-        localStorage.setItem('rs_favs_v5', JSON.stringify(favorites));
-        renderHome();
-        renderFavs();
+    function renderChat() {
+        const box = document.getElementById('chat-container');
+        box.innerHTML = messages.filter(m => m.mode === chatMode).map(m => `
+            <div class="bubble ${m.me ? 'msg-me' : (m.user === 'Gemini' ? 'msg-ai' : 'msg-other')}">
+                <small style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px;">${m.user}</small>
+                ${m.text}
+            </div>
+        `).join('');
+        box.scrollTop = box.scrollHeight;
     }
 
-    function renderFavs() {
-        const ffeed = document.getElementById('feed-fav');
-        ffeed.innerHTML = posts.filter(p => favorites.includes(p.id)).map(p => `<div class="v-card"><video src="${p.url}" controls></video><div class="v-body"><b>${p.title}</b></div></div>`).join('');
-    }
-
-    // --- CHAT ---
     function setChat(m) {
         chatMode = m;
         document.getElementById('btn-g').style.background = m === 'global' ? 'var(--red)' : '#222';
@@ -278,33 +327,24 @@
         renderChat();
     }
 
-    function sendMsg() {
-        const input = document.getElementById('chat-in');
-        if(!input.value) return;
-        messages.push({ text: input.value, user: user.name, mode: chatMode, me: true });
-        if(chatMode === 'ai') {
-            setTimeout(() => {
-                messages.push({ text: "Salut " + user.name + ", je suis Gemini !", user: "Gemini", mode: "ai", me: false });
-                renderChat();
-            }, 800);
-        }
-        input.value = "";
-        localStorage.setItem('rs_msgs_v5', JSON.stringify(messages));
-        renderChat();
+    function updateHeader() {
+        document.getElementById('user-badge').innerHTML = `
+            <div style="text-align:right">
+                <div style="font-weight:bold; font-size:14px;">${user.name}</div>
+                <div style="font-size:10px; color:var(--red);">${user.followers} abonnés</div>
+            </div>
+            <img src="${user.avatar}" style="width:35px; height:35px; border-radius:50%; border:2px solid var(--red);">
+        `;
     }
 
-    function renderChat() {
-        const box = document.getElementById('chat-container');
-        box.innerHTML = messages.filter(m => m.mode === chatMode).map(m => `
-            <div class="bubble ${m.me ? 'msg-me' : (m.user === 'Gemini' ? 'msg-ai' : 'msg-other')}">
-                <small style="font-size:10px; opacity:0.7">${m.user}</small><br>${m.text}
-            </div>
-        `).join('');
-        box.scrollTop = box.scrollHeight;
+    function toggleFav(id) {
+        if(favorites.includes(id)) favorites = favorites.filter(x => x !== id);
+        else favorites.push(id);
+        localStorage.setItem('rs_favs_v6', JSON.stringify(favorites));
+        renderHome();
     }
 
     function search() { renderHome(document.getElementById('search-in').value); }
-    function logout() { localStorage.removeItem('rs_user_v5'); location.reload(); }
 
     window.onload = () => {
         if(user) {
@@ -312,9 +352,8 @@
             document.getElementById('app-header').style.display = 'block';
             document.getElementById('app-main').style.display = 'block';
             document.getElementById('app-nav').style.display = 'flex';
-            updateBadge();
+            updateHeader();
             renderHome();
-            renderFavs();
         }
     };
 </script>
