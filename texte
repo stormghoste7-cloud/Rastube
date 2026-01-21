@@ -1,0 +1,9 @@
+rasstube/
+├── index.html        # Le squelette HTML
+├── styles.css        # Le design global
+└── js/
+    ├── api.js        # Fonctions pour parler au serveur (Fetch)
+    ├── auth.js       # Gestion de la connexion (Login/Session)
+    ├── chat.js       # Logique du chat communautaire (WebSockets)
+    ├── stories.js    # Logique d'affichage des stories
+    └── app.js        # Le chef d'orchestre (initialisation)
