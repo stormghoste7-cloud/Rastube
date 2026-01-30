@@ -3,66 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Geometry Dash Deluxe</title>
+    <title>Geometry Dash Ultra</title>
     <style>
-        :root { --main-color: #00ff00; --bg-color: #0a0a1a; }
-        body { margin: 0; background: var(--bg-color); color: white; font-family: 'Segoe UI', sans-serif; overflow: hidden; touch-action: none; }
-        canvas { display: block; filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.3)); }
-        
-        .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 10; }
+        :root { --neon-green: #00ff00; --neon-blue: #00ffff; --neon-red: #ff4444; }
+        body { margin: 0; background: #050510; color: white; font-family: 'Arial Black', sans-serif; overflow: hidden; touch-action: none; }
+        canvas { display: block; }
+
+        /* Superposition des Menus */
+        .overlay { 
+            position: absolute; inset: 0; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.9); z-index: 100;
+            transition: opacity 0.3s;
+        }
         .hidden { display: none !important; }
 
-        h1 { font-size: 3rem; text-shadow: 0 0 20px var(--main-color); margin-bottom: 20px; }
-        button { 
-            padding: 15px 40px; margin: 10px; font-size: 1.2rem; cursor: pointer;
-            background: transparent; border: 2px solid var(--main-color); color: white;
-            border-radius: 8px; transition: 0.3s; text-transform: uppercase; font-weight: bold;
-        }
-        button:hover { background: var(--main-color); box-shadow: 0 0 20px var(--main-color); color: black; }
+        h1 { font-size: 3rem; text-shadow: 0 0 20px var(--neon-green); margin-bottom: 30px; text-align: center; }
         
-        .difficulty-btns { display: flex; gap: 10px; }
-        #editor-ui { position: absolute; bottom: 20px; left: 20px; z-index: 5; }
+        .btn {
+            padding: 20px 50px; margin: 10px; font-size: 1.5rem; cursor: pointer;
+            background: var(--neon-green); border: none; color: black;
+            border-radius: 12px; font-weight: bold; text-transform: uppercase;
+            box-shadow: 0 0 15px var(--neon-green); transition: 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-outline { background: transparent; border: 2px solid var(--neon-green); color: white; }
+
+        .difficulty-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        
+        #editor-controls {
+            position: absolute; top: 20px; width: 100%; display: flex; justify-content: center; gap: 10px; z-index: 50;
+        }
     </style>
 </head>
 <body>
 
     <div id="main-menu" class="overlay">
         <h1>GEOMETRY DASH</h1>
-        <button onclick="showDifficulty()">JOUER</button>
-        <button onclick="startEditor()">ÉDITEUR DE NIVEAU</button>
+        <button class="btn" onclick="showDifficulty()">JOUER</button>
+        <button class="btn btn-outline" onclick="initEditor()">ÉDITEUR</button>
     </div>
 
     <div id="difficulty-menu" class="overlay hidden">
         <h1>DIFFICULTÉ</h1>
-        <div class="difficulty-btns">
-            <button onclick="startGame(4, 120)">FACILE</button>
-            <button onclick="startGame(7, 80)">NORMAL</button>
-            <button onclick="startGame(10, 50)">DÉMON</button>
+        <div class="difficulty-container">
+            <button class="btn" style="background:#55ff55" onclick="startGame(6, 100)">FACILE</button>
+            <button class="btn" style="background:#ffff55" onclick="startGame(9, 70)">NORMAL</button>
+            <button class="btn" style="background:#ff5555" onclick="startGame(13, 45)">DEMON</button>
         </div>
-        <button onclick="backToMain()" style="border-color: #ff4444; font-size: 0.8rem;">RETOUR</button>
+        <button class="btn btn-outline" style="margin-top:40px; border-color:red" onclick="location.reload()">RETOUR</button>
     </div>
 
-    <div id="editor-ui" class="hidden">
-        <button onclick="saveAndPlay()">JOUER MON NIVEAU</button>
-        <button onclick="backToMain()">QUITTER</button>
-        <p>Tape sur le sol pour placer un pique !</p>
+    <div id="editor-controls" class="hidden">
+        <button class="btn" style="font-size:1rem; padding:10px" onclick="playCustomLevel()">TESTER LE NIVEAU</button>
+        <button class="btn btn-outline" style="font-size:1rem; padding:10px" onclick="location.reload()">QUITTER</button>
     </div>
 
-    <canvas id="game"></canvas>
+    <canvas id="gameCanvas"></canvas>
 
 <script>
-    const canvas = document.getElementById('game');
+    const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    
-    let state = 'MENU'; // MENU, PLAYING, EDITOR
-    let gameSpeed = 6;
+
+    // États
+    let state = 'MENU';
+    let gameSpeed = 8;
     let spawnRate = 80;
+    let frameCount = 0;
     let score = 0;
+    
+    // Objets
+    let player = { x: 150, y: 0, size: 40, dy: 0, gravity: 0.8, jumpForce: 14, grounded: false, angle: 0 };
     let obstacles = [];
     let particles = [];
-    let customLevel = [];
-
-    const player = { x: 100, y: 0, size: 40, dy: 0, gravity: 0.7, jumpForce: 13, grounded: false, angle: 0 };
+    let editorPicks = [];
 
     function resize() {
         canvas.width = window.innerWidth;
@@ -71,60 +85,72 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // --- LOGIQUE MENU ---
-    function showDifficulty() { document.getElementById('main-menu').classList.add('hidden'); document.getElementById('difficulty-menu').classList.remove('hidden'); }
-    function backToMain() { location.reload(); }
+    // --- NAVIGATION ---
+    function showDifficulty() {
+        document.getElementById('main-menu').classList.add('hidden');
+        document.getElementById('difficulty-menu').classList.remove('hidden');
+    }
 
-    function startGame(speed, rate, level = []) {
+    function startGame(speed, rate) {
         gameSpeed = speed;
         spawnRate = rate;
         state = 'PLAYING';
         document.getElementById('difficulty-menu').classList.add('hidden');
-        document.getElementById('editor-ui').classList.add('hidden');
-        if(level.length > 0) obstacles = [...level];
-        animate();
+        resetGame();
+        requestAnimationFrame(gameLoop);
     }
 
-    function startEditor() {
+    function initEditor() {
         state = 'EDITOR';
         document.getElementById('main-menu').classList.add('hidden');
-        document.getElementById('editor-ui').classList.remove('hidden');
-        animate();
+        document.getElementById('editor-controls').classList.remove('hidden');
+        resetGame();
+        requestAnimationFrame(gameLoop);
     }
 
-    // --- SYSTÈME DE PARTICULES ---
-    function createParticles(x, y) {
-        for(let i=0; i<5; i++) {
-            particles.push({ x, y, dx: Math.random()*2-1, dy: Math.random()*2-1, life: 1, size: Math.random()*5 });
-        }
+    function resetGame() {
+        obstacles = [];
+        score = 0;
+        frameCount = 0;
+        player.y = canvas.height - 100;
+        player.dy = 0;
     }
 
-    // --- BOUCLE DE JEU ---
-    function animate() {
+    // --- LOGIQUE DE JEU ---
+    function gameLoop() {
         if (state === 'MENU') return;
+        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const floorY = canvas.height - 60;
+        const floorY = canvas.height - 80;
 
-        // Dessin du Sol
-        ctx.fillStyle = "#111";
-        ctx.fillRect(0, floorY, canvas.width, 60);
-        ctx.strokeStyle = "#00ffff";
-        ctx.strokeRect(0, floorY, canvas.width, 2);
+        // Dessin du fond et sol
+        drawEnvironment(floorY);
 
         if (state === 'PLAYING') {
-            updatePlayer(floorY);
-            updateObstacles(floorY);
-            drawScore();
+            updatePhysics(floorY);
+            handleObstacles(floorY);
+            drawUI();
         } else if (state === 'EDITOR') {
+            updatePhysics(floorY); // Permet de sauter dans l'éditeur
             drawEditorLevel(floorY);
         }
 
-        drawParticles();
         drawPlayer();
-        requestAnimationFrame(animate);
+        drawParticles();
+        
+        requestAnimationFrame(gameLoop);
     }
 
-    function updatePlayer(floorY) {
+    function drawEnvironment(floorY) {
+        // Sol Néon
+        ctx.fillStyle = "#0a0a20";
+        ctx.fillRect(0, floorY, canvas.width, 80);
+        ctx.strokeStyle = varColor('--neon-blue');
+        ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(0, floorY); ctx.lineTo(canvas.width, floorY); ctx.stroke();
+    }
+
+    function updatePhysics(floorY) {
         player.dy += player.gravity;
         player.y += player.dy;
 
@@ -132,37 +158,30 @@
             player.y = floorY - player.size;
             player.dy = 0;
             player.grounded = true;
-            if (Math.abs(player.dy) < 1) createParticles(player.x, floorY);
+            if (state === 'PLAYING' && Math.random() > 0.5) createParticle(player.x, floorY);
         }
 
-        if (!player.grounded) player.angle += 0.15;
+        if (!player.grounded) player.angle += 0.2;
         else player.angle = Math.round(player.angle / (Math.PI/2)) * (Math.PI/2);
     }
 
-    function updateObstacles(floorY) {
-        if (customLevel.length === 0 && Math.floor(Date.now()/20) % spawnRate === 0) {
-            obstacles.push({ x: canvas.width, y: floorY - 40, w: 30, h: 40 });
+    function handleObstacles(floorY) {
+        frameCount++;
+        if (frameCount % spawnRate === 0) {
+            obstacles.push({ x: canvas.width, w: 40, h: 45 });
         }
 
         for (let i = obstacles.length - 1; i >= 0; i--) {
             obstacles[i].x -= gameSpeed;
-            
-            // Draw Spike
-            ctx.fillStyle = "#ff4444";
-            ctx.shadowBlur = 15; ctx.shadowColor = "red";
-            ctx.beginPath();
-            ctx.moveTo(obstacles[i].x, floorY);
-            ctx.lineTo(obstacles[i].x + obstacles[i].w/2, floorY - obstacles[i].h);
-            ctx.lineTo(obstacles[i].x + obstacles[i].w, floorY);
-            ctx.fill();
-            ctx.shadowBlur = 0;
 
-            // Collision
-            if (player.x < obstacles[i].x + obstacles[i].w && player.x + player.size > obstacles[i].x &&
-                player.y + player.size > floorY - obstacles[i].h) {
-                state = 'MENU';
-                alert("BOUM ! Score: " + score);
-                location.reload();
+            // Dessin Spike
+            drawSpike(obstacles[i].x, floorY, obstacles[i].w, obstacles[i].h);
+
+            // Collision AABB
+            if (player.x < obstacles[i].x + obstacles[i].w - 10 &&
+                player.x + player.size > obstacles[i].x + 10 &&
+                player.y + player.size > floorY - obstacles[i].h + 10) {
+                gameOver();
             }
 
             if (obstacles[i].x + obstacles[i].w < 0) {
@@ -172,12 +191,23 @@
         }
     }
 
+    function drawSpike(x, groundY, w, h) {
+        ctx.shadowBlur = 15; ctx.shadowColor = "red";
+        ctx.fillStyle = "#ff4444";
+        ctx.beginPath();
+        ctx.moveTo(x, groundY);
+        ctx.lineTo(x + w / 2, groundY - h);
+        ctx.lineTo(x + w, groundY);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+
     function drawPlayer() {
         ctx.save();
         ctx.translate(player.x + player.size/2, player.y + player.size/2);
         ctx.rotate(player.angle);
-        ctx.shadowBlur = 15; ctx.shadowColor = "#00ff00";
-        ctx.fillStyle = "#00ff00";
+        ctx.shadowBlur = 20; ctx.shadowColor = varColor('--neon-green');
+        ctx.fillStyle = varColor('--neon-green');
         ctx.fillRect(-player.size/2, -player.size/2, player.size, player.size);
         ctx.strokeStyle = "white";
         ctx.lineWidth = 3;
@@ -186,52 +216,67 @@
         ctx.shadowBlur = 0;
     }
 
+    // --- EDITEUR ---
+    function drawEditorLevel(floorY) {
+        editorPicks.forEach(p => drawSpike(p.x, floorY, 40, 45));
+    }
+
+    function playCustomLevel() {
+        if(editorPicks.length === 0) return alert("Place des piques d'abord !");
+        obstacles = editorPicks.map(p => ({...p, w: 40, h: 45}));
+        state = 'PLAYING';
+        gameSpeed = 8;
+        spawnRate = 999999; // Désactive le spawn auto
+        document.getElementById('editor-controls').classList.add('hidden');
+    }
+
+    // --- UTILS ---
+    function varColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name); }
+    
+    function createParticle(x, y) {
+        particles.push({ x, y, dx: -Math.random()*5, dy: -Math.random()*3, life: 1 });
+    }
+
     function drawParticles() {
         particles.forEach((p, i) => {
-            p.x += p.dx; p.y += p.dy; p.life -= 0.02;
+            p.x += p.dx; p.y += p.dy; p.life -= 0.05;
             ctx.fillStyle = `rgba(0, 255, 255, ${p.life})`;
-            ctx.fillRect(p.x, p.y, p.size, p.size);
+            ctx.fillRect(p.x, p.y, 4, 4);
             if(p.life <= 0) particles.splice(i, 1);
         });
     }
 
-    function drawScore() {
+    function drawUI() {
         ctx.fillStyle = "white";
-        ctx.font = "bold 24px Arial";
-        ctx.fillText("SCORE: " + score, 20, 40);
+        ctx.font = "bold 25px Arial";
+        ctx.fillText("SCORE: " + score, 20, 50);
     }
 
-    // --- FONCTIONS ÉDITEUR ---
-    function drawEditorLevel(floorY) {
-        customLevel.forEach(ob => {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-            ctx.beginPath();
-            ctx.moveTo(ob.x, floorY);
-            ctx.lineTo(ob.x + 15, floorY - 40);
-            ctx.lineTo(ob.x + 30, floorY);
-            ctx.fill();
-        });
-    }
-
-    function saveAndPlay() {
-        obstacles = customLevel.map(ob => ({...ob, w: 30, h: 40}));
-        startGame(7, 9999); // On désactive le spawn auto
+    function gameOver() {
+        state = 'MENU';
+        alert("GAME OVER ! Score: " + score);
+        location.reload();
     }
 
     // --- INPUTS ---
-    function handleInput(e) {
-        if (state === 'PLAYING' && player.grounded) {
-            player.dy = -player.jumpForce;
-            player.grounded = false;
-        } else if (state === 'EDITOR') {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            customLevel.push({ x: x, y: canvas.height - 100 });
+    const handleInput = (e) => {
+        if (state === 'PLAYING' || state === 'EDITOR') {
+            if (player.grounded) {
+                player.dy = -player.jumpForce;
+                player.grounded = false;
+            }
         }
-    }
+        if (state === 'EDITOR') {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - rect.left;
+            if (clickX > 300) { // Ne place pas de piques sur le joueur
+                editorPicks.push({ x: clickX });
+            }
+        }
+    };
 
-    window.addEventListener('touchstart', (e) => { e.preventDefault(); handleInput(e); }, {passive: false});
     window.addEventListener('mousedown', handleInput);
+    window.addEventListener('touchstart', (e) => { e.preventDefault(); handleInput(e); }, {passive: false});
     window.addEventListener('keydown', (e) => { if(e.code === "Space") handleInput(e); });
 
 </script>
