@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibes App - Connecte par humeur</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Styles de base (similaires à avant) */
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text: #ffffff;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+            --online: #10b981;
+            --offline: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--surface);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--surface-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Container principal */
+        .main-container {
+            display: flex;
+            height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 80px;
+            background: var(--surface);
+            border-right: 1px solid var(--surface-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .nav-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+        }
+
+        .nav-icon.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-icon:hover {
+            background: var(--surface-light);
+        }
+
+        /* Contenu principal */
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Section Mood */
+        .mood-section {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .mood-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .mood-card {
+            background: var(--surface-light);
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .mood-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .mood-card.active {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .mood-emoji {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .mood-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Section Matches */
+        .matches-section {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .matches-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .match-card {
+            background: var(--surface-light);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .match-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .match-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .match-mood {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .chat-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-btn:hover {
+            opacity: 0.9;
+            transform: scale(0.95);
+        }
+
+        /* Modal Chat */
+        .chat-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .chat-modal.active {
+            display: flex;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 500px;
+            height: 80vh;
+            background: var(--surface);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--surface-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .message.sent {
+            background: var(--primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.received {
+            background: var(--surface-light);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid var(--surface-light);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--surface-light);
+            background: var(--bg);
+            color: white;
+            outline: none;
+        }
+
+        .chat-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+            
+            .mood-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .matches-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mood-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">Vibes</div>
+        <div class="nav-user">
+            <div class="user-avatar" onclick="openProfile()" id="user-avatar">U</div>
+            <button onclick="logout()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Container principal -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-icon active" onclick="showSection('mood')">
+                <i class="fas fa-smile"></i>
+            </div>
+            <div class="nav-icon" onclick="showSection('matches')">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="nav-icon" onclick="showSection('messages')">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="nav-icon" onclick="showSection('feed')">
+                <i class="fas fa-newspaper"></i>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="content">
+            <!-- Section Mood -->
+            <div id="mood-section" class="section active">
+                <div class="mood-section">
+                    <h2 class="mood-title"><i class="fas fa-smile"></i> Sélectionne ton humeur</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">
+                        Comment tu te sens aujourd'hui ? Choisis ton mood pour trouver des personnes qui te ressemblent.
+                    </p>
+                    
+                    <div class="mood-grid" id="mood-grid">
+                        <!-- Moods seront générés par JavaScript -->
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--surface-light);">
+                        <h3 style="margin-bottom: 15px;">Ton mood actuel : <span id="current-mood">Aucun</span></h3>
+                        <button class="chat-btn" onclick="updateMood()" id="update-mood-btn" disabled>
+                            <i class="fas fa-check"></i> Confirmer mon mood
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Matches -->
+            <div id="matches-section" class="section">
+                <div class="matches-section">
+                    <h2 class="matches-title"><i class="fas fa-users"></i> Personnes avec la même vibe</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">
+                        Découvre des personnes qui partagent ton humeur du moment.
+                    </p>
+                    
+                    <div class="matches-grid" id="matches-grid">
+                        <!-- Matches seront générés par JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Messages -->
+            <div id="messages-section" class="section">
+                <div class="matches-section">
+                    <h2 class="matches-title"><i class="fas fa-comments"></i> Tes conversations</h2>
+                    <div id="conversations-list">
+                        <!-- Conversations seront générées par JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Feed -->
+            <div id="feed-section" class="section">
+                <div class="matches-section">
+                    <h2 class="matches-title"><i class="fas fa-newspaper"></i> Activité de tes amis</h2>
+                    <div id="activity-feed">
+                        <!-- Feed sera généré par JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chat -->
+    <div class="chat-modal" id="chat-modal">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div id="chat-avatar" class="match-avatar" style="width: 40px; height: 40px; margin: 0;"></div>
+                    <div>
+                        <div id="chat-name" style="font-weight: 600;"></div>
+                        <div id="chat-status" style="font-size: 12px; color: var(--text-muted);">En ligne</div>
+                    </div>
+                </div>
+                <button onclick="closeChat()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 20px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages seront affichés ici -->
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Écris ton message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de données simulée
+        let currentUser = {
+            id: 1,
+            name: "Alex",
+            email: "alex@example.com",
+            avatar: "A",
+            currentMood: null
+        };
+
+        let moods = [
+            { id: 1, name: "Heureux", emoji: "😊", color: "#fbbf24" },
+            { id: 2, name: "Triste", emoji: "😢", color: "#60a5fa" },
+            { id: 3, name: "Énergique", emoji: "💪", color: "#f87171" },
+            { id: 4, name: "Calme", emoji: "😌", color: "#34d399" },
+            { id: 5, name: "Motivé", emoji: "🔥", color: "#f97316" },
+            { id: 6, name: "Fatigué", emoji: "😴", color: "#a78bfa" },
+            { id: 7, name: "Stressé", emoji: "😰", color: "#f472b6" },
+            { id: 8, name: "Excité", emoji: "🎉", color: "#f59e0b" },
+            { id: 9, name: "Créatif", emoji: "🎨", color: "#8b5cf6" },
+            { id: 10, name: "Aventureux", emoji: "🏔️", color: "#06b6d4" }
+        ];
+
+        let users = [
+            { id: 2, name: "Emma", avatar: "E", currentMood: "Heureux", lastSeen: "Maintenant" },
+            { id: 3, name: "Lucas", avatar: "L", currentMood: "Énergique", lastSeen: "Il y a 5 min" },
+            { id: 4, name: "Chloé", avatar: "C", currentMood: "Créatif", lastSeen: "En ligne" },
+            { id: 5, name: "Thomas", avatar: "T", currentMood: "Calme", lastSeen: "Il y a 2h" },
+            { id: 6, name: "Sarah", avatar: "S", currentMood: "Motivé", lastSeen: "En ligne" },
+            { id: 7, name: "Nicolas", avatar: "N", currentMood: "Heureux", lastSeen: "Il y a 30 min" }
+        ];
+
+        let conversations = [
+            { userId: 2, lastMessage: "Salut ! Comment ça va ?", time: "10:30", unread: 2 },
+            { userId: 4, lastMessage: "J'adore ta vibe créative !", time: "Hier", unread: 0 }
+        ];
+
+        let selectedMood = null;
+        let currentChatUser = null;
+        let chatMessages = [];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+        });
+
+        function initApp() {
+            // Afficher l'avatar utilisateur
+            document.getElementById('user-avatar').textContent = currentUser.avatar;
+            
+            // Générer les options de mood
+            generateMoodOptions();
+            
+            // Afficher les matches
+            showMatches();
+            
+            // Afficher les conversations
+            showConversations();
+            
+            // Afficher le feed
+            showActivityFeed();
+        }
+
+        function generateMoodOptions() {
+            const moodGrid = document.getElementById('mood-grid');
+            moodGrid.innerHTML = '';
+            
+            moods.forEach(mood => {
+                const moodCard = document.createElement('div');
+                moodCard.className = 'mood-card';
+                moodCard.innerHTML = `
+                    <div class="mood-emoji">${mood.emoji}</div>
+                    <div class="mood-name">${mood.name}</div>
+                `;
+                moodCard.onclick = () => selectMood(mood);
+                moodGrid.appendChild(moodCard);
+            });
+            
+            // Afficher le mood actuel s'il existe
+            if (currentUser.currentMood) {
+                document.getElementById('current-mood').textContent = currentUser.currentMood;
+            }
+        }
+
+        function selectMood(mood) {
+            selectedMood = mood;
+            
+            // Retirer la classe active de toutes les cartes
+            document.querySelectorAll('.mood-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Ajouter la classe active à la carte sélectionnée
+            event.target.closest('.mood-card').classList.add('active');
+            
+            // Activer le bouton de confirmation
+            document.getElementById('update-mood-btn').disabled = false;
+        }
+
+        function updateMood() {
+            if (!selectedMood) return;
+            
+            currentUser.currentMood = selectedMood.name;
+            document.getElementById('current-mood').textContent = selectedMood.name;
+            
+            // Afficher une notification
+            showNotification(`Mood mis à jour : ${selectedMood.emoji} ${selectedMood.name}`, 'success');
+            
+            // Désactiver le bouton
+            document.getElementById('update-mood-btn').disabled = true;
+            
+            // Mettre à jour les matches
+            showMatches();
+        }
+
+        function showMatches() {
+            const matchesGrid = document.getElementById('matches-grid');
+            matchesGrid.innerHTML = '';
+            
+            // Filtrer les utilisateurs avec le même mood
+            const matches = users.filter(user => 
+                currentUser.currentMood && 
+                user.currentMood === currentUser.currentMood
+            );
+            
+            if (matches.length === 0) {
+                matchesGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class="fas fa-users" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <p>Change ton mood pour découvrir des personnes qui te ressemblent !</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            matches.forEach(user => {
+                const matchCard = document.createElement('div');
+                matchCard.className = 'match-card';
+                matchCard.innerHTML = `
+                    <div class="match-avatar">${user.avatar}</div>
+                    <div class="match-name">${user.name}</div>
+                    <div class="match-mood">${user.currentMood}</div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">
+                        <i class="fas fa-circle" style="color: ${user.lastSeen === 'En ligne' ? 'var(--online)' : 'var(--offline)'}; font-size: 8px;"></i>
+                        ${user.lastSeen}
+                    </div>
+                    <button class="chat-btn" onclick="openChat(${user.id})">
+                        <i class="fas fa-comment"></i> Discuter
+                    </button>
+                `;
+                matchesGrid.appendChild(matchCard);
+            });
+        }
+
+        function showConversations() {
+            const conversationsList = document.getElementById('conversations-list');
+            conversationsList.innerHTML = '';
+            
+            if (conversations.length === 0) {
+                conversationsList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class="fas fa-comments" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <p>Commence à discuter avec tes matches !</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            conversations.forEach(conv => {
+                const user = users.find(u => u.id === conv.userId);
+                if (!user) return;
+                
+                const convElement = document.createElement('div');
+                convElement.className = 'match-card';
+                convElement.style.display = 'flex';
+                convElement.style.alignItems = 'center';
+                convElement.style.textAlign = 'left';
+                convElement.style.cursor = 'pointer';
+                convElement.onclick = () => openChat(user.id);
+                
+                convElement.innerHTML = `
+                    <div class="match-avatar" style="width: 50px; height: 50px; margin: 0 15px 0 0;">${user.avatar}</div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div class="match-name">${user.name}</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">${conv.time}</div>
+                        </div>
+                        <div class="match-mood" style="margin-bottom: 5px;">${conv.lastMessage}</div>
+                        ${conv.unread > 0 ? `<span style="background: var(--primary); color: white; border-radius: 10px; padding: 2px 8px; font-size: 12px;">${conv.unread}</span>` : ''}
+                    </div>
+                `;
+                conversationsList.appendChild(convElement);
+            });
+        }
+
+        function showActivityFeed() {
+            const activityFeed = document.getElementById('activity-feed');
+            activityFeed.innerHTML = '';
+            
+            const activities = [
+                { user: "Emma", action: "est maintenant", mood: "Heureux", time: "2 min", emoji: "😊" },
+                { user: "Lucas", action: "a changé son mood pour", mood: "Énergique", time: "15 min", emoji: "💪" },
+                { user: "Chloé", action: "a envoyé une onde positive à", target: "Thomas", time: "1h", emoji: "✨" },
+                { user: "Sarah", action: "est maintenant", mood: "Motivé", time: "2h", emoji: "🔥" }
+            ];
+            
+            activities.forEach(activity => {
+                const activityElement = document.createElement('div');
+                activityElement.className = 'match-card';
+                activityElement.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="font-size: 24px;">${activity.emoji}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">${activity.user}</div>
+                            <div style="color: var(--text-muted); font-size: 14px;">
+                                ${activity.action} ${activity.mood || ''} ${activity.target || ''}
+                            </div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-muted);">${activity.time}</div>
+                    </div>
+                `;
+                activityFeed.appendChild(activityElement);
+            });
+        }
+
+        function showSection(sectionId) {
+            // Cacher toutes les sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Désactiver toutes les icônes
+            document.querySelectorAll('.nav-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            
+            // Afficher la section demandée
+            document.getElementById(`${sectionId}-section`).classList.add('active');
+            
+            // Activer l'icône correspondante
+            const iconIndex = {
+                'mood': 0,
+                'matches': 1,
+                'messages': 2,
+                'feed': 3
+            };
+            document.querySelectorAll('.nav-icon')[iconIndex[sectionId]].classList.add('active');
+        }
+
+        function openChat(userId) {
+            currentChatUser = users.find(u => u.id === userId);
+            if (!currentChatUser) return;
+            
+            // Mettre à jour le modal
+            document.getElementById('chat-avatar').textContent = currentChatUser.avatar;
+            document.getElementById('chat-name').textContent = currentChatUser.name;
+            
+            // Charger les messages
+            loadChatMessages();
+            
+            // Afficher le modal
+            document.getElementById('chat-modal').classList.add('active');
+            
+            // Focus sur l'input
+            setTimeout(() => {
+                document.getElementById('message-input').focus();
+            }, 100);
+        }
+
+        function closeChat() {
+            document.getElementById('chat-modal').classList.remove('active');
+            currentChatUser = null;
+        }
+
+        function loadChatMessages() {
+            const chatMessagesDiv = document.getElementById('chat-messages');
+            chatMessagesDiv.innerHTML = '';
+            
+            // Messages simulés
+            const messages = [
+                { senderId: currentChatUser.id, text: "Salut ! Tu as choisi le même mood que moi aujourd'hui !", time: "10:30" },
+                { senderId: currentUser.id, text: "Oui, super vibe ! 😊", time: "10:32" },
+                { senderId: currentChatUser.id, text: "Tu veux en parler ?", time: "10:33" }
+            ];
+            
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${msg.senderId === currentUser.id ? 'sent' : 'received'}`;
+                messageDiv.innerHTML = `
+                    <div>${msg.text}</div>
+                    <div style="font-size: 10px; text-align: right; margin-top: 5px; opacity: 0.7;">${msg.time}</div>
+                `;
+                chatMessagesDiv.appendChild(messageDiv);
+            });
+            
+            // Scroll vers le bas
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            
+            if (!text || !currentChatUser) return;
+            
+            // Ajouter le message à l'interface
+            const chatMessagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message sent';
+            const now = new Date();
+            const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            messageDiv.innerHTML = `
+                <div>${text}</div>
+                <div style="font-size: 10px; text-align: right; margin-top: 5px; opacity: 0.7;">${time}</div>
+            `;
+            chatMessagesDiv.appendChild(messageDiv);
+            
+            // Effacer l'input
+            input.value = '';
+            
+            // Scroll vers le bas
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            
+            // Simuler une réponse
+            setTimeout(() => {
+                const responses = [
+                    "Intéressant !",
+                    "Je ressens la même chose !",
+                    "Tu veux en parler plus ?",
+                    "😊",
+                    "Cette vibe est contagieuse !"
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'message received';
+                responseDiv.innerHTML = `
+                    <div>${response}</div>
+                    <div style="font-size: 10px; text-align: right; margin-top: 5px; opacity: 0.7;">${time}</div>
+                `;
+                chatMessagesDiv.appendChild(responseDiv);
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }, 1000);
+        }
+
+        function openProfile() {
+            showNotification("Fonctionnalité profil à venir !", "info");
+        }
+
+        function logout() {
+            if (confirm("Veux-tu vraiment te déconnecter ?")) {
+                showNotification("À bientôt sur Vibes !", "info");
+                // Redirection vers la page de login
+                setTimeout(() => {
+                    alert("Déconnexion simulée - Dans une vraie app, tu serais redirigé vers le login");
+                }, 1000);
+            }
+        }
+
+        function showNotification(message, type = "info") {
+            // Créer une notification temporaire
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--error)' : 'var(--primary)'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Ajouter les styles d'animation pour les notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
