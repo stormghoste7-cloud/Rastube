@@ -1041,15 +1041,15 @@
             });
             
             // Contrôles tactiles pour sauter (taper n'importe où sur l'écran de jeu)
-            document.getElementById('gameScreen').addEventListener('touchstart', (e) => {
+            document.querySelector('.game-container').addEventListener('touchstart', (e) => {
                 if (appState.game.running && !appState.game.paused) {
                     e.preventDefault();
                     jump();
                 }
             });
             
-            document.getElementById('gameScreen').addEventListener('click', (e) => {
-                if (appState.game.running && !appState.game.paused && e.target.id === 'gameScreen') {
+            document.querySelector('.game-container').addEventListener('click', (e) => {
+                if (appState.game.running && !appState.game.paused && e.target.classList.contains('game-container')) {
                     jump();
                 }
             });
@@ -1108,7 +1108,9 @@
             }
             
             // Mettre à jour l'affichage
-            document.getElementById('speedValue').textContent = `${appState.game.speed.toFixed(1)}x`;
+            if (document.getElementById('speedValue')) {
+                document.getElementById('speedValue').textContent = `${appState.game.speed.toFixed(1)}x`;
+            }
         }
 
         function startGame() {
@@ -1124,7 +1126,7 @@
             updateGameDisplay();
             
             // Démarrer la génération d'obstacles
-            const interval = 1500 / appState.game.speed;
+            const interval = 2000 / appState.game.speed; // Augmenté pour donner plus de temps
             appState.game.obstacleInterval = setInterval(createObstacle, interval);
             
             // Démarrer la boucle de jeu
@@ -1138,8 +1140,15 @@
             appState.game.running = false;
             appState.game.paused = false;
             
-            clearInterval(appState.game.obstacleInterval);
-            cancelAnimationFrame(appState.game.gameLoop);
+            if (appState.game.obstacleInterval) {
+                clearInterval(appState.game.obstacleInterval);
+                appState.game.obstacleInterval = null;
+            }
+            
+            if (appState.game.gameLoop) {
+                cancelAnimationFrame(appState.game.gameLoop);
+                appState.game.gameLoop = null;
+            }
             
             // Supprimer tous les obstacles
             clearObstacles();
@@ -1163,9 +1172,15 @@
         }
 
         function updateGameDisplay() {
-            document.getElementById('scoreValue').textContent = appState.game.score;
-            document.getElementById('levelValue').textContent = appState.game.level;
-            document.getElementById('speedValue').textContent = `${appState.game.speed.toFixed(1)}x`;
+            if (document.getElementById('scoreValue')) {
+                document.getElementById('scoreValue').textContent = appState.game.score;
+            }
+            if (document.getElementById('levelValue')) {
+                document.getElementById('levelValue').textContent = appState.game.level;
+            }
+            if (document.getElementById('speedValue')) {
+                document.getElementById('speedValue').textContent = `${appState.game.speed.toFixed(1)}x`;
+            }
         }
 
         function jump() {
@@ -1373,11 +1388,12 @@
             for (const obstacle of appState.game.obstacles) {
                 const obstacleRect = obstacle.element.getBoundingClientRect();
                 
-                // Vérifier la collision
-                if (playerRect.left < obstacleRect.right &&
-                    playerRect.right > obstacleRect.left &&
-                    playerRect.top < obstacleRect.bottom &&
-                    playerRect.bottom > obstacleRect.top) {
+                // Vérifier la collision avec une tolérance
+                const tolerance = 5; // 5px de tolérance
+                if (playerRect.left + tolerance < obstacleRect.right - tolerance &&
+                    playerRect.right - tolerance > obstacleRect.left + tolerance &&
+                    playerRect.top + tolerance < obstacleRect.bottom - tolerance &&
+                    playerRect.bottom - tolerance > obstacleRect.top + tolerance) {
                     
                     gameOver();
                     return;
@@ -1386,6 +1402,8 @@
         }
 
         function gameOver() {
+            if (!appState.game.running) return;
+            
             appState.game.running = false;
             clearInterval(appState.game.obstacleInterval);
             cancelAnimationFrame(appState.game.gameLoop);
