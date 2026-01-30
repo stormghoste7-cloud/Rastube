@@ -6,69 +6,165 @@
     <title>Vibes App</title>
     <style>
         :root {
-            --primary: #6366f1; /* Bleu type Twitch/Insta */
-            --bg: #0f172a;      /* Sombre type TikTok/Twitch */
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --bg: #0f172a;
             --surface: #1e293b;
+            --surface-light: #334155;
             --text: #ffffff;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg);
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             color: var(--text);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            padding: 20px;
         }
 
         .phone {
             width: 100%;
-            max-width: 350px;
-            padding: 40px 25px;
-            text-align: center;
+            max-width: 400px;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* --- LOGO STYLE INSTA/TWITCH --- */
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--surface);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            border-left: 4px solid var(--primary);
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Logo */
         .logo-box {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            margin: 0 auto 20px;
-            border-radius: 22px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            margin: 0 auto 25px;
+            border-radius: 24px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            font-size: 48px;
+            font-weight: 800;
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+            animation: float 3s ease-in-out infinite;
         }
 
-        h1 { font-size: 32px; font-weight: 800; margin: 0; letter-spacing: -1px; }
-        p { color: #94a3b8; margin-bottom: 30px; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
 
-        .form-group { display: block; width: 100%; }
-        
-        /* Cacher l'inscription par défaut */
-        #signup-section { display: none; }
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0 0 10px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
 
         input {
             width: 100%;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid #334155;
+            padding: 16px 20px;
+            border: 2px solid var(--surface-light);
             border-radius: 14px;
-            background-color: var(--surface);
+            background: rgba(255, 255, 255, 0.05);
             color: white;
-            box-sizing: border-box;
             font-size: 16px;
             outline: none;
+            transition: all 0.3s ease;
         }
 
-        input:focus { border-color: var(--primary); }
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
 
-        button {
+        input.error {
+            border-color: var(--error);
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Buttons */
+        .btn {
             width: 100%;
             padding: 16px;
             border: none;
@@ -76,74 +172,650 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn-main { background-color: var(--primary); color: white; margin-top: 10px; }
-        .btn-main:hover { opacity: 0.9; transform: scale(0.98); }
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
 
-        .btn-link { background: none; color: #94a3b8; font-size: 14px; margin-top: 15px; }
+        .btn-main:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
 
-        #msg { margin-top: 15px; font-size: 14px; font-weight: 500; }
+        .btn-main:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--surface-light);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-light);
+            opacity: 0.9;
+        }
+
+        .btn-link {
+            background: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .btn-link:hover {
+            color: var(--text);
+        }
+
+        .loading {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Dashboard */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--surface-light);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .user-details h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .user-details p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Vibe Cards */
+        .vibes-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .vibe-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--surface-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .vibe-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .vibe-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vibe-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .vibe-emoji {
+            font-size: 24px;
+        }
+
+        /* Action buttons */
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: var(--surface-light);
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 24px;
+        }
+
+        /* Message */
+        .message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Logout button */
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            color: var(--error);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .phone {
+                padding: 20px 15px;
+            }
+            
+            .logo-box {
+                width: 80px;
+                height: 80px;
+                font-size: 36px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="phone">
-        <div class="logo-box">V</div>
-        <h1>Vibes</h1>
-        <p id="tagline">Partage ton mood, trouve ta vibe.</p>
+    <div class="notification" id="notification"></div>
 
-        <div id="login-section">
-            <input type="email" id="login-email" placeholder="Email">
-            <input type="password" id="login-pass" placeholder="Mot de passe">
-            <button class="btn-main" onclick="action('connexion')">Se connecter</button>
-            <button class="btn-link" onclick="switchPage('signup')">Pas de compte ? Créer un profil</button>
+    <div class="phone" id="phone">
+        <!-- Login Section -->
+        <div class="section active" id="login-section">
+            <div class="logo-box">V</div>
+            <h1>Vibes</h1>
+            <p class="tagline">Partage ton mood, trouve ta vibe.</p>
+
+            <div class="form-group">
+                <input type="email" id="login-email" placeholder="Email" autocomplete="email">
+            </div>
+            <div class="form-group password-field">
+                <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password">
+                <button class="toggle-password" data-target="login-pass">👁️</button>
+            </div>
+            
+            <button class="btn btn-main" id="login-btn" onclick="login()">
+                <span>Se connecter</span>
+            </button>
+            
+            <button class="btn btn-link" onclick="switchSection('signup')">
+                Pas de compte ? Créer un profil
+            </button>
+            
+            <div class="message" id="login-message"></div>
         </div>
 
-        <div id="signup-section">
-            <input type="text" id="sign-name" placeholder="Nom complet">
-            <input type="email" id="sign-email" placeholder="Email">
-            <input type="password" id="sign-pass" placeholder="Créer un mot de passe">
-            <button class="btn-main" onclick="action('inscription')">Créer mon profil</button>
-            <button class="btn-link" onclick="switchPage('login')">Déjà un compte ? Se connecter</button>
+        <!-- Signup Section -->
+        <div class="section" id="signup-section">
+            <div class="logo-box">V</div>
+            <h1>Rejoins-nous</h1>
+            <p class="tagline">Crée ton profil et commence à partager tes vibes.</p>
+
+            <div class="form-group">
+                <input type="text" id="sign-name" placeholder="Nom complet" autocomplete="name">
+            </div>
+            <div class="form-group">
+                <input type="email" id="sign-email" placeholder="Email" autocomplete="email">
+            </div>
+            <div class="form-group password-field">
+                <input type="password" id="sign-pass" placeholder="Créer un mot de passe" autocomplete="new-password">
+                <button class="toggle-password" data-target="sign-pass">👁️</button>
+            </div>
+            <div class="form-group">
+                <input type="password" id="sign-confirm-pass" placeholder="Confirmer le mot de passe" autocomplete="new-password">
+            </div>
+            
+            <button class="btn btn-main" id="signup-btn" onclick="signup()">
+                <span>Créer mon profil</span>
+            </button>
+            
+            <button class="btn btn-link" onclick="switchSection('login')">
+                Déjà un compte ? Se connecter
+            </button>
+            
+            <div class="message" id="signup-message"></div>
         </div>
 
-        <div id="msg"></div>
+        <!-- Dashboard Section -->
+        <div class="section" id="dashboard-section">
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="avatar" id="user-avatar">U</div>
+                    <div class="user-details">
+                        <h2 id="user-name">Utilisateur</h2>
+                        <p id="user-email">email@exemple.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 20px;">Ta vibe du jour</h3>
+            <div class="vibes-grid">
+                <div class="vibe-card" onclick="setMood('😊', 'Heureux')">
+                    <h3><span class="vibe-emoji">😊</span> Heureux</h3>
+                    <p>Tu rayonnes de bonheur aujourd'hui</p>
+                </div>
+                <div class="vibe-card" onclick="setMood('😌', 'Calme')">
+                    <h3><span class="vibe-emoji">😌</span> Calme</h3>
+                    <p>Paix intérieure et sérénité</p>
+                </div>
+                <div class="vibe-card" onclick="setMood('💪', 'Motivé')">
+                    <h3><span class="vibe-emoji">💪</span> Motivé</h3>
+                    <p>Prêt à conquérir le monde</p>
+                </div>
+                <div class="vibe-card" onclick="setMood('🎵', 'Musical')">
+                    <h3><span class="vibe-emoji">🎵</span> Musical</h3>
+                    <p>La musique guide ta journée</p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="action-btn" onclick="shareVibe()">
+                    <span>📤</span>
+                    <span>Partager</span>
+                </button>
+                <button class="action-btn" onclick="showFriends()">
+                    <span>👥</span>
+                    <span>Amis</span>
+                </button>
+                <button class="action-btn" onclick="showStats()">
+                    <span>📊</span>
+                    <span>Statistiques</span>
+                </button>
+                <button class="action-btn" onclick="showProfile()">
+                    <span>👤</span>
+                    <span>Profil</span>
+                </button>
+            </div>
+
+            <div class="message" id="dashboard-message"></div>
+        </div>
     </div>
 
     <script>
-        // Logique pour changer d'écran
-        function switchPage(page) {
-            const login = document.getElementById('login-section');
-            const signup = document.getElementById('signup-section');
-            const tagline = document.getElementById('tagline');
+        // Simulated backend database
+        const usersDB = JSON.parse(localStorage.getItem('vibes_users')) || [];
+        const currentUser = JSON.parse(localStorage.getItem('vibes_current_user')) || null;
 
-            if (page === 'signup') {
-                login.style.display = 'none';
-                signup.style.display = 'block';
-                tagline.innerText = "Rejoins la communauté Vibes.";
+        // DOM elements
+        const sections = {
+            login: document.getElementById('login-section'),
+            signup: document.getElementById('signup-section'),
+            dashboard: document.getElementById('dashboard-section')
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add toggle password functionality
+            document.querySelectorAll('.toggle-password').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const input = document.getElementById(targetId);
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.textContent = '👁️‍';
+                    } else {
+                        input.type = 'password';
+                        this.textContent = '👁️';
+                    }
+                });
+            });
+
+            // Check if user is already logged in
+            if (currentUser) {
+                switchSection('dashboard');
+                updateDashboard(currentUser);
             } else {
-                login.style.display = 'block';
-                signup.style.display = 'none';
-                tagline.innerText = "Partage ton mood, trouve ta vibe.";
+                switchSection('login');
+            }
+
+            // Add enter key support
+            document.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const activeSection = document.querySelector('.section.active');
+                    if (activeSection.id === 'login-section') {
+                        login();
+                    } else if (activeSection.id === 'signup-section') {
+                        signup();
+                    }
+                }
+            });
+        });
+
+        // Switch between sections
+        function switchSection(sectionName) {
+            Object.keys(sections).forEach(key => {
+                sections[key].classList.remove('active');
+            });
+            sections[sectionName].classList.add('active');
+            
+            // Clear messages
+            clearMessages();
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification';
+            
+            switch(type) {
+                case 'success':
+                    notification.style.borderLeftColor = 'var(--success)';
+                    break;
+                case 'error':
+                    notification.style.borderLeftColor = 'var(--error)';
+                    break;
+                case 'warning':
+                    notification.style.borderLeftColor = 'var(--warning)';
+                    break;
+                default:
+                    notification.style.borderLeftColor = 'var(--primary)';
+            }
+            
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show message in form
+        function showMessage(elementId, message, type = 'error') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `message ${type} show`;
+        }
+
+        // Clear all messages
+        function clearMessages() {
+            document.querySelectorAll('.message').forEach(msg => {
+                msg.className = 'message';
+                msg.textContent = '';
+            });
+        }
+
+        // Validate email
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Validate password
+        function isValidPassword(password) {
+            return password.length >= 6;
+        }
+
+        // Login function
+        async function login() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-pass').value;
+            const button = document.getElementById('login-btn');
+            
+            // Validation
+            if (!email || !password) {
+                showMessage('login-message', 'Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showMessage('login-message', 'Email invalide', 'error');
+                return;
+            }
+            
+            // Show loading
+            const originalText = button.innerHTML;
+            button.innerHTML = '<div class="loading"></div>';
+            button.disabled = true;
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Check credentials
+            const user = usersDB.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Success
+                localStorage.setItem('vibes_current_user', JSON.stringify(user));
+                showNotification(`Bienvenue ${user.name} !`, 'success');
+                switchSection('dashboard');
+                updateDashboard(user);
+            } else {
+                // Error
+                showMessage('login-message', 'Email ou mot de passe incorrect', 'error');
+            }
+            
+            // Reset button
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
+
+        // Signup function
+        async function signup() {
+            const name = document.getElementById('sign-name').value.trim();
+            const email = document.getElementById('sign-email').value.trim();
+            const password = document.getElementById('sign-pass').value;
+            const confirmPassword = document.getElementById('sign-confirm-pass').value;
+            const button = document.getElementById('signup-btn');
+            
+            // Validation
+            if (!name || !email || !password || !confirmPassword) {
+                showMessage('signup-message', 'Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showMessage('signup-message', 'Email invalide', 'error');
+                return;
+            }
+            
+            if (!isValidPassword(password)) {
+                showMessage('signup-message', 'Le mot de passe doit contenir au moins 6 caractères', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('signup-message', 'Les mots de passe ne correspondent pas', 'error');
+                return;
+            }
+            
+            // Check if user already exists
+            if (usersDB.some(u => u.email === email)) {
+                showMessage('signup-message', 'Un compte avec cet email existe déjà', 'error');
+                return;
+            }
+            
+            // Show loading
+            const originalText = button.innerHTML;
+            button.innerHTML = '<div class="loading"></div>';
+            button.disabled = true;
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                createdAt: new Date().toISOString(),
+                lastLogin: new Date().toISOString(),
+                avatarColor: getRandomColor()
+            };
+            
+            // Save to database
+            usersDB.push(newUser);
+            localStorage.setItem('vibes_users', JSON.stringify(usersDB));
+            localStorage.setItem('vibes_current_user', JSON.stringify(newUser));
+            
+            // Success
+            showNotification(`Profil créé avec succès, ${name} !`, 'success');
+            switchSection('dashboard');
+            updateDashboard(newUser);
+            
+            // Reset button
+            button.innerHTML = originalText;
+            button.disabled = false;
+            
+            // Clear form
+            document.getElementById('sign-name').value = '';
+            document.getElementById('sign-email').value = '';
+            document.getElementById('sign-pass').value = '';
+            document.getElementById('sign-confirm-pass').value = '';
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('vibes_current_user');
+            showNotification('À bientôt !', 'info');
+            switchSection('login');
+            
+            // Clear login form
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-pass').value = '';
+        }
+
+        // Update dashboard with user info
+        function updateDashboard(user) {
+            document.getElementById('user-name').textContent = user.name;
+            document.getElementById('user-email').textContent = user.email;
+            document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('user-avatar').style.background = user.avatarColor;
+        }
+
+        // Set mood
+        function setMood(emoji, mood) {
+            showNotification(`Vibe "${mood}" ${emoji} enregistrée !`, 'success');
+            
+            // Save mood to user's history
+            const user = JSON.parse(localStorage.getItem('vibes_current_user'));
+            if (user) {
+                user.currentMood = { emoji, mood, timestamp: new Date().toISOString() };
+                localStorage.setItem('vibes_current_user', JSON.stringify(user));
+                
+                // Update dashboard message
+                const message = document.getElementById('dashboard-message');
+                message.textContent = `Tu te sens ${mood.toLowerCase()} aujourd'hui ${emoji}`;
+                message.className = 'message success show';
             }
         }
 
-        // Logique des boutons
-        function action(type) {
-            const msg = document.getElementById('msg');
-            msg.style.color = "#34d399"; // Vert
-            
-            if (type === 'connexion') {
-                const email = document.getElementById('login-email').value;
-                if(!email) { msg.style.color = "#fb7185"; msg.innerText = "Remplis ton email !"; return; }
-                msg.innerText = "Connexion de " + email + "...";
-            } else {
-                const name = document.getElementById('sign-name').value;
-                if(!name) { msg.style.color = "#fb7185"; msg.innerText = "Quel est ton nom ?"; return; }
-                msg.innerText = "Profil créé pour " + name + " !";
-            }
+        // Dashboard actions
+        function shareVibe() {
+            const user = JSON.parse(localStorage.getItem('vibes_current_user'));
+            const mood = user?.currentMood?.mood || 'géniale';
+            showNotification(`Ta vibe a été partagée avec tes amis !`, 'success');
+        }
+
+        function showFriends() {
+            showNotification('Fonctionnalité "Amis" bientôt disponible !', 'info');
+        }
+
+        function showStats() {
+            showNotification('Fonctionnalité "Statistiques" bientôt disponible !', 'info');
+        }
+
+        function showProfile() {
+            showNotification('Fonctionnalité "Profil" bientôt disponible !', 'info');
+        }
+
+        // Utility functions
+        function getRandomColor() {
+            const colors = [
+                'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                'linear-gradient(135deg, #10b981, #059669)',
+                'linear-gradient(135deg, #f59e0b, #d97706)',
+                'linear-gradient(135deg, #ec4899, #db2777)',
+                'linear-gradient(135deg, #3b82f6, #1d4ed8)'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
     </script>
 </body>
