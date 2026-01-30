@@ -3,187 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibes - Connexion</title>
+    <title>Vibes App</title>
     <style>
-        /* --- DESIGN (CSS) --- */
-        
+        :root {
+            --primary: #6366f1; /* Bleu type Twitch/Insta */
+            --bg: #0f172a;      /* Sombre type TikTok/Twitch */
+            --surface: #1e293b;
+            --text: #ffffff;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Nouveau dégradé plus "Vibe" (Bleu nuit vers violet) */
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            color: #333;
+            overflow: hidden;
         }
 
-        .phone-screen {
-            background-color: white;
-            padding: 40px 30px;
-            border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        .phone {
             width: 100%;
-            max-width: 320px;
+            max-width: 350px;
+            padding: 40px 25px;
             text-align: center;
+        }
+
+        /* --- LOGO STYLE INSTA/TWITCH --- */
+        .logo-box {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            margin: 0 auto 20px;
+            border-radius: 22px;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-            position: relative; /* Pour positionner les messages */
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        h1 {
-            margin: 0;
-            font-size: 36px;
-            font-weight: 800;
-            /* Dégradé de texte pour le logo Vibes */
-            background: -webkit-linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
+        h1 { font-size: 32px; font-weight: 800; margin: 0; letter-spacing: -1px; }
+        p { color: #94a3b8; margin-bottom: 30px; }
 
-        .subtitle {
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
+        .form-group { display: block; width: 100%; }
+        
+        /* Cacher l'inscription par défaut */
+        #signup-section { display: none; }
 
         input {
             width: 100%;
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            background-color: #f9f9f9;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            background-color: var(--surface);
+            color: white;
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 16px;
             outline: none;
-            transition: all 0.3s ease;
         }
 
-        input:focus {
-            border-color: #764ba2;
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1);
-        }
+        input:focus { border-color: var(--primary); }
 
         button {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
+            transition: 0.2s;
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
+        .btn-main { background-color: var(--primary); color: white; margin-top: 10px; }
+        .btn-main:hover { opacity: 0.9; transform: scale(0.98); }
 
-        .btn-login {
-            /* Dégradé Vibes */
-            background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
-            margin-top: 10px;
-        }
+        .btn-link { background: none; color: #94a3b8; font-size: 14px; margin-top: 15px; }
 
-        .btn-signup {
-            background-color: transparent;
-            color: #777;
-            font-size: 13px;
-            font-weight: normal;
-            margin-top: 5px;
-        }
-
-        .btn-signup:hover {
-            color: #333;
-            text-decoration: underline;
-        }
-
-        /* Message d'erreur ou de succès */
-        #feedback-message {
-            font-size: 13px;
-            margin-top: 10px;
-            min-height: 20px; /* Garde la place pour éviter que ça saute */
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .error { color: #e74c3c; }
-        .success { color: #2ecc71; }
-
+        #msg { margin-top: 15px; font-size: 14px; font-weight: 500; }
     </style>
 </head>
 <body>
 
-    <div class="phone-screen">
-        <div style="font-size: 40px;">🌊</div> <h1>Vibes</h1>
-        <p class="subtitle">Catch the right mood.</p>
+    <div class="phone">
+        <div class="logo-box">V</div>
+        <h1>Vibes</h1>
+        <p id="tagline">Partage ton mood, trouve ta vibe.</p>
 
-        <form id="loginForm">
-            <input type="email" id="email" placeholder="Email" required>
-            <br><br>
-            <input type="password" id="password" placeholder="Mot de passe" required>
-            
-            <button type="submit" class="btn-login" id="submitBtn">Se connecter</button>
-            <button type="button" class="btn-signup" onclick="toggleMode()">Pas de compte ? Créer un profil</button>
-        </form>
+        <div id="login-section">
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-pass" placeholder="Mot de passe">
+            <button class="btn-main" onclick="action('connexion')">Se connecter</button>
+            <button class="btn-link" onclick="switchPage('signup')">Pas de compte ? Créer un profil</button>
+        </div>
 
-        <div id="feedback-message"></div>
+        <div id="signup-section">
+            <input type="text" id="sign-name" placeholder="Nom complet">
+            <input type="email" id="sign-email" placeholder="Email">
+            <input type="password" id="sign-pass" placeholder="Créer un mot de passe">
+            <button class="btn-main" onclick="action('inscription')">Créer mon profil</button>
+            <button class="btn-link" onclick="switchPage('login')">Déjà un compte ? Se connecter</button>
+        </div>
+
+        <div id="msg"></div>
     </div>
 
     <script>
-        /* --- LOGIQUE (JAVASCRIPT) --- */
+        // Logique pour changer d'écran
+        function switchPage(page) {
+            const login = document.getElementById('login-section');
+            const signup = document.getElementById('signup-section');
+            const tagline = document.getElementById('tagline');
 
-        const loginForm = document.getElementById('loginForm');
-        const feedback = document.getElementById('feedback-message');
-        const submitBtn = document.getElementById('submitBtn');
+            if (page === 'signup') {
+                login.style.display = 'none';
+                signup.style.display = 'block';
+                tagline.innerText = "Rejoins la communauté Vibes.";
+            } else {
+                login.style.display = 'block';
+                signup.style.display = 'none';
+                tagline.innerText = "Partage ton mood, trouve ta vibe.";
+            }
+        }
 
-        loginForm.addEventListener('submit', function(event) {
-            // 1. On empêche le rechargement de la page (Bug fix)
-            event.preventDefault();
-
-            // 2. On récupère les infos
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // 3. Petit effet de chargement
-            submitBtn.textContent = "Connexion...";
-            submitBtn.style.opacity = "0.7";
-            feedback.style.opacity = "0";
-
-            // 4. Simulation de vérification (délai de 1 seconde)
-            setTimeout(() => {
-                submitBtn.textContent = "Se connecter";
-                submitBtn.style.opacity = "1";
-
-                if (password.length < 6) {
-                    // Erreur
-                    feedback.textContent = "Le mot de passe est trop court ! (min 6 caractères)";
-                    feedback.className = "error";
-                    feedback.style.opacity = "1";
-                } else {
-                    // Succès
-                    feedback.textContent = "Bienvenue sur Vibes, " + email + " !";
-                    feedback.className = "success";
-                    feedback.style.opacity = "1";
-                    
-                    // Ici, on pourrait rediriger vers la page d'accueil
-                    console.log("Utilisateur connecté : " + email);
-                }
-            }, 1000);
-        });
-
-        function toggleMode() {
-            feedback.textContent = "La page d'inscription arrive bientôt !";
-            feedback.className = ""; // Ni erreur ni succès, juste info
-            feedback.style.opacity = "1";
+        // Logique des boutons
+        function action(type) {
+            const msg = document.getElementById('msg');
+            msg.style.color = "#34d399"; // Vert
+            
+            if (type === 'connexion') {
+                const email = document.getElementById('login-email').value;
+                if(!email) { msg.style.color = "#fb7185"; msg.innerText = "Remplis ton email !"; return; }
+                msg.innerText = "Connexion de " + email + "...";
+            } else {
+                const name = document.getElementById('sign-name').value;
+                if(!name) { msg.style.color = "#fb7185"; msg.innerText = "Quel est ton nom ?"; return; }
+                msg.innerText = "Profil créé pour " + name + " !";
+            }
         }
     </script>
-
 </body>
 </html>
