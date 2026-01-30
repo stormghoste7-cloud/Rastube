@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaïlight - Connexion</title>
+    <title>Vibes - Connexion</title>
     <style>
         /* --- DESIGN (CSS) --- */
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Le fond dégradé doux */
+            /* Nouveau dégradé plus "Vibe" (Bleu nuit vers violet) */
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             display: flex;
             justify-content: center;
@@ -19,53 +19,55 @@
             color: #333;
         }
 
-        /* La boîte centrale (comme l'écran du téléphone) */
         .phone-screen {
             background-color: white;
             padding: 40px 30px;
             border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 320px; /* Largeur d'un téléphone standard */
+            max-width: 320px;
             text-align: center;
             display: flex;
             flex-direction: column;
             gap: 15px;
+            position: relative; /* Pour positionner les messages */
         }
 
         h1 {
             margin: 0;
-            font-size: 32px;
-            color: #333;
+            font-size: 36px;
+            font-weight: 800;
+            /* Dégradé de texte pour le logo Vibes */
+            background: -webkit-linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
         }
 
         .subtitle {
             color: #888;
             font-size: 14px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        /* Champs de texte */
         input {
             width: 100%;
             padding: 15px;
             border: 1px solid #eee;
             border-radius: 12px;
             background-color: #f9f9f9;
-            box-sizing: border-box; /* Important pour l'alignement */
+            box-sizing: border-box;
             font-size: 14px;
             outline: none;
             transition: all 0.3s ease;
         }
 
         input:focus {
-            border-color: #a1c4fd;
+            border-color: #764ba2;
             background-color: white;
-            box-shadow: 0 0 0 4px rgba(161, 196, 253, 0.1);
+            box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1);
         }
 
-        /* Boutons */
         button {
             width: 100%;
             padding: 15px;
@@ -74,7 +76,7 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
         button:active {
@@ -82,9 +84,10 @@
         }
 
         .btn-login {
-            background: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 100%);
+            /* Dégradé Vibes */
+            background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(161, 196, 253, 0.4);
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
             margin-top: 10px;
         }
 
@@ -93,7 +96,7 @@
             color: #777;
             font-size: 13px;
             font-weight: normal;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .btn-signup:hover {
@@ -101,50 +104,84 @@
             text-decoration: underline;
         }
 
-        /* Logo simulé par du texte pour l'instant */
-        .logo-placeholder {
-            font-size: 50px;
-            margin-bottom: 10px;
+        /* Message d'erreur ou de succès */
+        #feedback-message {
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px; /* Garde la place pour éviter que ça saute */
+            opacity: 0;
+            transition: opacity 0.3s;
         }
+        
+        .error { color: #e74c3c; }
+        .success { color: #2ecc71; }
 
     </style>
 </head>
 <body>
 
     <div class="phone-screen">
-        <div class="logo-placeholder">✨</div>
-        <h1>Kaïlight</h1>
-        <p class="subtitle">Connecte-toi à ton mood.</p>
+        <div style="font-size: 40px;">🌊</div> <h1>Vibes</h1>
+        <p class="subtitle">Catch the right mood.</p>
 
-        <form id="loginForm" onsubmit="handleLogin(event)">
+        <form id="loginForm">
             <input type="email" id="email" placeholder="Email" required>
-            <br><br> <input type="password" id="password" placeholder="Mot de passe" required>
+            <br><br>
+            <input type="password" id="password" placeholder="Mot de passe" required>
             
-            <button type="submit" class="btn-login">Se connecter</button>
-            <button type="button" class="btn-signup" onclick="alert('Redirection vers Inscription...')">Pas de compte ? S'inscrire</button>
+            <button type="submit" class="btn-login" id="submitBtn">Se connecter</button>
+            <button type="button" class="btn-signup" onclick="toggleMode()">Pas de compte ? Créer un profil</button>
         </form>
+
+        <div id="feedback-message"></div>
     </div>
 
     <script>
         /* --- LOGIQUE (JAVASCRIPT) --- */
-        
-        function handleLogin(event) {
-            // Empêche la page de se recharger
+
+        const loginForm = document.getElementById('loginForm');
+        const feedback = document.getElementById('feedback-message');
+        const submitBtn = document.getElementById('submitBtn');
+
+        loginForm.addEventListener('submit', function(event) {
+            // 1. On empêche le rechargement de la page (Bug fix)
             event.preventDefault();
 
-            // Récupère les valeurs
+            // 2. On récupère les infos
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Simulation de connexion
-            if(password.length < 6) {
-                alert("Le mot de passe est trop court !");
-            } else {
-                // C'est ici que normalement on enverrait les données à une base de données
-                console.log("Email:", email);
-                console.log("Mdp:", password);
-                alert("Bienvenue sur Kaïlight, " + email + " ! (Ceci est une démo)");
-            }
+            // 3. Petit effet de chargement
+            submitBtn.textContent = "Connexion...";
+            submitBtn.style.opacity = "0.7";
+            feedback.style.opacity = "0";
+
+            // 4. Simulation de vérification (délai de 1 seconde)
+            setTimeout(() => {
+                submitBtn.textContent = "Se connecter";
+                submitBtn.style.opacity = "1";
+
+                if (password.length < 6) {
+                    // Erreur
+                    feedback.textContent = "Le mot de passe est trop court ! (min 6 caractères)";
+                    feedback.className = "error";
+                    feedback.style.opacity = "1";
+                } else {
+                    // Succès
+                    feedback.textContent = "Bienvenue sur Vibes, " + email + " !";
+                    feedback.className = "success";
+                    feedback.style.opacity = "1";
+                    
+                    // Ici, on pourrait rediriger vers la page d'accueil
+                    console.log("Utilisateur connecté : " + email);
+                }
+            }, 1000);
+        });
+
+        function toggleMode() {
+            feedback.textContent = "La page d'inscription arrive bientôt !";
+            feedback.className = ""; // Ni erreur ni succès, juste info
+            feedback.style.opacity = "1";
         }
     </script>
 
