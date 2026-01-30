@@ -1,0 +1,12 @@
+// Extension du code actuel avec Firebase (solution No-Code)
+async function initFirebase() {
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "vibes-app.firebaseapp.com",
+    projectId: "vibes-app",
+    storageBucket: "vibes-app.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  // Utiliser Firebase Authentication + Firestore
+}
